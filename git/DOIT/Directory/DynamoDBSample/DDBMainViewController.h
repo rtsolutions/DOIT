@@ -31,6 +31,17 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 @property (nonatomic, assign) BOOL needsToRefresh;
 
 
+// Arrays to hold items with hashKeys 0000, 0001, 0002, 0003 so the app doesn't have
+// to search through the whole array every time
+@property (nonatomic, readwrite, strong) NSMutableArray *array0000;
+@property (nonatomic, readwrite, strong) NSMutableArray *array0001;
+@property (nonatomic, readwrite, strong) NSMutableArray *array0002;
+@property (nonatomic, readwrite, strong) NSMutableArray *array0003;
+
+
+// A string from the search bar on the home page. Used to filter results
+@property (nonatomic, readwrite, strong) NSString *searchString;
+
 - (IBAction)showActionSheet:(id)sender;
 
 @end

@@ -24,6 +24,14 @@
 @property (nonatomic, assign) BOOL doneLoading;
 @property (nonatomic, retain) NSMutableArray *timeStamp;
 
+@property (nonatomic, readonly, strong) NSMutableArray *array0000;
+@property (nonatomic, readonly, strong) NSMutableArray *array0001;
+@property (nonatomic, readonly, strong) NSMutableArray *array0002;
+@property (nonatomic, readonly, strong) NSMutableArray *array0003;
+@property (nonatomic, readonly, strong) NSMutableArray *searchResults;
+@property (nonatomic, readwrite) NSString *searchString;
+@property (nonatomic, assign) BOOL searching;
+
 @end
 
 @implementation MainViewController
@@ -146,8 +154,68 @@
          }
      return nil;
 }
-                 
-                 
+
+
+// Sorts the directory into categories based on hashKey. hashKey really indicates the number
+// of parents the item has. This is just to split the array so that the app doesn't have to scan through
+// every item whenever it loads a tableView
+// Since the directory is sorted in refresh list, everything is in alphabetical order within the
+// hashKey arrays.
+- (void)sortItems {
+    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
+        if ([item.hashKey  isEqual: @"0000"])
+        {
+            [self.array0000 addObject:item];
+        }
+        
+        else if ([item.hashKey  isEqual: @"0001"])
+        {
+            [self.array0001 addObject:item];
+        }
+        
+        else if ([item.hashKey  isEqual: @"0002"])
+        {
+            [self.array0002 addObject:item];
+        }
+        
+        else if ([item.hashKey  isEqual: @"0003"])
+        {
+            [self.array0003 addObject:item];
+        }
+    }
+}
+
+
+// Search bar implementation
+- (void)searchBar:(UISearchBar*) searchBar textDidChange:(NSString *)searchText {
+    
+    // If the user types, store the string.
+    if (searchText.length > 0)
+    {
+        self.searchString = searchText;
+    }
+
+}
+
+- (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
+    
+    [self.searchResults removeAllObjects];
+    
+    // Scan through tableRows for the text in the search bar
+    for (DDBTableRow *item in self.array0000)
+    {
+        NSRange titleRange = [item.title rangeOfString:self.searchString options:NSCaseInsensitiveSearch];
+        if(titleRange.location != NSNotFound)
+        {
+            // If a match is found, add the current item to directorySearchResults
+            [self.searchResults addObject:item];
+        }
+    }
+    self.searching = YES;
+    
+    [self performSegueWithIdentifier:@"listDepartments" sender:searchBar];
+}
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -175,12 +243,22 @@
     // Hide the navigation bar on startup
     [self.navigationController setNavigationBarHidden:YES];
     
+    // Initialize arrays to hold the directory
+    _array0000 = [NSMutableArray new];
+    _array0001 = [NSMutableArray new];
+    _array0002 = [NSMutableArray new];
+    _array0003 = [NSMutableArray new];
+    _searchResults = [NSMutableArray new];
+    
+    
     // Create a locks to keep the methods thread safe
     _refreshLock = [NSLock new];
     
     // Compare the time stamp item in the locally stored array and the array on DynamoDB.
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
+    
+    [self sortItems];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -202,7 +280,21 @@
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    DDBDetailViewController *mainViewController = [segue destinationViewController];
+    DDBMainViewController *mainViewController = [segue destinationViewController];
+    
+    if (_searching)
+    {
+        mainViewController.array0000 = self.searchResults;
+    }
+    else
+    {
+        mainViewController.array0000 = self.array0000;
+    }
+    
+    mainViewController.array0001 = self.array0001;
+    mainViewController.array0002 = self.array0002;
+    mainViewController.array0003 = self.array0003;
+    
     switch([sender tag]) {
         case 0:
         {

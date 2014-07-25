@@ -27,18 +27,18 @@
 // Array to hold items that will be displayed in cells
 @property (nonatomic, readonly) NSMutableArray *tableRows;
 
+
 // tableRows filtered by the search bar
 @property (nonatomic, readwrite) NSMutableArray *filteredTableRows;
 
-// Arrays to hold items with hashKeys 0000, 0001, 0002, 0003 so the app doesn't have
-// to search through the whole array every time
-@property (nonatomic, readonly) NSMutableArray *array0000;
-@property (nonatomic, readonly) NSMutableArray *array0001;
-@property (nonatomic, readonly) NSMutableArray *array0002;
-@property (nonatomic, readonly) NSMutableArray *array0003;
 
 // The current item from tableRows
 @property (nonatomic, strong) DDBTableRow *tableRow;
+
+
+// The number of parents of the current items, which is the hashKey. Use this string to specify
+// which array to search in
+@property (nonatomic, readwrite) NSInteger numParents;
 
 // The item that was selected in the last table
 @property (nonatomic, strong) DDBTableRow *parentItem;
@@ -47,24 +47,30 @@
 @property (nonatomic, readwrite) NSString *parentID;
 @property (nonatomic, readwrite) NSString *parentTitle;
 
+
 // The dialable phone number and address on the current table for creating URLs.
 // The URLs are used to open the dialer app or the maps app
+// PHONE NUMBER MUST BE OF FORM 555-555-5555 -- NO SPACES ALLOWED
 @property (nonatomic, readwrite) NSString *phoneNumber;
 @property (nonatomic, readwrite) NSString *address;
+
 
 // Items leftover from DynamoDBSample. Not sure if still needed.
 @property (nonatomic, readonly) NSLock *lock;
 @property (nonatomic, strong) NSDictionary *lastEvaluatedKey;
 @property (nonatomic, assign) BOOL doneLoading;
 
+
 // Activate detail mode
 @property (nonatomic, assign) BOOL showDetails;
+
 
 // BOOLs to keep track of which items are already on the detail view
 @property (nonatomic, assign) BOOL addressFlag;
 @property (nonatomic, assign) BOOL phoneUsed;
 @property (nonatomic, assign) BOOL faxUsed;
 @property (nonatomic, assign) BOOL addressUsed;
+
 
 // BOOL that indicates the search bar is being used
 @property (nonatomic, assign) BOOL isFiltered;
@@ -92,7 +98,29 @@
     
     [self.tableRows removeAllObjects];
     
-    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
+    NSMutableArray *currentArray = nil;
+    
+    // Switch between arrays of items sorted by hashkey. This cuts down the time it takes to
+    // scan through arrays.
+    switch (self.numParents) {
+        case (1):
+        {
+            currentArray = self.array0001;
+            break;
+        }
+        case (2):
+        {
+            currentArray = self.array0002;
+            break;
+        }
+        case (3):
+        {
+            currentArray = self.array0003;
+            break;
+        }
+    }
+    
+    for (DDBTableRow *item in currentArray) {
         
         if (item.parentID == self.parentID)
             [self.tableRows addObject:item];
@@ -138,33 +166,6 @@
 }
 
 
-// Sorts the directory into categories based on hashKey. hashKey really indicates the number
-// of parents the item has. This is just to split the array so that the app doesn't have to scan through
-// every item whenever it loads a tableView
-- (void)sortItems {
-    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
-        if ([item.hashKey  isEqual: @"0000"])
-        {
-            [self.array0000 addObject:item];
-        }
-        
-        else if ([item.hashKey  isEqual: @"0001"])
-        {
-            [self.array0001 addObject:item];
-        }
-        
-        else if ([item.hashKey  isEqual: @"0002"])
-        {
-            [self.array0002 addObject:item];
-        }
-        
-        else if ([item.hashKey  isEqual: @"0003"])
-        {
-            [self.array0003 addObject:item];
-        }
-    }
-}
-
 
 #pragma mark - Action sheet
 
@@ -198,7 +199,7 @@
             {
                 
                 // Disable the Add to Favorites button if we're looking at the whole directory
-                if (_parentItem.parentID == nil)
+                if (_parentItem == nil)
                 {
                     [button setEnabled:NO];
                     return;
@@ -206,7 +207,7 @@
                 
                 // If the current item is a favorite...
                 BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:self.parentItem];
-            
+                
                 if (alreadyFavorite)
                 {
                     // Change the button text to "Remove from Favorites
@@ -283,6 +284,8 @@
 
 // Search bar implementation
 - (void)searchBar:(UISearchBar*) searchBar textDidChange:(NSString *)searchText {
+    
+    // If there is no text in the search bar, don't do anything
     if (searchText.length == 0)
     {
         self.isFiltered = NO;
@@ -290,20 +293,29 @@
     else
     {
         self.isFiltered = YES;
+        
+        // Clear filteredTableRows
         [self.filteredTableRows removeAllObjects];
+        
+        // Scan through tableRows for the text in the search bar
         for (DDBTableRow *item in self.tableRows)
         {
             NSRange titleRange = [item.title rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if(titleRange.location != NSNotFound)
             {
+                // If a match is found, add the current item to filteredTableRows
                 [self.filteredTableRows addObject:item];
             }
         }
     }
+    // Refresh the table
     [self.tableView reloadData];
 }
 
+
 -(void)searchBarCancelButtonClicked: (UISearchBar *) searchbar {
+    // If the cancel button is clicked, reload the table with all of the data instead of the
+    // filtered results
     self.isFiltered = NO;
     [self.tableView reloadData];
 }
@@ -312,6 +324,8 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     
+    // Selection Index for quick scrolling through the table. Lists the alphabet on the right
+    // side of the screen
     NSArray *alphabet = [NSArray new];
     
     //if (!(self.showDetails = YES))
@@ -330,29 +344,49 @@
 }
 
 
+// heightForRowAtIndexPath changes the height of a particular cell on the tableView.
+// In this case, the only height we want to change is the cell with an address inside,
+// because it takes up multiple lines.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    // If the screen is desplaying details, and the current table row contains an address,
+    // and we haven't added the address to the table yet
     if (self.showDetails == YES && ([_tableRow.address length] > 0) && (!(self.addressFlag == YES)))
     {
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:17.0]};
         
+        // Create a rectangle that bounds the text. Width is 200, and height is calculated based on
+        // how much space the text would need if it wraps.
         CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(200.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
         
-        CGSize size = rect.size;
+        // Mark that the current table already has an address on it, and we don't need to change the size
+        // of any other cells
         self.addressFlag = YES;
+        
+        // The height of the cell is equal to the height of the rectangle, plus 10 to give the
+        // text a little bit of room on the top and bottom
+        CGSize size = rect.size;
         return size.height + 10;
     }
     
+    // If we're not displaying an address, just use 40 as the size of each cell
     return 40.0;
     
     
 }
 
 
+// numberOfRowsInSection has three cases: displaying details, displaying search results, and displaying
+// the whole table. numberOfRowsInSection must be calculated before drawing each table.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rowCount = 0;
     
+    // If we're displaying details, check to see if the item has a phone number, fax, and address.
+    // Add one to rowCount for phone number and fax. For address, add two, so we can display a dummy
+    // cell at the end. If we don't do this, the size of every cell will be the size of the address
+    // cell (big) and that looks messy.
     if (self.showDetails == YES) {
+        NSInteger rowCount = 0;
+        
         if ([_tableRow.phone length] > 0)
         {
             rowCount++;
@@ -364,13 +398,16 @@
         if ([_tableRow.address length] > 0)
         {
             rowCount++;
+            rowCount++;
         }
-        return rowCount + 1;
+        return rowCount;
     }
+    // If we're viewing search results, return the number of items in the filteredTableRows array
     else if (self.isFiltered == YES)
     {
         return [self.filteredTableRows count];
     }
+    // Otherwise just return the number of items in tableRows
     else
     {
         return [self.tableRows count];
@@ -390,16 +427,25 @@
         // If the tableRow has an address
         if ([_tableRow.address length] > 0)
         {
+            // If we haven't displayed an address yet
             if (!(self.addressUsed == YES))
             {
+                // Create a cell with the string in _tableRow.address
                 cell.textLabel.text = @"Address:";
                 cell.detailTextLabel.text = _tableRow.address;
+                
+                // Don't try to make another address cell
                 self.addressUsed = YES;
                 
+                // Word wrap so we can see the whole address. Setting the numberOfLines to 0 allows
+                // the string to use as many lines as it needs.
                 [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
                 cell.detailTextLabel.numberOfLines = 0;
                 
+                // Let users click on the cell, which brings up the maps app with the address string
                 cell.userInteractionEnabled = YES;
+                
+                // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 return cell;
             }
@@ -414,6 +460,8 @@
                 // Add the phone number to a cell
                 cell.textLabel.text = @"Phone:";
                 cell.detailTextLabel.text = _tableRow.phone;
+                
+                // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 
                 // Don't use the phone number anymore
@@ -476,41 +524,38 @@
 }
 
 
-
+// Disable user editing. This keeps users from swiping on table cells to reveal a "delet" button
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        DDBTableRow *row = self.tableRows[indexPath.row];
-        [self deleteTableRow:row];
-        
-        [self.tableRows removeObject:row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath]
-                         withRowAnimation:UITableViewRowAnimationFade];
-    }
-}
-
-
+// didSelectRowAtIndexPath is called when the user selects a cell on a tableview. It passes the index
+// of the selected cell.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    // Show the deselect animation when the user lifts their finger
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // Get the text from the cell label so we can tell if we have an address or a phone number
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSString *cellText = cell.textLabel.text;
     
-    
+    // On a details screen....
     if (self.showDetails == YES)
     {
         if ([cellText  isEqual: @"Address:"])
         {
+            // Create a string that's compatible with the maps app ("Albuquerque, New Mexico" becomes
+            // "Albuquerque,+New+Mexico") and append it to the Apple maps URL. Open the maps app
+            // with this string.
             NSString *addressNoSpaces = [self.address stringByReplacingOccurrencesOfString:@" " withString:@"+"];
             NSString *addressURL = [@"http://maps.apple.com?q=" stringByAppendingString:addressNoSpaces];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:addressURL]];
         }
         if ([cellText  isEqual: @"phone"])
         {
+            // Create a phone URL, and open up the dialer with the number.
             NSString *phoneNumberURL = [@"tel://" stringByAppendingString:self.phoneNumber];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
         }
@@ -518,12 +563,17 @@
     
     else
     {
+        // If we're not on a details screen, the only other option is to open up a new tableview
+        // with the children of the selected cell.
         [self performSegueWithIdentifier:@"navigateToMainView" sender:[tableView cellForRowAtIndexPath:indexPath]];
     }
 }
 
 #pragma mark - Navigation
 
+
+// prepareForSegue sends information to the destination viewcontroller. It is called by
+// performSegueWithIdentifier
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -550,6 +600,14 @@
         
     }
     mainVewController.parentItem = indexRow;
+    NSInteger temp = [indexRow.hashKey integerValue];
+    temp++;
+    mainVewController.numParents = temp;
+    mainVewController.array0000 = self.array0000;
+    mainVewController.array0001 = self.array0001;
+    mainVewController.array0002 = self.array0002;
+    mainVewController.array0003 = self.array0003;
+    
 }
 
 #pragma mark - View lifecycle
@@ -595,21 +653,20 @@
     
     _tableRows = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
-    _array0000 = [NSMutableArray new];
-    _array0001 = [NSMutableArray new];
-    _array0002 = [NSMutableArray new];
-    _array0003 = [NSMutableArray new];
+
     _lock = [NSLock new];
     
     [self.navigationController.navigationBar setTranslucent:NO];
-
+    
     [self.navigationController setNavigationBarHidden:NO];
+    
+    // Trying to hide search bar on a details page, but I can't get it to work. Perhaps a better
+    // approach would be to hide the search bar if the number of cells in the tableview is less than ten,
+    // but I can't seem to find the code that hides the search bar at all.
     if (self.showDetails == YES)
     {
-   //     self.tableView.contentOffset = CGPointMake(0,44);
+        //     self.tableView.contentOffset = CGPointMake(0,44);
     }
-    
-    [self sortItems];
     
     [self setupView];
     
