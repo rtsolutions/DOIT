@@ -1,0 +1,1 @@
+../../AWSiOSSDKv2/AmazonCore/Networking/AZURLSessionManager.h
