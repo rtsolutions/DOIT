@@ -29,6 +29,9 @@
 @property (nonatomic, readonly, strong) NSMutableArray *array0002;
 @property (nonatomic, readonly, strong) NSMutableArray *array0003;
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
+@property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
+@property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
+
 @property (nonatomic, readwrite) NSString *searchString;
 @property (nonatomic, assign) BOOL searching;
 
@@ -182,6 +185,14 @@
         {
             [self.array0003 addObject:item];
         }
+        else if ([item.hashKey  isEqual: @"0005"])
+        {
+            [self.houseAndSenate addObject:item];
+        }
+        else if ([item.hashKey isEqual:@"0006"])
+        {
+            [self.electedOfficials addObject:item];
+        }
     }
 }
 
@@ -249,6 +260,8 @@
     _array0002 = [NSMutableArray new];
     _array0003 = [NSMutableArray new];
     _searchResults = [NSMutableArray new];
+    _electedOfficials = [NSMutableArray new];
+    _houseAndSenate = [NSMutableArray new];
     
     
     // Create a locks to keep the methods thread safe
@@ -311,6 +324,8 @@
         case 2:
         {
             mainViewController.viewType = DDBMainViewTypeElectedOfficials;
+            mainViewController.houseAndSenate = self.houseAndSenate;
+            mainViewController.electedOfficials = self.electedOfficials;
             break;
         }
         /*case 3:

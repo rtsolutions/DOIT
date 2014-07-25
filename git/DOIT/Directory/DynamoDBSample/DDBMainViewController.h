@@ -37,6 +37,9 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 @property (nonatomic, readwrite, strong) NSMutableArray *array0001;
 @property (nonatomic, readwrite, strong) NSMutableArray *array0002;
 @property (nonatomic, readwrite, strong) NSMutableArray *array0003;
+@property (nonatomic, readwrite, strong) NSMutableArray *electedOfficials;
+@property (nonatomic, readwrite, strong) NSMutableArray *houseAndSenate;
+
 
 
 // A string from the search bar on the home page. Used to filter results

@@ -118,6 +118,11 @@
             currentArray = self.array0003;
             break;
         }
+        case (6):
+        {
+            currentArray = self.electedOfficials;
+            break;
+        }
     }
     
     for (DDBTableRow *item in currentArray) {
@@ -139,32 +144,13 @@
     }
 }
 
-
-// Leftover from DynamoDBSample
-- (void)deleteTableRow:(DDBTableRow *)row {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    AWSDynamoDBObjectMapper *dynamoDBObjectMapper = [AWSDynamoDBObjectMapper defaultDynamoDBObjectMapper];
-    [[dynamoDBObjectMapper remove:row]
-     continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id(BFTask *task) {
-         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-         
-         if (task.error) {
-             NSLog(@"Error: [%@]", task.error);
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                             message:@"Failed to delete a row."
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
-             [alert show];
-             
-             [self.tableView reloadData];
-         }
-         
-         return nil;
-     }];
+- (void)showElectedOfficials {
+    [self.tableRows removeAllObjects];
+    for (DDBTableRow *item in self.houseAndSenate)
+    {
+        [self.tableRows addObject:item];
+    }
 }
-
 
 
 #pragma mark - Action sheet
@@ -603,11 +589,19 @@
     NSInteger temp = [indexRow.hashKey integerValue];
     temp++;
     mainVewController.numParents = temp;
-    mainVewController.array0000 = self.array0000;
-    mainVewController.array0001 = self.array0001;
-    mainVewController.array0002 = self.array0002;
-    mainVewController.array0003 = self.array0003;
     
+    if (temp <= 4)
+    {
+        mainVewController.array0000 = self.array0000;
+        mainVewController.array0001 = self.array0001;
+        mainVewController.array0002 = self.array0002;
+        mainVewController.array0003 = self.array0003;
+    }
+    else if (temp >= 5 && temp <=7)
+    {
+        mainVewController.electedOfficials = self.electedOfficials;
+        mainVewController.houseAndSenate = self.houseAndSenate;
+    }
 }
 
 #pragma mark - View lifecycle
@@ -624,7 +618,7 @@
             
         case DDBMainViewTypeElectedOfficials:
         {
-            [self navigateDirectory];
+            [self showElectedOfficials];
             break;
         }
             
