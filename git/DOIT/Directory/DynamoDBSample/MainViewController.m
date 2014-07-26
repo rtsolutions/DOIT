@@ -165,7 +165,18 @@
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
 - (void)sortItems {
+    
+    [self.array0000 removeAllObjects];
+    [self.array0001 removeAllObjects];
+    [self.array0002 removeAllObjects];
+    [self.array0003 removeAllObjects];
+    [self.electedOfficials removeAllObjects];
+    [self.houseAndSenate removeAllObjects];
+    
+    
     for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
+
+        
         if ([item.hashKey  isEqual: @"0000"])
         {
             [self.array0000 addObject:item];
