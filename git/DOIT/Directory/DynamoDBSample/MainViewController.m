@@ -271,7 +271,7 @@
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
     
-    [self sortItems];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -293,6 +293,7 @@
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+        [self sortItems];
     DDBMainViewController *mainViewController = [segue destinationViewController];
     
     if (_searching)
