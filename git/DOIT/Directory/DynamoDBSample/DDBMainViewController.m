@@ -145,7 +145,7 @@
     
     for (DDBTableRow *item in currentArray) {
         
-        if (item.parentID == self.parentID)
+        if ([item.parentID isEqual:self.parentID])
             [self.tableRows addObject:item];
     }
 }
