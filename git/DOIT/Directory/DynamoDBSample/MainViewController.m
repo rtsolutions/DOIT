@@ -18,8 +18,7 @@
 @interface MainViewController ()
 
 @property (nonatomic, readonly) NSMutableArray *tableRows;
-@property (nonatomic, readonly) NSLock *refreshLock;
-@property (nonatomic, readonly) NSLock *checkForUpdateLock;
+@property (nonatomic, readonly) NSLock *lock;
 @property (nonatomic, strong) NSDictionary *lastEvaluatedKey;
 @property (nonatomic, assign) BOOL doneLoading;
 @property (nonatomic, retain) NSMutableArray *timeStamp;
@@ -34,15 +33,15 @@
 
 @property (nonatomic, readwrite) NSString *searchString;
 @property (nonatomic, assign) BOOL searching;
+@property (nonatomic, assign) BOOL updateDirectory;
 
 @end
 
 @implementation MainViewController
 
 - (BFTask *)checkDatabaseForUpdate:(BOOL)check {
-    _checkForUpdateLock = [NSLock new];
-    
-    if ([self.checkForUpdateLock tryLock]){
+    _lock = [NSLock new];
+    if ([self.lock tryLock]){
         if (check) {
             self.lastEvaluatedKey = nil;
             self.doneLoading = NO;
@@ -69,14 +68,11 @@
                      // Write time stamp back to array from .archive file
                      self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/timeStamp.archive"];
                      
-                     BOOL updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
+                     self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
-                     if (!updateDirectory) {
+                     if (!self.updateDirectory) {
                          // Write the new time stamp to timeStamp.archive
                          [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/timeStamp.archive"];
-                         
-                         // Call refreshList to update the directory array
-                         [self refreshList:YES];
                      }
                      
                      
@@ -85,21 +81,27 @@
                      if (task.error) {
                          NSLog(@"Error: [%@]", task.error);
                      }
+                     if (!(self.updateDirectory))
+                     {
+                         // Call refreshList to update the directory array
+                         [self.lock unlock];
+                         [self refreshList:YES];
+                     }
                      
-                     [self.checkForUpdateLock unlock];
-                     
-                     // Turn of network activity indicator in status bar
+                     // Turn off network activity indicator in status bar
                      [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                      
                      return nil;
                  }];
+        
+        
     }
     return nil;
 }
 
 
 - (BFTask *)refreshList:(BOOL)startFromBeginning {
-    if ([self.refreshLock tryLock]){
+    if ([self.lock tryLock]){
         if (startFromBeginning) {
             self.lastEvaluatedKey = nil;
             self.doneLoading = NO;
@@ -147,7 +149,7 @@
                          NSLog(@"Error: [%@]", task.error);
                      }
                      
-                     [self.refreshLock unlock];
+                     [self.lock unlock];
                      
                      // Turn of network activity indicator in status bar
                      [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -276,7 +278,6 @@
     
     
     // Create a locks to keep the methods thread safe
-    _refreshLock = [NSLock new];
     
     // Compare the time stamp item in the locally stored array and the array on DynamoDB.
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
