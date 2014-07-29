@@ -110,6 +110,13 @@
         // Turn on the network activity indicator on the status bar
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        activityView.center = self.view.center;
+        [activityView startAnimating];
+        [self.view addSubview:activityView];
+
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        
         // Set up scan expression to download the database
         AWSDynamoDBScanExpression *scanExpression = [AWSDynamoDBScanExpression new];
         scanExpression.exclusiveStartKey = self.lastEvaluatedKey;
@@ -153,6 +160,9 @@
                      
                      // Turn of network activity indicator in status bar
                      [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                     [activityView stopAnimating];
+                     
+                     [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                      
                      return nil;
                  }];
@@ -167,7 +177,6 @@
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
 - (void)sortItems {
-    
     [self.array0000 removeAllObjects];
     [self.array0001 removeAllObjects];
     [self.array0002 removeAllObjects];
@@ -208,6 +217,7 @@
         }
     }
 }
+
 
 
 // Search bar implementation
@@ -283,7 +293,6 @@
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
     
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -305,8 +314,9 @@
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [self sortItems];
     DDBMainViewController *mainViewController = [segue destinationViewController];
+    
+    [self sortItems];
     
     if (_searching)
     {
