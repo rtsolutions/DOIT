@@ -15,36 +15,6 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "8"
             endingLineNumber = "8">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DDBElectedOfficialsViewController tableRows]"
-                  moduleName = "DynamoDBSample"
-                  urlString = "file:///Users/rts/Desktop/Xcode%20repository/DOIT/git/DOIT/Directory/DynamoDBSample/DDBElectedOfficialsViewController.m"
-                  timestampString = "428024705.438757"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DDBElectedOfficialsViewController setTableRows:]"
-                  moduleName = "DynamoDBSample"
-                  urlString = "file:///Users/rts/Desktop/Xcode%20repository/DOIT/git/DOIT/Directory/DynamoDBSample/DDBElectedOfficialsViewController.m"
-                  timestampString = "428024705.439858"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "31">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

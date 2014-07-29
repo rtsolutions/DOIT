@@ -37,5 +37,7 @@
 @property (nonatomic, strong) NSString *timestamp;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *details;
+@property (nonatomic, strong) NSString *county;
+
 
 @end

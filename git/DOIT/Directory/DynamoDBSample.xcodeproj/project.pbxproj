@@ -12,7 +12,6 @@
 		3B9E074819783C2E0082BA8B /* SingletonArrayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */; };
 		3B9E074A197841760082BA8B /* directoryArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E0749197841760082BA8B /* directoryArray.archive */; };
 		3B9E074C19788C6B0082BA8B /* timeStamp.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E074B19788C6B0082BA8B /* timeStamp.archive */; };
-		3B9E074F1979A1640082BA8B /* DDBElectedOfficialsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9E074E1979A1640082BA8B /* DDBElectedOfficialsViewController.m */; };
 		3B9E0756197D7E360082BA8B /* SingletonFavoritesArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9E0755197D7E360082BA8B /* SingletonFavoritesArray.m */; };
 		3B9E0759197D81270082BA8B /* favoritesArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E0758197D81270082BA8B /* favoritesArray.archive */; };
 		3B9E076D197DAB350082BA8B /* aToZDirectoryButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E075B197DAB350082BA8B /* aToZDirectoryButton.png */; };
@@ -42,7 +41,6 @@
 		CE0DDA8D18BD19C900BD8F49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE0DDA8B18BD19C900BD8F49 /* Main.storyboard */; };
 		CE0DDA9218BD19C900BD8F49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0DDA9118BD19C900BD8F49 /* Images.xcassets */; };
 		CE4729891935678900F49623 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4729881935678900F49623 /* Constants.m */; };
-		CE7BD55318C168DE0044F866 /* DDBDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7BD55218C168DE0044F866 /* DDBDetailViewController.m */; };
 		CE8A06CA18BD4AA6005CBA52 /* DDBMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8A06C918BD4AA6005CBA52 /* DDBMainViewController.m */; };
 		CEA9F50218C5270400B6AE51 /* DDBDynamoDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA9F50118C5270400B6AE51 /* DDBDynamoDBManager.m */; };
 /* End PBXBuildFile section */
@@ -54,8 +52,6 @@
 		3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingletonArrayObject.m; path = ../SingletonArrayObject.m; sourceTree = "<group>"; };
 		3B9E0749197841760082BA8B /* directoryArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = directoryArray.archive; sourceTree = "<group>"; };
 		3B9E074B19788C6B0082BA8B /* timeStamp.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timeStamp.archive; sourceTree = "<group>"; };
-		3B9E074D1979A1640082BA8B /* DDBElectedOfficialsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBElectedOfficialsViewController.h; sourceTree = "<group>"; };
-		3B9E074E1979A1640082BA8B /* DDBElectedOfficialsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBElectedOfficialsViewController.m; sourceTree = "<group>"; };
 		3B9E0755197D7E360082BA8B /* SingletonFavoritesArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonFavoritesArray.m; sourceTree = SOURCE_ROOT; };
 		3B9E0757197D7E450082BA8B /* SingletonFavoritesArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonFavoritesArray.h; sourceTree = SOURCE_ROOT; };
 		3B9E0758197D81270082BA8B /* favoritesArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = favoritesArray.archive; sourceTree = "<group>"; };
@@ -94,8 +90,6 @@
 		CE0DDA9818BD19C900BD8F49 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		CE4729871935678900F49623 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		CE4729881935678900F49623 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		CE7BD55118C168DE0044F866 /* DDBDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBDetailViewController.h; sourceTree = "<group>"; };
-		CE7BD55218C168DE0044F866 /* DDBDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBDetailViewController.m; sourceTree = "<group>"; };
 		CE8A06C818BD4AA6005CBA52 /* DDBMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBMainViewController.h; sourceTree = "<group>"; };
 		CE8A06C918BD4AA6005CBA52 /* DDBMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBMainViewController.m; sourceTree = "<group>"; };
 		CEA9F50018C5270400B6AE51 /* DDBDynamoDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBDynamoDBManager.h; sourceTree = "<group>"; };
@@ -216,10 +210,6 @@
 				CEA9F50118C5270400B6AE51 /* DDBDynamoDBManager.m */,
 				CE8A06C818BD4AA6005CBA52 /* DDBMainViewController.h */,
 				CE8A06C918BD4AA6005CBA52 /* DDBMainViewController.m */,
-				3B9E074D1979A1640082BA8B /* DDBElectedOfficialsViewController.h */,
-				3B9E074E1979A1640082BA8B /* DDBElectedOfficialsViewController.m */,
-				CE7BD55118C168DE0044F866 /* DDBDetailViewController.h */,
-				CE7BD55218C168DE0044F866 /* DDBDetailViewController.m */,
 			);
 			name = DynamoDB;
 			sourceTree = "<group>";
@@ -345,11 +335,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B9E074F1979A1640082BA8B /* DDBElectedOfficialsViewController.m in Sources */,
 				CE0DDA8A18BD19C900BD8F49 /* AppDelegate.m in Sources */,
 				CEA9F50218C5270400B6AE51 /* DDBDynamoDBManager.m in Sources */,
 				3B9E074819783C2E0082BA8B /* SingletonArrayObject.m in Sources */,
-				CE7BD55318C168DE0044F866 /* DDBDetailViewController.m in Sources */,
 				CE0DDA8618BD19C900BD8F49 /* main.m in Sources */,
 				3B6DD57919760DD1001C3FB8 /* MainViewController.m in Sources */,
 				CE8A06CA18BD4AA6005CBA52 /* DDBMainViewController.m in Sources */,

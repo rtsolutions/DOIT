@@ -25,12 +25,17 @@
 @interface DDBMainViewController ()
 
 // Array to hold items that will be displayed in cells
-@property (nonatomic, readonly) NSMutableArray *tableRows;
+@property (nonatomic, readwrite) NSMutableArray *tableRows;
 
 
 // tableRows filtered by the search bar
 @property (nonatomic, readwrite) NSMutableArray *filteredTableRows;
 
+// Array of counties -- possibly not needed
+@property (nonatomic, readwrite) NSArray *countyArray;
+
+// Number of sections the table will need when sorting items by county
+@property (nonatomic, strong) NSMutableDictionary *sections;
 
 // The current item from tableRows
 @property (nonatomic, strong) DDBTableRow *tableRow;
@@ -71,9 +76,16 @@
 @property (nonatomic, assign) BOOL faxUsed;
 @property (nonatomic, assign) BOOL addressUsed;
 
+// BOOL that indicates whether to list items by county
+@property (nonatomic, assign) BOOL listingByCounty;
+@property (nonatomic, assign) BOOL changedListingByCounty;
+@property (nonatomic, readwrite) NSString *currentCounty;
 
 // BOOL that indicates the search bar is being used
 @property (nonatomic, assign) BOOL isFiltered;
+
+// BOOL that indicates we're viewing favorites
+@property (nonatomic, assign) BOOL showingFavorites;
 
 @end
 
@@ -90,6 +102,12 @@
     for (DDBTableRow *item in self.array0000) {
         [self.tableRows addObject:item];
     }
+    
+    // Include elected officials in A to Z directory?
+    /*
+    for (DDBTableRow *item in self.electedOfficials) {
+        [self.tableRows addObject:item];
+    }*/
 }
 
 
@@ -137,6 +155,7 @@
 - (void)showFavorites {
     
     [self.tableRows removeAllObjects];
+    self.showingFavorites = YES;
     
     for (DDBTableRow *item in [SingletonFavoritesArray sharedInstance].favoritesArray)
     {
@@ -144,6 +163,7 @@
     }
 }
 
+// Shows just two menu options: Senate and House of Representatives
 - (void)showElectedOfficials {
     [self.tableRows removeAllObjects];
     for (DDBTableRow *item in self.houseAndSenate)
@@ -152,6 +172,49 @@
     }
 }
 
+// Sorts the directory by county, rather than alphabetically
+- (void)showCounties {
+    self.listingByCounty = YES;
+    
+    [self.tableRows removeAllObjects];
+    
+    // Add the items which have counties to tableRows
+    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
+    {
+        if ([item.county length] > 0)
+        {
+            [self.tableRows addObject:item];
+        }
+    }
+    
+    // Sort the array alphabetically by county, then alphabetically by title
+    NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title"
+                                                                          ascending:YES];
+    NSSortDescriptor *sortByCountyDescriptor = [[NSSortDescriptor alloc] initWithKey:@"county" ascending:YES];
+    
+    NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortByCountyDescriptor, sortByTitleDescriptor, nil];
+    NSMutableArray *temp = self.tableRows;
+    [temp sortUsingDescriptors:sortingDescriptor];
+    self.tableRows = [temp mutableCopy];
+    
+    // Create sections in a dictionary for each county
+    self.sections = [NSMutableDictionary dictionary];
+    
+    for (DDBTableRow *item in self.tableRows)
+    {
+        NSMutableArray *listingsInCountyArray = [self.sections objectForKey:@"county"];
+        
+        if (listingsInCountyArray == nil)
+        {
+            listingsInCountyArray = [NSMutableArray array];
+            
+            [self.sections setObject:listingsInCountyArray forKey:item.county];
+        }
+        
+        [listingsInCountyArray addObject:item];
+    }
+    
+}
 
 #pragma mark - Action sheet
 
@@ -280,6 +343,13 @@
     {
         self.isFiltered = YES;
         
+        if (self.listingByCounty == YES)
+        {
+            self.changedListingByCounty = YES;
+        }
+        
+        self.listingByCounty = NO;
+
         // Clear filteredTableRows
         [self.filteredTableRows removeAllObjects];
         
@@ -303,6 +373,12 @@
     // If the cancel button is clicked, reload the table with all of the data instead of the
     // filtered results
     self.isFiltered = NO;
+    
+    if (self.changedListingByCounty == YES);
+    {
+        self.listingByCounty = YES;
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -312,21 +388,29 @@
     
     // Selection Index for quick scrolling through the table. Lists the alphabet on the right
     // side of the screen
-    NSArray *alphabet = [NSArray new];
     
-    //if (!(self.showDetails = YES))
+   // if (!(self.showDetails = YES))
     {
+        NSArray *alphabet = [NSArray new];
+        
         alphabet = [@"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z" componentsSeparatedByString:@" "];
         
+        return alphabet;
     }
     
-    return alphabet;
-    
+  //  return nil;
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    if (self.listingByCounty)
+    {
+        return [self.sections count];
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 
@@ -393,6 +477,12 @@
     {
         return [self.filteredTableRows count];
     }
+    else if (self.listingByCounty == YES)
+    {
+        DDBTableRow *item = [self.tableRows objectAtIndex:section];
+        NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
+        return [listingsInCountyArray count];
+    }
     // Otherwise just return the number of items in tableRows
     else
     {
@@ -400,6 +490,17 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (self.listingByCounty == YES)
+    {
+        DDBTableRow *item = [self.tableRows objectAtIndex:section];
+        return item.county;
+    }
+    else
+    {
+        return nil;
+    }
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -497,6 +598,59 @@
             cell.detailTextLabel.text = nil;
             return cell;
         }
+        /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
+        else if (self.showingFavorites == YES)
+        {
+            
+            [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+            cell.detailTextLabel.numberOfLines = 1;
+            
+            DDBTableRow *item = self.tableRows[indexPath.row];
+            if ([item.hashKey integerValue] <= 4)
+            {
+                for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+                {
+                    if ([possibleParent.hashKey integerValue] <= 4)
+                    {
+                        if ([item.parentID isEqual: possibleParent.rangeKey])
+                        {
+                            cell.textLabel.text = possibleParent.title;
+                        }
+                    }
+                }
+            }
+            
+            else if ([item.hashKey integerValue] > 4)
+            {
+                for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+                {
+                    if ([possibleParent.hashKey integerValue] > 4)
+                    {
+                        if ([item.parentID isEqual: possibleParent.rangeKey])
+                        {
+                            cell.textLabel.text = possibleParent.title;
+                        }
+                    }
+                }
+                
+            }
+            
+
+            cell.detailTextLabel.text = item.title;
+        }*/
+        
+        else if (self.listingByCounty == YES)
+        {
+            DDBTableRow *item = [self.tableRows objectAtIndex:indexPath.section];
+            NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
+            
+            DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
+            
+            cell.textLabel.text=listing.title;
+            cell.detailTextLabel.text = nil;
+            
+            return cell;
+        }
         else
         {
             // Add rows that don't contain details
@@ -551,6 +705,10 @@
     {
         // If we're not on a details screen, the only other option is to open up a new tableview
         // with the children of the selected cell.
+        if (self.listingByCounty == YES)
+        {
+            self.currentCounty = [self tableView:tableView titleForHeaderInSection:indexPath.section];
+        }
         [self performSegueWithIdentifier:@"navigateToMainView" sender:[tableView cellForRowAtIndexPath:indexPath]];
     }
 }
@@ -562,9 +720,21 @@
 // performSegueWithIdentifier
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    DDBTableRow *indexRow = [self.tableRows objectAtIndex:indexPath.row];
     DDBMainViewController *mainVewController = [segue destinationViewController];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    
+    DDBTableRow *indexRow = nil;
+    
+    if (self.listingByCounty == YES)
+    {
+        NSArray *listingsInCounty = [self.sections objectForKey:self.currentCounty];
+        indexRow = [listingsInCounty objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        indexRow = [self.tableRows objectAtIndex:indexPath.row];
+    }
+    
     
     // If the indexRow is an item that contains details...
     if ([indexRow.details isEqual:@"YES"])
@@ -624,7 +794,9 @@
             
         case DDBMainViewTypeByCounty:
         {
-            [self showFavorites];
+            [self showCounties];
+            //Need to create a new case for favorites
+            //[self showFavorites];
             break;
         }
             

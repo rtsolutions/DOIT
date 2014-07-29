@@ -41,7 +41,7 @@
 
 - (BFTask *)checkDatabaseForUpdate:(BOOL)check {
     _checkForUpdateLock = [NSLock new];
-
+    
     if ([self.checkForUpdateLock tryLock]){
         if (check) {
             self.lastEvaluatedKey = nil;
@@ -62,7 +62,7 @@
         return [[[dynamoDBObjectMapper query:[DDBTableRow class]
                                   expression:queryExpression]
                  continueWithExecutor:[BFExecutor mainThreadExecutor] withSuccessBlock:^id(BFTask *task) {
-
+                     
                      
                      AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                      
@@ -113,7 +113,7 @@
         scanExpression.exclusiveStartKey = self.lastEvaluatedKey;
         scanExpression.limit = @20;
         AWSDynamoDBObjectMapper *dynamoDBObjectMapper = [AWSDynamoDBObjectMapper defaultDynamoDBObjectMapper];
-
+        
         // Scan the database. Use BFTask to keep the method safe
         return [[[dynamoDBObjectMapper scan:[DDBTableRow class]
                                  expression:scanExpression]
@@ -135,27 +135,27 @@
                      NSMutableArray *temp = [SingletonArrayObject sharedInstance].directoryArray;
                      [temp sortUsingDescriptors:sortingDescriptor];
                      [SingletonArrayObject sharedInstance].directoryArray = [temp mutableCopy];
-                         
+                     
                      // Write the directory array to an archive file
                      [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/directoryArray.archive"];
                      
                      
                      
                      return nil;
-                     }] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id(BFTask *task) {
+                 }] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id(BFTask *task) {
                      if (task.error) {
                          NSLog(@"Error: [%@]", task.error);
                      }
                      
                      [self.refreshLock unlock];
-                         
+                     
                      // Turn of network activity indicator in status bar
                      [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
+                     
                      return nil;
                  }];
-         }
-     return nil;
+    }
+    return nil;
 }
 
 
@@ -175,7 +175,7 @@
     
     
     for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
-
+        
         
         if ([item.hashKey  isEqual: @"0000"])
         {
@@ -216,7 +216,7 @@
     {
         self.searchString = searchText;
     }
-
+    
 }
 
 - (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
@@ -261,7 +261,7 @@
     {
         [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
     }
-
+    
     // Hide the navigation bar on startup
     [self.navigationController setNavigationBarHidden:YES];
     
@@ -282,7 +282,7 @@
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
     
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -304,7 +304,7 @@
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-        [self sortItems];
+    [self sortItems];
     DDBMainViewController *mainViewController = [segue destinationViewController];
     
     if (_searching)
@@ -324,6 +324,7 @@
         case 0:
         {
             mainViewController.viewType = DDBMainViewTypeAtoZ;
+            mainViewController.electedOfficials = self.electedOfficials;
             mainViewController.title = @"Directory";
             break;
         }
@@ -340,14 +341,14 @@
             mainViewController.electedOfficials = self.electedOfficials;
             break;
         }
-        /*case 3:
-        {
-            mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
-        }
-        case 4:
-        {
-            mainViewController.viewType = DDBMainViewTypeN11;
-        }*/
+            /*case 3:
+             {
+             mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
+             }
+             case 4:
+             {
+             mainViewController.viewType = DDBMainViewTypeN11;
+             }*/
     }
 }
 @end
