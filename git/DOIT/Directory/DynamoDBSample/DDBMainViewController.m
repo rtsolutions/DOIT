@@ -383,7 +383,8 @@
         self.listingByCounty = YES;
     }
     
-    [self.tableView reloadData];
+    [self setupView];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark - Table view data source
