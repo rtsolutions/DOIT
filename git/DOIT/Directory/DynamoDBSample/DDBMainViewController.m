@@ -736,7 +736,7 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:addressURL]];
             return;
         }
-        if ([cellText  isEqual: @"phone"])
+        if ([cellText  isEqual: @"Phone:"])
         {
             // Create a phone URL, and open up the dialer with the number.
             NSString *formattedPhoneNumber = [self.phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
