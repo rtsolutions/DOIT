@@ -75,6 +75,7 @@
 @property (nonatomic, assign) BOOL phoneUsed;
 @property (nonatomic, assign) BOOL faxUsed;
 @property (nonatomic, assign) BOOL addressUsed;
+@property (nonatomic, readwrite)  NSInteger arrayOffset;
 
 // BOOL that indicates whether to list items by county
 @property (nonatomic, assign) BOOL listingByCounty;
@@ -524,6 +525,8 @@
                 // Don't try to make another address cell
                 self.addressUsed = YES;
                 
+                self.arrayOffset++;
+                
                 // Word wrap so we can see the whole address. Setting the numberOfLines to 0 allows
                 // the string to use as many lines as it needs.
                 [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
@@ -553,6 +556,7 @@
                 
                 // Don't use the phone number anymore
                 self.phoneUsed = YES;
+                self.arrayOffset++;
                 return cell;
             }
             
@@ -570,6 +574,7 @@
                 
                 // Don't use the fax number anymore
                 self.faxUsed = YES;
+                self.arrayOffset++;
                 
                 // Disable user interaciton so you can't call the fax number by touching it
                 cell.userInteractionEnabled = NO;
@@ -588,75 +593,80 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-
-        if (self.isFiltered == YES)
-        {
-            // Add rows that don't contain details
-            DDBTableRow *item = self.filteredTableRows[indexPath.row];
-            cell.textLabel.text = item.title;
-            cell.detailTextLabel.text = nil;
-            return cell;
-        }
-        /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
-         else if (self.showingFavorites == YES)
-         {
-         
-         [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
-         cell.detailTextLabel.numberOfLines = 1;
-         
-         DDBTableRow *item = self.tableRows[indexPath.row];
-         if ([item.hashKey integerValue] <= 4)
-         {
-         for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-         {
-         if ([possibleParent.hashKey integerValue] <= 4)
-         {
-         if ([item.parentID isEqual: possibleParent.rangeKey])
-         {
-         cell.textLabel.text = possibleParent.title;
-         }
-         }
-         }
-         }
-         
-         else if ([item.hashKey integerValue] > 4)
-         {
-         for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-         {
-         if ([possibleParent.hashKey integerValue] > 4)
-         {
-         if ([item.parentID isEqual: possibleParent.rangeKey])
-         {
-         cell.textLabel.text = possibleParent.title;
-         }
-         }
-         }
-         
-         }
-         
-         
-         cell.detailTextLabel.text = item.title;
-         }*/
+    
+    if (self.isFiltered == YES)
+    {
+        // Add rows that don't contain details
+        DDBTableRow *item = self.filteredTableRows[indexPath.row-self.arrayOffset];
+        cell.textLabel.text = item.title;
+        cell.detailTextLabel.text = nil;
+        return cell;
+    }
+    /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
+     else if (self.showingFavorites == YES)
+     {
+     
+     [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+     cell.detailTextLabel.numberOfLines = 1;
+     
+     DDBTableRow *item = self.tableRows[indexPath.row];
+     if ([item.hashKey integerValue] <= 4)
+     {
+     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+     {
+     if ([possibleParent.hashKey integerValue] <= 4)
+     {
+     if ([item.parentID isEqual: possibleParent.rangeKey])
+     {
+     cell.textLabel.text = possibleParent.title;
+     }
+     }
+     }
+     }
+     
+     else if ([item.hashKey integerValue] > 4)
+     {
+     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+     {
+     if ([possibleParent.hashKey integerValue] > 4)
+     {
+     if ([item.parentID isEqual: possibleParent.rangeKey])
+     {
+     cell.textLabel.text = possibleParent.title;
+     }
+     }
+     }
+     
+     }
+     
+     
+     cell.detailTextLabel.text = item.title;
+     }*/
+    
+    if (self.listingByCounty == YES)
+    {
+        DDBTableRow *item = [self.tableRows objectAtIndex:indexPath.section];
+        NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
         
-        if (self.listingByCounty == YES)
-        {
-            DDBTableRow *item = [self.tableRows objectAtIndex:indexPath.section];
-            NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
-            
-            DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
-            
-            cell.textLabel.text=listing.title;
-            cell.detailTextLabel.text = nil;
-            
-            return cell;
-        }
-
-            // Add rows that don't contain details
-            DDBTableRow *item = self.tableRows[indexPath.row];
-            cell.textLabel.text = item.title;
-            cell.detailTextLabel.text = nil;
-            return cell;
-
+        DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
+        
+        cell.textLabel.text=listing.title;
+        cell.detailTextLabel.text = nil;
+        
+        return cell;
+    }
+    
+    // Add rows that don't contain details
+    if (_tableRows.count)
+    {
+        DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
+        cell.textLabel.text = item.title;
+        cell.detailTextLabel.text = nil;
+        cell.userInteractionEnabled = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+    }
     
     return cell;
 }
@@ -680,8 +690,7 @@
     NSString *cellText = cell.textLabel.text;
     
     // On a details screen....
-    if (self.showDetails == YES)
-    {
+
         if ([cellText  isEqual: @"Address:"])
         {
             // Create a string that's compatible with the maps app ("Albuquerque, New Mexico" becomes
@@ -697,10 +706,7 @@
             NSString *phoneNumberURL = [@"tel://" stringByAppendingString:self.phoneNumber];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
         }
-    }
-    
-    else
-    {
+
         // If we're not on a details screen, the only other option is to open up a new tableview
         // with the children of the selected cell.
         if (self.listingByCounty == YES)
@@ -708,7 +714,7 @@
             self.currentCounty = [self tableView:tableView titleForHeaderInSection:indexPath.section];
         }
         [self performSegueWithIdentifier:@"navigateToMainView" sender:[tableView cellForRowAtIndexPath:indexPath]];
-    }
+  
 }
 
 #pragma mark - Navigation
@@ -730,7 +736,7 @@
     }
     else
     {
-        indexRow = [self.tableRows objectAtIndex:indexPath.row];
+        indexRow = [self.tableRows objectAtIndex:(indexPath.row-self.arrayOffset)];
     }
     
     
@@ -814,7 +820,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     _tableRows = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
     
@@ -838,6 +843,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    // Reset all of the detail flags
+    _phoneUsed = NO;
+    _faxUsed = NO;
+    _addressUsed = NO;
+    _arrayOffset = 0;
     
     [self setupView];
     [self.tableView reloadData];
