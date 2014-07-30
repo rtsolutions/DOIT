@@ -85,7 +85,7 @@
                      {
                          // Call refreshList to update the directory array
                          [self.lock unlock];
-                         //[self refreshList:YES];
+                         [self refreshList:YES];
                      }
                      
                      // Turn off network activity indicator in status bar
