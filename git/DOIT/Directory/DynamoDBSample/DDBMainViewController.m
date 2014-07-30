@@ -703,7 +703,10 @@
         if ([cellText  isEqual: @"phone"])
         {
             // Create a phone URL, and open up the dialer with the number.
-            NSString *phoneNumberURL = [@"tel://" stringByAppendingString:self.phoneNumber];
+            NSString *formattedPhoneNumber = [self.phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            
+            
+            NSString *phoneNumberURL = [@"tel://" stringByAppendingString:formattedPhoneNumber];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
         }
 
