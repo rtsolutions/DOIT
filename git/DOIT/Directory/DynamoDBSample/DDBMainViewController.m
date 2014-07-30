@@ -378,13 +378,11 @@
     // filtered results
     self.isFiltered = NO;
     
-    if (self.changedListingByCounty == YES);
+    if (self.changedListingByCounty == YES)
     {
         self.listingByCounty = YES;
     }
-    
-    [self setupView];
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
