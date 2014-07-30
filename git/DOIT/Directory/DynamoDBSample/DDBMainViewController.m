@@ -73,8 +73,11 @@
 // BOOLs to keep track of which items are already on the detail view
 @property (nonatomic, assign) BOOL addressFlag;
 @property (nonatomic, assign) BOOL phoneUsed;
+@property (nonatomic, readwrite) NSInteger phoneIndex;
 @property (nonatomic, assign) BOOL faxUsed;
+@property (nonatomic, readwrite) NSInteger faxIndex;
 @property (nonatomic, assign) BOOL addressUsed;
+@property (nonatomic, readwrite) NSInteger addressIndex;
 @property (nonatomic, readwrite)  NSInteger arrayOffset;
 
 // BOOL that indicates whether to list items by county
@@ -509,6 +512,25 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     
+    // I am so sorry for this.
+    // In future directory apps, each detail should get its own entry in the database to avoid
+    // nasty workarounds like this. If the detail has already been loaded, keep track of its
+    // index so we can load it again if we scroll down and up. Otherwise, we get an out of range
+    // error.
+    
+    if (indexPath.row == self.addressIndex)
+    {
+        goto label1;
+    }
+    if (indexPath.row == self.phoneIndex)
+    {
+        goto label2;
+    }
+    if (indexPath.row == self.faxIndex)
+    {
+        goto label3;
+    }
+
     
     if (self.showDetails == YES) {
         
@@ -518,14 +540,18 @@
             // If we haven't displayed an address yet
             if (!(self.addressUsed == YES))
             {
-                // Create a cell with the string in _tableRow.address
-                cell.textLabel.text = @"Address:";
-                cell.detailTextLabel.text = _tableRow.address;
-                
                 // Don't try to make another address cell
                 self.addressUsed = YES;
                 
                 self.arrayOffset++;
+                
+                self.addressIndex = indexPath.row;
+                
+            label1:
+                
+                // Create a cell with the string in _tableRow.address
+                cell.textLabel.text = @"Address:";
+                cell.detailTextLabel.text = _tableRow.address;
                 
                 // Word wrap so we can see the whole address. Setting the numberOfLines to 0 allows
                 // the string to use as many lines as it needs.
@@ -537,6 +563,7 @@
                 
                 // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
+                
                 return cell;
             }
         }
@@ -547,6 +574,13 @@
             // If there is not already a cell with phone number
             if (!(self.phoneUsed == YES))
             {
+                // Don't use the phone number anymore
+                self.phoneUsed = YES;
+                self.arrayOffset++;
+                self.phoneIndex = indexPath.row;
+                
+            label2:
+                
                 // Add the phone number to a cell
                 cell.textLabel.text = @"Phone:";
                 cell.detailTextLabel.text = _tableRow.phone;
@@ -554,9 +588,7 @@
                 // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 
-                // Don't use the phone number anymore
-                self.phoneUsed = YES;
-                self.arrayOffset++;
+
                 return cell;
             }
             
@@ -568,13 +600,17 @@
             // If there is not already a cell with a fax number
             if (!(self.faxUsed == YES))
             {
+                // Don't use the fax number anymore
+                self.faxUsed = YES;
+                self.arrayOffset++;
+                self.faxIndex = indexPath.row;
+                
+            label3:
+                
                 // Add the fax number to a cell
                 cell.textLabel.text = @"Fax:";
                 cell.detailTextLabel.text = _tableRow.fax;
                 
-                // Don't use the fax number anymore
-                self.faxUsed = YES;
-                self.arrayOffset++;
                 
                 // Disable user interaciton so you can't call the fax number by touching it
                 cell.userInteractionEnabled = NO;
@@ -854,6 +890,9 @@
     _faxUsed = NO;
     _addressUsed = NO;
     _arrayOffset = 0;
+    _addressIndex = -1;
+    _phoneIndex = -1;
+    _faxIndex = -1;
     
     [self setupView];
     [self.tableView reloadData];
