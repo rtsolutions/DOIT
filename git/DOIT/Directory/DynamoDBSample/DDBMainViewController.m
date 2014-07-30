@@ -699,6 +699,7 @@
             NSString *addressNoSpaces = [self.address stringByReplacingOccurrencesOfString:@" " withString:@"+"];
             NSString *addressURL = [@"http://maps.apple.com?q=" stringByAppendingString:addressNoSpaces];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:addressURL]];
+            return;
         }
         if ([cellText  isEqual: @"phone"])
         {
@@ -708,6 +709,7 @@
             
             NSString *phoneNumberURL = [@"tel://" stringByAppendingString:formattedPhoneNumber];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
+            return;
         }
 
         // If we're not on a details screen, the only other option is to open up a new tableview
