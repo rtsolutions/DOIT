@@ -120,7 +120,7 @@
         // Set up scan expression to download the database
         AWSDynamoDBScanExpression *scanExpression = [AWSDynamoDBScanExpression new];
         scanExpression.exclusiveStartKey = self.lastEvaluatedKey;
-        scanExpression.limit = @20;
+        scanExpression.limit = @10000;
         AWSDynamoDBObjectMapper *dynamoDBObjectMapper = [AWSDynamoDBObjectMapper defaultDynamoDBObjectMapper];
         
         // Scan the database. Use BFTask to keep the method safe

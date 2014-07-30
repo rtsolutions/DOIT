@@ -105,9 +105,9 @@
     
     // Include elected officials in A to Z directory?
     /*
-    for (DDBTableRow *item in self.electedOfficials) {
-        [self.tableRows addObject:item];
-    }*/
+     for (DDBTableRow *item in self.electedOfficials) {
+     [self.tableRows addObject:item];
+     }*/
 }
 
 
@@ -349,7 +349,7 @@
         }
         
         self.listingByCounty = NO;
-
+        
         // Clear filteredTableRows
         [self.filteredTableRows removeAllObjects];
         
@@ -389,7 +389,7 @@
     // Selection Index for quick scrolling through the table. Lists the alphabet on the right
     // side of the screen
     
-   // if (!(self.showDetails = YES))
+    // if (!(self.showDetails = YES))
     {
         NSArray *alphabet = [NSArray new];
         
@@ -398,7 +398,7 @@
         return alphabet;
     }
     
-  //  return nil;
+    //  return nil;
 }
 
 
@@ -440,7 +440,7 @@
     }
     
     // If we're not displaying an address, just use 40 as the size of each cell
-    return 40.0;
+    return 44.0;
     
     
 }
@@ -454,8 +454,10 @@
     // Add one to rowCount for phone number and fax. For address, add two, so we can display a dummy
     // cell at the end. If we don't do this, the size of every cell will be the size of the address
     // cell (big) and that looks messy.
+    
+    NSInteger rowCount = 0;
+    
     if (self.showDetails == YES) {
-        NSInteger rowCount = 0;
         
         if ([_tableRow.phone length] > 0)
         {
@@ -470,24 +472,22 @@
             rowCount++;
             rowCount++;
         }
-        return rowCount;
     }
     // If we're viewing search results, return the number of items in the filteredTableRows array
-    else if (self.isFiltered == YES)
+    if (self.isFiltered == YES)
     {
-        return [self.filteredTableRows count];
+        return (rowCount + [self.filteredTableRows count]);
     }
-    else if (self.listingByCounty == YES)
+    if (self.listingByCounty == YES)
     {
         DDBTableRow *item = [self.tableRows objectAtIndex:section];
         NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
         return [listingsInCountyArray count];
     }
     // Otherwise just return the number of items in tableRows
-    else
-    {
-        return [self.tableRows count];
-    }
+    rowCount += [self.tableRows count];
+    
+    return rowCount;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -588,8 +588,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    else
-    {
+
         if (self.isFiltered == YES)
         {
             // Add rows that don't contain details
@@ -599,47 +598,47 @@
             return cell;
         }
         /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
-        else if (self.showingFavorites == YES)
-        {
-            
-            [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
-            cell.detailTextLabel.numberOfLines = 1;
-            
-            DDBTableRow *item = self.tableRows[indexPath.row];
-            if ([item.hashKey integerValue] <= 4)
-            {
-                for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-                {
-                    if ([possibleParent.hashKey integerValue] <= 4)
-                    {
-                        if ([item.parentID isEqual: possibleParent.rangeKey])
-                        {
-                            cell.textLabel.text = possibleParent.title;
-                        }
-                    }
-                }
-            }
-            
-            else if ([item.hashKey integerValue] > 4)
-            {
-                for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-                {
-                    if ([possibleParent.hashKey integerValue] > 4)
-                    {
-                        if ([item.parentID isEqual: possibleParent.rangeKey])
-                        {
-                            cell.textLabel.text = possibleParent.title;
-                        }
-                    }
-                }
-                
-            }
-            
-
-            cell.detailTextLabel.text = item.title;
-        }*/
+         else if (self.showingFavorites == YES)
+         {
+         
+         [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+         cell.detailTextLabel.numberOfLines = 1;
+         
+         DDBTableRow *item = self.tableRows[indexPath.row];
+         if ([item.hashKey integerValue] <= 4)
+         {
+         for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+         {
+         if ([possibleParent.hashKey integerValue] <= 4)
+         {
+         if ([item.parentID isEqual: possibleParent.rangeKey])
+         {
+         cell.textLabel.text = possibleParent.title;
+         }
+         }
+         }
+         }
+         
+         else if ([item.hashKey integerValue] > 4)
+         {
+         for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+         {
+         if ([possibleParent.hashKey integerValue] > 4)
+         {
+         if ([item.parentID isEqual: possibleParent.rangeKey])
+         {
+         cell.textLabel.text = possibleParent.title;
+         }
+         }
+         }
+         
+         }
+         
+         
+         cell.detailTextLabel.text = item.title;
+         }*/
         
-        else if (self.listingByCounty == YES)
+        if (self.listingByCounty == YES)
         {
             DDBTableRow *item = [self.tableRows objectAtIndex:indexPath.section];
             NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
@@ -651,15 +650,14 @@
             
             return cell;
         }
-        else
-        {
+
             // Add rows that don't contain details
             DDBTableRow *item = self.tableRows[indexPath.row];
             cell.textLabel.text = item.title;
             cell.detailTextLabel.text = nil;
             return cell;
-        }
-    }
+
+    
     return cell;
 }
 
@@ -740,7 +738,7 @@
     if ([indexRow.details isEqual:@"YES"])
     {
         // Setup the mainViewController for displaying details
-        mainVewController.viewType = DDBMainViewTypeDetails;
+        //mainVewController.viewType = DDBMainViewTypeDetails;
         mainVewController.tableRow = indexRow;
         mainVewController.showDetails = YES;
         mainVewController.phoneNumber = indexRow.phone;
@@ -748,13 +746,13 @@
         mainVewController.title = indexRow.title;
         
     }
-    else
-    {
-        mainVewController.parentID = indexRow.rangeKey;
-        mainVewController.viewType = DDBMainViewTypeChildren;
-        mainVewController.title = indexRow.title;
-        
-    }
+    
+    
+    mainVewController.parentID = indexRow.rangeKey;
+    mainVewController.viewType = DDBMainViewTypeChildren;
+    mainVewController.title = indexRow.title;
+    
+    
     mainVewController.parentItem = indexRow;
     NSInteger temp = [indexRow.hashKey integerValue];
     temp++;
@@ -819,7 +817,7 @@
     
     _tableRows = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
-
+    
     _lock = [NSLock new];
     
     [self.navigationController.navigationBar setTranslucent:NO];
