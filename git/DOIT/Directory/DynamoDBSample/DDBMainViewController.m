@@ -31,6 +31,10 @@
 // tableRows filtered by the search bar
 @property (nonatomic, readwrite) NSMutableArray *filteredTableRows;
 
+// Array to hold favorites items ([singletonArrayObject SharedInstance].favoritesArray only
+// holds rangeKeys
+@property (nonatomic, readwrite) NSMutableArray *favoritesArray;
+
 // Array of counties -- possibly not needed
 @property (nonatomic, readwrite) NSArray *countyArray;
 
@@ -160,11 +164,18 @@
 
 // Adds all items in the global favoritesArray to tableRows
 - (void)showFavorites {
-    
+    [self.favoritesArray removeAllObjects];
     [self.tableRows removeAllObjects];
     self.showingFavorites = YES;
     
-    for (DDBTableRow *item in [SingletonFavoritesArray sharedInstance].favoritesArray)
+    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
+    {
+        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
+        {
+            [self.favoritesArray addObject:item];
+        }
+    }
+    for (DDBTableRow *item in self.favoritesArray)
     {
         [self.tableRows addObject:item];
     }
@@ -265,7 +276,7 @@
                 }
                 
                 // If the current item is a favorite...
-                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:self.parentItem];
+                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
                 
                 if (alreadyFavorite)
                 {
@@ -288,13 +299,13 @@
             
         case 1:
         {
-            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:self.parentItem];
+            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
             
             // If the item is already a favorite
             if (alreadyFavorite)
             {
                 // Remove from favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:self.parentItem];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
                 
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
@@ -311,15 +322,15 @@
             else
             {
                 // Add to favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:self.parentItem];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem.rangeKey];
                 
                 // Sort the favoritesArray by title
                 NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
                 
                 NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortByTitleDescriptor, nil];
-                NSMutableArray *temp = [SingletonFavoritesArray sharedInstance].favoritesArray;
+                NSMutableArray *temp = self.favoritesArray;
                 [temp sortUsingDescriptors:sortingDescriptor];
-                [SingletonFavoritesArray sharedInstance].favoritesArray = [temp mutableCopy];
+                self.favoritesArray = [temp mutableCopy];
                 
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
@@ -849,6 +860,12 @@
             //[self showFavorites];
             break;
         }
+        
+        case DDBMainViewTypeFavorites:
+        {
+            [self showFavorites];
+            break;
+        }
             
         case DDBMainViewTypeChildren:
         {
@@ -867,6 +884,7 @@
     [super viewDidLoad];
     
     _tableRows = [NSMutableArray new];
+    _favoritesArray = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
     
     _lock = [NSLock new];

@@ -352,11 +352,11 @@
             mainViewController.electedOfficials = self.electedOfficials;
             break;
         }
-            /*case 3:
-             {
-             mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
-             }
-             case 4:
+        case 5:
+        {
+        mainViewController.viewType = DDBMainViewTypeFavorites;
+        }
+             /*case 4:
              {
              mainViewController.viewType = DDBMainViewTypeN11;
              }*/

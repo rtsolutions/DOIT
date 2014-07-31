@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
     DDBMainViewTypeElectedOfficials,
     DDBMainViewTypeByCounty,
     DDBMainViewTypeChildren,
-    DDBMainViewTypeDetails
+    DDBMainViewTypeDetails,
+    DDBMainViewTypeFavorites
 
 };
 
