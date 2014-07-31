@@ -308,7 +308,7 @@
                 [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
@@ -333,7 +333,7 @@
                 self.favoritesArray = [temp mutableCopy];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
