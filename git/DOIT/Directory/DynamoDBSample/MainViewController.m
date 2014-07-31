@@ -228,7 +228,15 @@
     {
         self.searchString = searchText;
     }
+    if (searchText.length == 0)
+    {
+        [searchBar performSelector:@selector(resignFirstResponder) withObject:nil afterDelay:0];
+    }
     
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
+    [searchBar resignFirstResponder];
 }
 
 - (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {

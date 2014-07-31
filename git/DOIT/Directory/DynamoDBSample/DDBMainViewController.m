@@ -702,8 +702,43 @@
         
         DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
         
-        cell.textLabel.text=listing.title;
-        cell.detailTextLabel.text = nil;
+        [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        cell.textLabel.numberOfLines = 2;
+        
+        cell.detailTextLabel.text = listing.title;
+        
+        [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        cell.detailTextLabel.numberOfLines = 2;
+        
+        if ([listing.hashKey integerValue] <= 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] <= 4)
+                {
+                    if ([listing.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+        }
+        
+        else if ([listing.hashKey integerValue] > 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] > 4)
+                {
+                    if ([listing.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+            
+        }
         
         return cell;
     }
