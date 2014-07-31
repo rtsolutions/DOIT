@@ -20,7 +20,9 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
     DDBMainViewTypeByCounty,
     DDBMainViewTypeChildren,
     DDBMainViewTypeDetails,
-    DDBMainViewTypeFavorites
+    DDBMainViewTypeFavorites,
+    DDBMainViewTypeN11,
+    DDBMainViewTypeNonEmergencyContacts
 
 };
 
@@ -40,6 +42,8 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 @property (nonatomic, readwrite, strong) NSMutableArray *array0003;
 @property (nonatomic, readwrite, strong) NSMutableArray *electedOfficials;
 @property (nonatomic, readwrite, strong) NSMutableArray *houseAndSenate;
+@property (nonatomic, readwrite, strong) NSMutableArray *n11;
+@property (nonatomic, readwrite, strong) NSMutableArray *nonEmergencyContacts;
 
 
 

@@ -68,6 +68,9 @@
                                                 <state key="normal" image="nonEmergencyContacts.png">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="nQs-i6-JM7" kind="push" id="Kpc-yq-oV8"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="n11" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZyL-Nn-Jye">
                                                 <rect key="frame" x="17" y="246" width="286" height="45"/>
@@ -75,6 +78,9 @@
                                                 <state key="normal" image="n11.png">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="nQs-i6-JM7" kind="push" id="ViA-ft-tNT"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oKJ-iC-FLE">
                                                 <rect key="frame" x="17" y="304" width="286" height="45"/>
@@ -274,7 +280,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="lu0-fu-BOV"/>
         <segue reference="AgC-Ni-hhj"/>
-        <segue reference="tyd-S9-hXv"/>
     </inferredMetricsTieBreakers>
 </document>

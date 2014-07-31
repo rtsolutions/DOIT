@@ -190,6 +190,22 @@
     }
 }
 
+- (void) showN11 {
+    [self.tableRows removeAllObjects];
+    for (DDBTableRow *item in self.n11)
+    {
+        [self.tableRows addObject:item];
+    }
+}
+
+- (void) showNonEmergencyContacts {
+    [self.tableRows removeAllObjects];
+    for (DDBTableRow *item in self.nonEmergencyContacts)
+    {
+        [self.tableRows addObject:item];
+    }
+}
+
 // Sorts the directory by county, rather than alphabetically
 - (void)showCounties {
     self.listingByCounty = YES;
@@ -941,6 +957,17 @@
         {
             break;
         }
+        case DDBMainViewTypeNonEmergencyContacts:
+        {
+            [self showNonEmergencyContacts];
+            break;
+        }
+        case DDBMainViewTypeN11:
+        {
+            [self showN11];
+            break;
+        }
+            
     }
 }
 

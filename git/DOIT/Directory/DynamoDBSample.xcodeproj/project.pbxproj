@@ -58,7 +58,7 @@
 		3B9E074B19788C6B0082BA8B /* timeStamp.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timeStamp.archive; sourceTree = "<group>"; };
 		3B9E0755197D7E360082BA8B /* SingletonFavoritesArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonFavoritesArray.m; sourceTree = SOURCE_ROOT; };
 		3B9E0757197D7E450082BA8B /* SingletonFavoritesArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonFavoritesArray.h; sourceTree = SOURCE_ROOT; };
-		3B9E0758197D81270082BA8B /* favoritesArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = favoritesArray.archive; sourceTree = "<group>"; };
+		3B9E0758197D81270082BA8B /* favoritesArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = favoritesArray.archive; path = DynamoDBSample/favoritesArray.archive; sourceTree = SOURCE_ROOT; };
 		3B9E075B197DAB350082BA8B /* aToZDirectoryButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aToZDirectoryButton.png; sourceTree = "<group>"; };
 		3B9E075C197DAB350082BA8B /* aToZDirectoryButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aToZDirectoryButton@2x.png"; sourceTree = "<group>"; };
 		3B9E075D197DAB350082BA8B /* electedOfficials.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = electedOfficials.png; sourceTree = "<group>"; };
@@ -206,9 +206,9 @@
 				CE0DDA8218BD19C900BD8F49 /* InfoPlist.strings */,
 				3B9E0758197D81270082BA8B /* favoritesArray.archive */,
 				CE0DDA8518BD19C900BD8F49 /* main.m */,
-				CE0DDA8718BD19C900BD8F49 /* DynamoDBSample-Prefix.pch */,
 				3B9E0749197841760082BA8B /* directoryArray.archive */,
 				3B9E074B19788C6B0082BA8B /* timeStamp.archive */,
+				CE0DDA8718BD19C900BD8F49 /* DynamoDBSample-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

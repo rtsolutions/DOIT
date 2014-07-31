@@ -30,6 +30,8 @@
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
 @property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
+@property (nonatomic, readonly, strong) NSMutableArray *n11;
+@property (nonatomic, readonly, strong) NSMutableArray *nonEmergencyContacts;
 
 @property (nonatomic, readwrite) NSString *searchString;
 @property (nonatomic, assign) BOOL searching;
@@ -215,6 +217,12 @@
         {
             [self.electedOfficials addObject:item];
         }
+        else if ([item.hashKey isEqual:@"0008"])
+        {
+            [self.nonEmergencyContacts addObject:item];
+        }
+        else if ([item.hashKey isEqual:@"0010"])
+            [self.n11 addObject:item];
     }
 }
 
@@ -362,12 +370,20 @@
         }
         case 5:
         {
-        mainViewController.viewType = DDBMainViewTypeFavorites;
+            mainViewController.viewType = DDBMainViewTypeFavorites;
+            break;
         }
-             /*case 4:
-             {
-             mainViewController.viewType = DDBMainViewTypeN11;
-             }*/
+        case 3:
+        {
+            mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
+            mainViewController.nonEmergencyContacts = self.nonEmergencyContacts;
+            break;
+        }
+        case 4:
+        {
+            mainViewController.viewType = DDBMainViewTypeN11;
+            mainViewController.n11 = self.n11;
+        }
     }
 }
 @end
