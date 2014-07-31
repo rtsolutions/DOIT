@@ -30,6 +30,8 @@
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
 @property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
+@property (nonatomic, readonly, strong) NSMutableArray *n11;
+@property (nonatomic, readonly, strong) NSMutableArray *nonEmergencyContacts;
 
 @property (nonatomic, readwrite) NSString *searchString;
 @property (nonatomic, assign) BOOL searching;
@@ -66,13 +68,13 @@
                      AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                      
                      // Write time stamp back to array from .archive file
-                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/timeStamp.archive"];
+                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:@"timeStamp.archive"];
                      
                      self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
                      if (!self.updateDirectory) {
                          // Write the new time stamp to timeStamp.archive
-                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/timeStamp.archive"];
+                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:@"timeStamp.archive"];
                      }
                      
                      
@@ -146,7 +148,7 @@
                      [SingletonArrayObject sharedInstance].directoryArray = [temp mutableCopy];
                      
                      // Write the directory array to an archive file
-                     [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/directoryArray.archive"];
+                     [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:@"directoryArray.archive"];
                      
                      
                      
@@ -215,6 +217,12 @@
         {
             [self.electedOfficials addObject:item];
         }
+        else if ([item.hashKey isEqual:@"0008"])
+        {
+            [self.nonEmergencyContacts addObject:item];
+        }
+        else if ([item.hashKey isEqual:@"0010"])
+            [self.n11 addObject:item];
     }
 }
 
@@ -228,7 +236,15 @@
     {
         self.searchString = searchText;
     }
+    if (searchText.length == 0)
+    {
+        [searchBar performSelector:@selector(resignFirstResponder) withObject:nil afterDelay:0];
+    }
     
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
+    [searchBar resignFirstResponder];
 }
 
 - (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
@@ -266,12 +282,12 @@
     // Do any additional setup after loading the view.
     
     // Write the directory to a singleton variable that is accessible from anywhere within the project
-    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/directoryArray.archive"];
+    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"directoryArray.archive"];
     
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    if([[NSData dataWithContentsOfFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"] length] > 0)
+    if([[NSData dataWithContentsOfFile:@"favoritesArray.archive"] length] > 0)
     {
-        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
+        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"favoritesArray.archive"];
     }
     
     // Hide the navigation bar on startup
@@ -352,14 +368,22 @@
             mainViewController.electedOfficials = self.electedOfficials;
             break;
         }
-            /*case 3:
-             {
-             mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
-             }
-             case 4:
-             {
-             mainViewController.viewType = DDBMainViewTypeN11;
-             }*/
+        case 5:
+        {
+            mainViewController.viewType = DDBMainViewTypeFavorites;
+            break;
+        }
+        case 3:
+        {
+            mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
+            mainViewController.nonEmergencyContacts = self.nonEmergencyContacts;
+            break;
+        }
+        case 4:
+        {
+            mainViewController.viewType = DDBMainViewTypeN11;
+            mainViewController.n11 = self.n11;
+        }
     }
 }
 @end

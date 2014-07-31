@@ -31,6 +31,10 @@
 // tableRows filtered by the search bar
 @property (nonatomic, readwrite) NSMutableArray *filteredTableRows;
 
+// Array to hold favorites items ([singletonArrayObject SharedInstance].favoritesArray only
+// holds rangeKeys
+@property (nonatomic, readwrite) NSMutableArray *favoritesArray;
+
 // Array of counties -- possibly not needed
 @property (nonatomic, readwrite) NSArray *countyArray;
 
@@ -160,11 +164,18 @@
 
 // Adds all items in the global favoritesArray to tableRows
 - (void)showFavorites {
-    
+    [self.favoritesArray removeAllObjects];
     [self.tableRows removeAllObjects];
     self.showingFavorites = YES;
     
-    for (DDBTableRow *item in [SingletonFavoritesArray sharedInstance].favoritesArray)
+    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
+    {
+        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
+        {
+            [self.favoritesArray addObject:item];
+        }
+    }
+    for (DDBTableRow *item in self.favoritesArray)
     {
         [self.tableRows addObject:item];
     }
@@ -174,6 +185,22 @@
 - (void)showElectedOfficials {
     [self.tableRows removeAllObjects];
     for (DDBTableRow *item in self.houseAndSenate)
+    {
+        [self.tableRows addObject:item];
+    }
+}
+
+- (void) showN11 {
+    [self.tableRows removeAllObjects];
+    for (DDBTableRow *item in self.n11)
+    {
+        [self.tableRows addObject:item];
+    }
+}
+
+- (void) showNonEmergencyContacts {
+    [self.tableRows removeAllObjects];
+    for (DDBTableRow *item in self.nonEmergencyContacts)
     {
         [self.tableRows addObject:item];
     }
@@ -265,7 +292,7 @@
                 }
                 
                 // If the current item is a favorite...
-                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:self.parentItem];
+                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
                 
                 if (alreadyFavorite)
                 {
@@ -288,16 +315,16 @@
             
         case 1:
         {
-            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:self.parentItem];
+            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
             
             // If the item is already a favorite
             if (alreadyFavorite)
             {
                 // Remove from favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:self.parentItem];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
@@ -311,18 +338,18 @@
             else
             {
                 // Add to favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:self.parentItem];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem.rangeKey];
                 
                 // Sort the favoritesArray by title
                 NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
                 
                 NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortByTitleDescriptor, nil];
-                NSMutableArray *temp = [SingletonFavoritesArray sharedInstance].favoritesArray;
+                NSMutableArray *temp = self.favoritesArray;
                 [temp sortUsingDescriptors:sortingDescriptor];
-                [SingletonFavoritesArray sharedInstance].favoritesArray = [temp mutableCopy];
+                self.favoritesArray = [temp mutableCopy];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"/Users/rts/Desktop/DynamoDBSample/DynamoDBSample/favoritesArray.archive"];
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
@@ -516,7 +543,6 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    
     // I am so sorry for this.
     // In future directory apps, each detail should get its own entry in the database to avoid
     // nasty workarounds like this. If the detail has already been loaded, keep track of its
@@ -643,56 +669,121 @@
         cell.detailTextLabel.text = nil;
         return cell;
     }
-    /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
-     else if (self.showingFavorites == YES)
-     {
-     
-     [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
-     cell.detailTextLabel.numberOfLines = 1;
-     
-     DDBTableRow *item = self.tableRows[indexPath.row];
-     if ([item.hashKey integerValue] <= 4)
-     {
-     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-     {
-     if ([possibleParent.hashKey integerValue] <= 4)
-     {
-     if ([item.parentID isEqual: possibleParent.rangeKey])
-     {
-     cell.textLabel.text = possibleParent.title;
-     }
-     }
-     }
-     }
-     
-     else if ([item.hashKey integerValue] > 4)
-     {
-     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-     {
-     if ([possibleParent.hashKey integerValue] > 4)
-     {
-     if ([item.parentID isEqual: possibleParent.rangeKey])
-     {
-     cell.textLabel.text = possibleParent.title;
-     }
-     }
-     }
-     
-     }
+    else if (self.showingFavorites == YES)
+    {
+        
+        // Use a different style of cell so we have more room for parent title
+        [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        
+        [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
+        [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        cell.detailTextLabel.numberOfLines = 2;
+        
+        DDBTableRow *item = self.tableRows[indexPath.row];
+        if (item.parentID == nil)
+        {
+            cell.textLabel.text = nil;
+        }
+        if ([item.hashKey integerValue] <= 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] <= 4)
+                {
+                    if ([item.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+        }
+        
+        else if ([item.hashKey integerValue] > 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] > 4)
+                {
+                    if ([item.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+            
+        }
+
      
      
      cell.detailTextLabel.text = item.title;
-     }*/
+        
+        return cell;
+     }
     
     if (self.listingByCounty == YES)
     {
+        // Use a different style of cell so we have more room for parent title
+        [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+
         NSString *county = [self.sortedSections objectAtIndex:indexPath.section];
         NSArray *listingsInCountyArray = [self.sections objectForKey:county];
         
         DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
         
-        cell.textLabel.text=listing.title;
-        cell.detailTextLabel.text = nil;
+        [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
+        
+        cell.detailTextLabel.text = listing.title;
+        
+        [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        cell.detailTextLabel.numberOfLines = 2;
+        
+        if (listing.parentID == nil)
+        {
+            cell.textLabel.text = nil;
+        }
+        
+        if ([listing.hashKey integerValue] <= 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] <= 4)
+                {
+                    if ([listing.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+        }
+        
+        else if ([listing.hashKey integerValue] > 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] > 4)
+                {
+                    if ([listing.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+            
+        }
         
         return cell;
     }
@@ -849,6 +940,12 @@
             //[self showFavorites];
             break;
         }
+        
+        case DDBMainViewTypeFavorites:
+        {
+            [self showFavorites];
+            break;
+        }
             
         case DDBMainViewTypeChildren:
         {
@@ -860,6 +957,17 @@
         {
             break;
         }
+        case DDBMainViewTypeNonEmergencyContacts:
+        {
+            [self showNonEmergencyContacts];
+            break;
+        }
+        case DDBMainViewTypeN11:
+        {
+            [self showN11];
+            break;
+        }
+            
     }
 }
 
@@ -867,6 +975,7 @@
     [super viewDidLoad];
     
     _tableRows = [NSMutableArray new];
+    _favoritesArray = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
     
     _lock = [NSLock new];
