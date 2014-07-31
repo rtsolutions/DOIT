@@ -32,7 +32,11 @@
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0 green:158.0/255.0 blue:211.0/255.0 alpha:1.0]];
+    
+    if ([[UIView appearance] respondsToSelector:@selector(setBarTintColor:)])
+    {
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0 green:158.0/255.0 blue:211.0/255.0 alpha:1.0]];
+    }
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, nil]];
 
     return YES;
