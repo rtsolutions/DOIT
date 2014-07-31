@@ -527,7 +527,6 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    
     // I am so sorry for this.
     // In future directory apps, each detail should get its own entry in the database to avoid
     // nasty workarounds like this. If the detail has already been loaded, keep track of its
@@ -697,6 +696,8 @@
     
     if (self.listingByCounty == YES)
     {
+        [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+
         NSString *county = [self.sortedSections objectAtIndex:indexPath.section];
         NSArray *listingsInCountyArray = [self.sections objectForKey:county];
         
@@ -705,6 +706,11 @@
         [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         cell.textLabel.numberOfLines = 2;
+        cell.textLabel.textColor = [UIColor blueColor];
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
         
         cell.detailTextLabel.text = listing.title;
         
