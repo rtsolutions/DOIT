@@ -37,6 +37,9 @@
 // Number of sections the table will need when sorting items by county
 @property (nonatomic, strong) NSMutableDictionary *sections;
 
+// Array of counties in _sections
+@property (nonatomic, strong) NSArray *sortedSections;
+
 // The current item from tableRows
 @property (nonatomic, strong) DDBTableRow *tableRow;
 
@@ -206,7 +209,7 @@
     
     for (DDBTableRow *item in self.tableRows)
     {
-        NSMutableArray *listingsInCountyArray = [self.sections objectForKey:@"county"];
+        NSMutableArray *listingsInCountyArray = [self.sections objectForKey:item.county];
         
         if (listingsInCountyArray == nil)
         {
@@ -217,6 +220,9 @@
         
         [listingsInCountyArray addObject:item];
     }
+    
+    NSArray *unsortedSections = [self.sections allKeys];
+    self.sortedSections = [unsortedSections sortedArrayUsingSelector:@selector(compare:)];
     
 }
 
@@ -483,8 +489,8 @@
     }
     if (self.listingByCounty == YES)
     {
-        DDBTableRow *item = [self.tableRows objectAtIndex:section];
-        NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
+        NSString *county = [self.sortedSections objectAtIndex:section];
+        NSArray *listingsInCountyArray = [self.sections objectForKey:county];
         return [listingsInCountyArray count];
     }
     // Otherwise just return the number of items in tableRows
@@ -496,8 +502,8 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.listingByCounty == YES)
     {
-        DDBTableRow *item = [self.tableRows objectAtIndex:section];
-        return item.county;
+        NSString *county = [self.sortedSections objectAtIndex:section];
+        return county;
     }
     else
     {
@@ -680,8 +686,8 @@
     
     if (self.listingByCounty == YES)
     {
-        DDBTableRow *item = [self.tableRows objectAtIndex:indexPath.section];
-        NSArray *listingsInCountyArray = [self.sections objectForKey:item.county];
+        NSString *county = [self.sortedSections objectAtIndex:indexPath.section];
+        NSArray *listingsInCountyArray = [self.sections objectForKey:county];
         
         DDBTableRow *listing = [listingsInCountyArray objectAtIndex:indexPath.row];
         
