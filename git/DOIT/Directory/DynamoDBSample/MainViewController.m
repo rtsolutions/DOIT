@@ -342,7 +342,7 @@
         case 1:
         {
             mainViewController.viewType = DDBMainViewTypeByCounty;
-            mainViewController.title = @"Favorites";
+            mainViewController.title = @"County List";
             break;
         }
         case 2:
