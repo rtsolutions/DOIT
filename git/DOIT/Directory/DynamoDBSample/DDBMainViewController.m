@@ -653,49 +653,67 @@
         cell.detailTextLabel.text = nil;
         return cell;
     }
-    /*****Trying to put a little more information on the favorites screen. Not really enough room, though*****
-     else if (self.showingFavorites == YES)
-     {
-     
-     [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
-     cell.detailTextLabel.numberOfLines = 1;
-     
-     DDBTableRow *item = self.tableRows[indexPath.row];
-     if ([item.hashKey integerValue] <= 4)
-     {
-     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-     {
-     if ([possibleParent.hashKey integerValue] <= 4)
-     {
-     if ([item.parentID isEqual: possibleParent.rangeKey])
-     {
-     cell.textLabel.text = possibleParent.title;
-     }
-     }
-     }
-     }
-     
-     else if ([item.hashKey integerValue] > 4)
-     {
-     for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-     {
-     if ([possibleParent.hashKey integerValue] > 4)
-     {
-     if ([item.parentID isEqual: possibleParent.rangeKey])
-     {
-     cell.textLabel.text = possibleParent.title;
-     }
-     }
-     }
-     
-     }
+    else if (self.showingFavorites == YES)
+    {
+        
+        // Use a different style of cell so we have more room for parent title
+        [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        
+        [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        
+        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
+        [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        cell.detailTextLabel.numberOfLines = 2;
+        
+        DDBTableRow *item = self.tableRows[indexPath.row];
+        if (item.parentID == nil)
+        {
+            cell.textLabel.text = nil;
+        }
+        if ([item.hashKey integerValue] <= 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] <= 4)
+                {
+                    if ([item.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+        }
+        
+        else if ([item.hashKey integerValue] > 4)
+        {
+            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
+            {
+                if ([possibleParent.hashKey integerValue] > 4)
+                {
+                    if ([item.parentID isEqual: possibleParent.rangeKey])
+                    {
+                        cell.textLabel.text = possibleParent.title;
+                    }
+                }
+            }
+            
+        }
+
      
      
      cell.detailTextLabel.text = item.title;
-     }*/
+        
+        return cell;
+     }
     
     if (self.listingByCounty == YES)
     {
+        // Use a different style of cell so we have more room for parent title
         [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
 
         NSString *county = [self.sortedSections objectAtIndex:indexPath.section];
@@ -706,7 +724,7 @@
         [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
         cell.textLabel.numberOfLines = 2;
-        cell.textLabel.textColor = [UIColor blueColor];
+        cell.textLabel.textColor = [UIColor lightGrayColor];
         cell.textLabel.textAlignment = NSTextAlignmentLeft;
         
         cell.detailTextLabel.textColor = [UIColor blackColor];
@@ -716,6 +734,11 @@
         
         [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
         cell.detailTextLabel.numberOfLines = 2;
+        
+        if (listing.parentID == nil)
+        {
+            cell.textLabel.text = nil;
+        }
         
         if ([listing.hashKey integerValue] <= 4)
         {
