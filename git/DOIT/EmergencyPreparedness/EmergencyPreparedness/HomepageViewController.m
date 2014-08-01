@@ -163,9 +163,23 @@
 - (void) sortItems {
     for (DDBTableRow *item in [SingletonArray sharedInstance].alertsArray)
     {
-        [self.stories addObject:item];
+        if (!([item.hashKey isEqual:@"update"])){
+            [self.stories addObject:item];
+        }
 
     }
+    
+    
+    
+    // Sort the array alphabetically by county, then alphabetically by title
+    NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rangeKey"
+                                                                          ascending:NO];
+    
+    NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortByTitleDescriptor, nil];
+    NSMutableArray *temp = self.stories;
+    [temp sortUsingDescriptors:sortingDescriptor];
+    self.stories = [temp mutableCopy];
+    
     [self.tableView reloadData];
 }
 
