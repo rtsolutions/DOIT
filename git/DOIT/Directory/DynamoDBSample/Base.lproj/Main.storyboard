@@ -24,7 +24,7 @@
                                     <constraint firstAttribute="height" constant="144" id="B9w-gV-EJD"/>
                                 </constraints>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OR6-cc-ufg">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OR6-cc-ufg">
                                 <rect key="frame" x="0.0" y="208" width="320" height="360"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
@@ -256,6 +256,10 @@
                         <color key="barTintColor" red="0.0" green="0.61960784310000006" blue="0.82745098039999998" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="G1A-sq-cdP">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Hgd-wA-2ZD" kind="relationship" relationship="rootViewController" id="HJo-Qe-Kys"/>
                     </connections>
@@ -280,7 +284,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lu0-fu-BOV"/>
         <segue reference="HJo-Qe-Kys"/>
+        <segue reference="lu0-fu-BOV"/>
     </inferredMetricsTieBreakers>
 </document>

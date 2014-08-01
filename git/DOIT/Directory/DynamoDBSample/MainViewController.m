@@ -185,6 +185,8 @@
     [self.array0003 removeAllObjects];
     [self.electedOfficials removeAllObjects];
     [self.houseAndSenate removeAllObjects];
+    [self.n11 removeAllObjects];
+    [self.nonEmergencyContacts removeAllObjects];
     
     
     for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
@@ -261,6 +263,17 @@
             [self.searchResults addObject:item];
         }
     }
+    
+    // Search elected officials
+    for (DDBTableRow *item in self.electedOfficials)
+    {
+        NSRange titleRange = [item.title rangeOfString:self.searchString options:NSCaseInsensitiveSearch];
+        if(titleRange.location != NSNotFound)
+        {
+            [self.searchResults addObject:item];
+        }
+    }
+    
     self.searching = YES;
     
     [self performSegueWithIdentifier:@"listDepartments" sender:searchBar];
@@ -301,6 +314,8 @@
     _searchResults = [NSMutableArray new];
     _electedOfficials = [NSMutableArray new];
     _houseAndSenate = [NSMutableArray new];
+    _n11 = [NSMutableArray new];
+    _nonEmergencyContacts = [NSMutableArray new];
     
     
     // Create a locks to keep the methods thread safe
