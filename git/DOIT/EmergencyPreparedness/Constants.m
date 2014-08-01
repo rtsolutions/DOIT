@@ -13,13 +13,13 @@
  * permissions and limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
+#import "Constants.h"
 
-@interface PREPAppDelegate : UIResponder <UIApplicationDelegate>
+// TODO: Updates the following Cognito constants.
+NSString *const AWSAccountID = @"796658757335";
+NSString *const CognitoPoolID = @"us-east-1:8b855015-f64f-414a-9efc-1e1afb04b45a";
+NSString *const CognitoRoleAuth = nil;
+NSString *const CognitoRoleUnauth = @"arn:aws:iam::796658757335:role/directoryRole";
 
-@property (strong, nonatomic) UIWindow *window;
 
-@end
-
-
-
+NSString *const AWSSampleDynamoDBTableName = @"Emergency";
