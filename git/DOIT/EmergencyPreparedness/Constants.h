@@ -13,13 +13,11 @@
  * permissions and limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface PREPAppDelegate : UIResponder <UIApplicationDelegate>
+FOUNDATION_EXPORT  NSString *const AWSAccountID;
+FOUNDATION_EXPORT  NSString *const CognitoPoolID;
+FOUNDATION_EXPORT  NSString *const CognitoRoleAuth;
+FOUNDATION_EXPORT  NSString *const CognitoRoleUnauth;
 
-@property (strong, nonatomic) UIWindow *window;
-
-@end
-
-
-
+FOUNDATION_EXPORT  NSString *const AWSSampleDynamoDBTableName;

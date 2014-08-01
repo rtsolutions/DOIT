@@ -13,13 +13,26 @@
  * permissions and limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "DynamoDB.h"
 
-@interface PREPAppDelegate : UIResponder <UIApplicationDelegate>
+@class DDBTableRow;
+@class BFTask;
 
-@property (strong, nonatomic) UIWindow *window;
+@interface DDBDynamoDBManager : NSObject
+
++ (BFTask *)describeTable;
++ (BFTask *)createTable;
 
 @end
 
+@interface DDBTableRow : AWSDynamoDBModel <AWSDynamoDBModeling>
+
+@property (nonatomic, strong) NSString *hashKey;
+@property (nonatomic, strong) NSString *rangeKey;
+@property (nonatomic, strong) NSString *intro;
+@property (nonatomic, strong) NSString *story;
+@property (nonatomic, strong) NSString *timestamp;
 
 
+@end
