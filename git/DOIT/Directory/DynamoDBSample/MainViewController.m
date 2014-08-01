@@ -23,10 +23,10 @@
 @property (nonatomic, assign) BOOL doneLoading;
 @property (nonatomic, retain) NSMutableArray *timeStamp;
 
-@property (nonatomic, readonly, strong) NSMutableArray *array0000;
-@property (nonatomic, readonly, strong) NSMutableArray *array0001;
-@property (nonatomic, readonly, strong) NSMutableArray *array0002;
-@property (nonatomic, readonly, strong) NSMutableArray *array0003;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel1;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel2;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel3;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel4;
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
 @property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
@@ -186,10 +186,10 @@
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
 - (void)sortItems {
-    [self.array0000 removeAllObjects];
-    [self.array0001 removeAllObjects];
-    [self.array0002 removeAllObjects];
-    [self.array0003 removeAllObjects];
+    [self.directoryLevel1 removeAllObjects];
+    [self.directoryLevel2 removeAllObjects];
+    [self.directoryLevel3 removeAllObjects];
+    [self.directoryLevel4 removeAllObjects];
     [self.electedOfficials removeAllObjects];
     [self.houseAndSenate removeAllObjects];
     [self.n11 removeAllObjects];
@@ -201,22 +201,22 @@
         
         if ([item.hashKey  isEqual: @"0000"])
         {
-            [self.array0000 addObject:item];
+            [self.directoryLevel1 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0001"])
         {
-            [self.array0001 addObject:item];
+            [self.directoryLevel2 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0002"])
         {
-            [self.array0002 addObject:item];
+            [self.directoryLevel3 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0003"])
         {
-            [self.array0003 addObject:item];
+            [self.directoryLevel4 addObject:item];
         }
         else if ([item.hashKey  isEqual: @"0005"])
         {
@@ -263,7 +263,7 @@
     [self.searchResults removeAllObjects];
     
     // Scan through tableRows for the text in the search bar
-    for (DDBTableRow *item in self.array0000)
+    for (DDBTableRow *item in self.directoryLevel1)
     {
         NSRange titleRange = [item.title rangeOfString:self.searchString options:NSCaseInsensitiveSearch];
         if(titleRange.location != NSNotFound)
@@ -326,10 +326,10 @@
     [self.navigationController setNavigationBarHidden:YES];
     
     // Initialize arrays to hold the directory
-    _array0000 = [NSMutableArray new];
-    _array0001 = [NSMutableArray new];
-    _array0002 = [NSMutableArray new];
-    _array0003 = [NSMutableArray new];
+    _directoryLevel1 = [NSMutableArray new];
+    _directoryLevel2 = [NSMutableArray new];
+    _directoryLevel3 = [NSMutableArray new];
+    _directoryLevel4 = [NSMutableArray new];
     _searchResults = [NSMutableArray new];
     _electedOfficials = [NSMutableArray new];
     _houseAndSenate = [NSMutableArray new];
@@ -377,16 +377,16 @@
     
     if (_searching)
     {
-        mainViewController.array0000 = self.searchResults;
+        mainViewController.directoryLevel1 = self.searchResults;
     }
     else
     {
-        mainViewController.array0000 = self.array0000;
+        mainViewController.directoryLevel1 = self.directoryLevel1;
     }
     
-    mainViewController.array0001 = self.array0001;
-    mainViewController.array0002 = self.array0002;
-    mainViewController.array0003 = self.array0003;
+    mainViewController.directoryLevel2 = self.directoryLevel2;
+    mainViewController.directoryLevel3 = self.directoryLevel3;
+    mainViewController.directoryLevel4 = self.directoryLevel4;
     
     switch([sender tag]) {
         case 0:

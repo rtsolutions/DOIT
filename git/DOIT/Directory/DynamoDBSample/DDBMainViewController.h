@@ -36,10 +36,10 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 
 // Arrays to hold items with hashKeys 0000, 0001, 0002, 0003 so the app doesn't have
 // to search through the whole array every time
-@property (nonatomic, readwrite, strong) NSMutableArray *array0000;
-@property (nonatomic, readwrite, strong) NSMutableArray *array0001;
-@property (nonatomic, readwrite, strong) NSMutableArray *array0002;
-@property (nonatomic, readwrite, strong) NSMutableArray *array0003;
+@property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel1;
+@property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel2;
+@property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel3;
+@property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel4;
 @property (nonatomic, readwrite, strong) NSMutableArray *electedOfficials;
 @property (nonatomic, readwrite, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readwrite, strong) NSMutableArray *n11;

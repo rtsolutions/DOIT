@@ -110,7 +110,7 @@
     
     [self.tableRows removeAllObjects];
     
-    for (DDBTableRow *item in self.array0000) {
+    for (DDBTableRow *item in self.directoryLevel1) {
         [self.tableRows addObject:item];
     }
     
@@ -134,17 +134,17 @@
     switch (self.numParents) {
         case (1):
         {
-            currentArray = self.array0001;
+            currentArray = self.directoryLevel2;
             break;
         }
         case (2):
         {
-            currentArray = self.array0002;
+            currentArray = self.directoryLevel3;
             break;
         }
         case (3):
         {
-            currentArray = self.array0003;
+            currentArray = self.directoryLevel4;
             break;
         }
         case (6):
@@ -432,9 +432,20 @@
     
     // if (!(self.showDetails = YES))
     {
-        NSArray *alphabet = [NSArray new];
+        NSMutableArray *alphabet = [NSMutableArray new];
         
-        alphabet = [@"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z" componentsSeparatedByString:@" "];
+        
+        
+        NSString *letter = nil;
+        for (DDBTableRow *item in self.tableRows)
+        {
+            letter = [item.title substringToIndex:1];
+            if (!([alphabet containsObject:letter]))
+            {
+                [alphabet addObject:letter];
+            }
+        }
+        
         
         return alphabet;
     }
@@ -443,7 +454,35 @@
 }
 
 
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    if (!(self.listingByCounty))
+    {
+        for (int i = 0; i < [self.tableRows count]; i++) {
+            DDBTableRow *item = [self.tableRows objectAtIndex:i];
+            NSString *letterString = [item.title substringToIndex:1];
+            if ([letterString isEqualToString:title]) {
+                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+                return i;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < [self.sortedSections count]; i++) {
+            NSString *item = [self.sortedSections objectAtIndex:i];
+            NSString *letterString = [title substringToIndex:1];
+            if ([letterString isEqualToString:item]) {
+                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+                return i;
+            }
+        }
+    }
+    return 0;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    // Add a section for each county
     if (self.listingByCounty)
     {
         return [self.sections count];
@@ -927,10 +966,10 @@
     
     if (temp <= 4)
     {
-        mainVewController.array0000 = self.array0000;
-        mainVewController.array0001 = self.array0001;
-        mainVewController.array0002 = self.array0002;
-        mainVewController.array0003 = self.array0003;
+        mainVewController.directoryLevel1 = self.directoryLevel1;
+        mainVewController.directoryLevel2 = self.directoryLevel2;
+        mainVewController.directoryLevel3 = self.directoryLevel3;
+        mainVewController.directoryLevel4 = self.directoryLevel4;
     }
     else if (temp >= 5 && temp <=7)
     {
