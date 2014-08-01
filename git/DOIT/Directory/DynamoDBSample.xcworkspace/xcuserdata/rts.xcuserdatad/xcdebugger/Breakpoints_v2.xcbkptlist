@@ -97,5 +97,65 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DynamoDBSample/MainViewController.m"
+            timestampString = "428623732.487137"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "-refreshList:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[MainViewController refreshList:]_block_invoke"
+                  moduleName = "DynamoDBSample"
+                  urlString = "file:///Users/rts/Desktop/Xcode%20repository/DOIT/git/DOIT/Directory/DynamoDBSample/MainViewController.m"
+                  timestampString = "428624047.849173"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "1049">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[MainViewController refreshList:]_block_invoke"
+                  moduleName = "DynamoDBSample"
+                  urlString = "file:///Users/rts/Desktop/Xcode%20repository/DOIT/git/DOIT/Directory/DynamoDBSample/MainViewController.m"
+                  timestampString = "428624047.849478"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "1199">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[MainViewController refreshList:]_block_invoke131"
+                  moduleName = "DynamoDBSample"
+                  urlString = "file:///Users/rts/Desktop/Xcode%20repository/DOIT/git/DOIT/Directory/DynamoDBSample/MainViewController.m"
+                  timestampString = "428624047.850125"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "51">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

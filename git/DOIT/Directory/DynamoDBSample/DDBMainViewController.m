@@ -317,6 +317,9 @@
         {
             BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
             
+            // filePath to favoritesArray.archive
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"favoritesArray" ofType:@".archive"];
+            
             // If the item is already a favorite
             if (alreadyFavorite)
             {
@@ -324,7 +327,9 @@
                 [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
+                
+                
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
@@ -349,7 +354,7 @@
                 self.favoritesArray = [temp mutableCopy];
                 
                 // Write the global favoritesArray to the .archive file so it persists
-                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:@"favoritesArray.archive"];
+                [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
                 
                 // Prepare a confirmation message
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil

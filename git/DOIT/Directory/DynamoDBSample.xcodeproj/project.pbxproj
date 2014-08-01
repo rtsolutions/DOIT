@@ -57,10 +57,10 @@
 
 /* Begin PBXFileReference section */
 		3B6DD57719760DD1001C3FB8 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		3B6DD57819760DD1001C3FB8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		3B6DD57819760DD1001C3FB8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = DynamoDBSample/MainViewController.m; sourceTree = SOURCE_ROOT; };
 		3B9E074619783C2E0082BA8B /* SingletonArrayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingletonArrayObject.h; path = ../SingletonArrayObject.h; sourceTree = "<group>"; };
 		3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingletonArrayObject.m; path = ../SingletonArrayObject.m; sourceTree = "<group>"; };
-		3B9E0749197841760082BA8B /* directoryArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = directoryArray.archive; sourceTree = "<group>"; };
+		3B9E0749197841760082BA8B /* directoryArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = directoryArray.archive; path = DynamoDBSample/directoryArray.archive; sourceTree = SOURCE_ROOT; };
 		3B9E074B19788C6B0082BA8B /* timeStamp.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timeStamp.archive; sourceTree = "<group>"; };
 		3B9E0755197D7E360082BA8B /* SingletonFavoritesArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingletonFavoritesArray.m; sourceTree = SOURCE_ROOT; };
 		3B9E0757197D7E450082BA8B /* SingletonFavoritesArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonFavoritesArray.h; sourceTree = SOURCE_ROOT; };

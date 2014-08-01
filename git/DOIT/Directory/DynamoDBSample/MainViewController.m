@@ -68,13 +68,18 @@
                      AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                      
                      // Write time stamp back to array from .archive file
-                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:@"timeStamp.archive"];
+                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                     
+                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
                      
                      self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
                      if (!self.updateDirectory) {
+                         
                          // Write the new time stamp to timeStamp.archive
-                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:@"timeStamp.archive"];
+                         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                         
+                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                      }
                      
                      
@@ -137,7 +142,7 @@
                      
                      
                      // Copy the new directory to the directory array
-                     [SingletonArrayObject sharedInstance].directoryArray = paginatedOutput.items;
+                     [SingletonArrayObject sharedInstance].directoryArray = [paginatedOutput.items mutableCopy];
                      
                      // Sort the array by title
                      NSSortDescriptor *sortByRangeKeyDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title"
@@ -147,8 +152,10 @@
                      [temp sortUsingDescriptors:sortingDescriptor];
                      [SingletonArrayObject sharedInstance].directoryArray = [temp mutableCopy];
                      
+                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
+                     
                      // Write the directory array to an archive file
-                     [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:@"directoryArray.archive"];
+                     BOOL success = [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
                      
                      
                      
@@ -291,18 +298,28 @@
     return self;
 }
 
+- (void) applicationWillEnterForeground:(NSNotification *) notification {
+    if ([notification isEqual:UIApplicationWillEnterForegroundNotification])
+    {
+        [self updateDirectory];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     // Write the directory to a singleton variable that is accessible from anywhere within the project
-    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"directoryArray.archive"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
     
+    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+    
+    filePath = [[NSBundle mainBundle] pathForResource:@"favoritesArray" ofType:@".archive"];
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    if([[NSData dataWithContentsOfFile:@"favoritesArray.archive"] length] > 0)
+    if([[NSData dataWithContentsOfFile:filePath] length] > 0)
     {
-        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"favoritesArray.archive"];
+        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     }
     
     // Hide the navigation bar on startup
@@ -325,6 +342,13 @@
     // Compare the time stamp item in the locally stored array and the array on DynamoDB.
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
+    
+    
+    
+    // Create a listener so we can refresh the directory when the app is brough up from
+    // the background
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+
     
 }
 
