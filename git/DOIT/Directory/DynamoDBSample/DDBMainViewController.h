@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 
 
 
-@interface DDBMainViewController : UITableViewController <UIActionSheetDelegate>
+@interface DDBMainViewController : UITableViewController <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, assign) DDBMainViewType viewType;
 @property (nonatomic, assign) BOOL needsToRefresh;

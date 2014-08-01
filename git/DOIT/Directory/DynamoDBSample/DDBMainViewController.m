@@ -809,6 +809,20 @@
     return NO;
 }
 
+// Set up an alert for prompting the map application and dialer application
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1)
+    {
+        // Create a phone URL, and open up the dialer with the number.
+        NSString *formattedPhoneNumber = [self.phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
+        
+        NSString *phoneNumberURL = [@"tel://" stringByAppendingString:formattedPhoneNumber];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
+    }
+    
+    return;
+}
 
 // didSelectRowAtIndexPath is called when the user selects a cell on a tableview. It passes the index
 // of the selected cell.
@@ -835,12 +849,17 @@
         }
         if ([cellText  isEqual: @"Phone:"])
         {
-            // Create a phone URL, and open up the dialer with the number.
-            NSString *formattedPhoneNumber = [self.phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            // Prepare a string that says "Dial [phone number]?"
+            NSString *messageString = [[@"Dial " stringByAppendingString:self.phoneNumber] stringByAppendingString:@"?"];
             
+            // Prepare a prompt
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                            message:messageString
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Okay", nil];
             
-            NSString *phoneNumberURL = [@"tel://" stringByAppendingString:formattedPhoneNumber];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumberURL]];
+            [alert show];
             return;
         }
 

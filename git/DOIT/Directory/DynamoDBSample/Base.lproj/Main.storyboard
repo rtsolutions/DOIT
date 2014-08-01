@@ -198,7 +198,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My List" id="Ejd-Q3-XTi">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="4PH-uY-PLs">
+                        <barButtonItem key="rightBarButtonItem" image="Hamburger.png" id="4PH-uY-PLs">
                             <connections>
                                 <action selector="showActionSheet:" destination="nQs-i6-JM7" id="OIn-ez-dC7"/>
                             </connections>
@@ -270,6 +270,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Hamburger.png" width="40" height="40"/>
         <image name="aToZDirectoryButton.png" width="286" height="45"/>
         <image name="electedOfficials.png" width="286" height="45"/>
         <image name="favorites.png" width="286" height="45"/>

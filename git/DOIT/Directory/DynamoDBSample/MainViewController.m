@@ -241,12 +241,14 @@
     if (searchText.length == 0)
     {
         [searchBar performSelector:@selector(resignFirstResponder) withObject:nil afterDelay:0];
+        self.searching = NO;
     }
     
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
     [searchBar resignFirstResponder];
+    self.searching = NO;
 }
 
 - (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
