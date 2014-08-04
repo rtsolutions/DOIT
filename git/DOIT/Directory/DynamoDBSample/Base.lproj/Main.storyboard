@@ -198,7 +198,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My List" id="Ejd-Q3-XTi">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="4PH-uY-PLs">
+                        <barButtonItem key="rightBarButtonItem" image="Hamburger.png" id="4PH-uY-PLs">
                             <connections>
                                 <action selector="showActionSheet:" destination="nQs-i6-JM7" id="OIn-ez-dC7"/>
                             </connections>
@@ -256,6 +256,10 @@
                         <color key="barTintColor" red="0.0" green="0.61960784310000006" blue="0.82745098039999998" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="G1A-sq-cdP">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Hgd-wA-2ZD" kind="relationship" relationship="rootViewController" id="HJo-Qe-Kys"/>
                     </connections>
@@ -266,6 +270,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Hamburger.png" width="40" height="40"/>
         <image name="aToZDirectoryButton.png" width="286" height="45"/>
         <image name="electedOfficials.png" width="286" height="45"/>
         <image name="favorites.png" width="286" height="45"/>
@@ -280,7 +285,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lu0-fu-BOV"/>
         <segue reference="HJo-Qe-Kys"/>
+        <segue reference="lu0-fu-BOV"/>
     </inferredMetricsTieBreakers>
 </document>

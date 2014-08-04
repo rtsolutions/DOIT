@@ -23,10 +23,10 @@
 @property (nonatomic, assign) BOOL doneLoading;
 @property (nonatomic, retain) NSMutableArray *timeStamp;
 
-@property (nonatomic, readonly, strong) NSMutableArray *array0000;
-@property (nonatomic, readonly, strong) NSMutableArray *array0001;
-@property (nonatomic, readonly, strong) NSMutableArray *array0002;
-@property (nonatomic, readonly, strong) NSMutableArray *array0003;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel1;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel2;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel3;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel4;
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
 @property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
@@ -68,13 +68,18 @@
                      AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                      
                      // Write time stamp back to array from .archive file
-                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:@"timeStamp.archive"];
+                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                     
+                     self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
                      
                      self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
                      if (!self.updateDirectory) {
+                         
                          // Write the new time stamp to timeStamp.archive
-                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:@"timeStamp.archive"];
+                         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                         
+                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                      }
                      
                      
@@ -137,7 +142,7 @@
                      
                      
                      // Copy the new directory to the directory array
-                     [SingletonArrayObject sharedInstance].directoryArray = paginatedOutput.items;
+                     [SingletonArrayObject sharedInstance].directoryArray = [paginatedOutput.items mutableCopy];
                      
                      // Sort the array by title
                      NSSortDescriptor *sortByRangeKeyDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title"
@@ -147,8 +152,10 @@
                      [temp sortUsingDescriptors:sortingDescriptor];
                      [SingletonArrayObject sharedInstance].directoryArray = [temp mutableCopy];
                      
+                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
+                     
                      // Write the directory array to an archive file
-                     [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:@"directoryArray.archive"];
+                     BOOL success = [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
                      
                      
                      
@@ -179,10 +186,10 @@
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
 - (void)sortItems {
-    [self.array0000 removeAllObjects];
-    [self.array0001 removeAllObjects];
-    [self.array0002 removeAllObjects];
-    [self.array0003 removeAllObjects];
+    [self.directoryLevel1 removeAllObjects];
+    [self.directoryLevel2 removeAllObjects];
+    [self.directoryLevel3 removeAllObjects];
+    [self.directoryLevel4 removeAllObjects];
     [self.electedOfficials removeAllObjects];
     [self.houseAndSenate removeAllObjects];
     [self.n11 removeAllObjects];
@@ -194,22 +201,22 @@
         
         if ([item.hashKey  isEqual: @"0000"])
         {
-            [self.array0000 addObject:item];
+            [self.directoryLevel1 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0001"])
         {
-            [self.array0001 addObject:item];
+            [self.directoryLevel2 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0002"])
         {
-            [self.array0002 addObject:item];
+            [self.directoryLevel3 addObject:item];
         }
         
         else if ([item.hashKey  isEqual: @"0003"])
         {
-            [self.array0003 addObject:item];
+            [self.directoryLevel4 addObject:item];
         }
         else if ([item.hashKey  isEqual: @"0005"])
         {
@@ -241,12 +248,14 @@
     if (searchText.length == 0)
     {
         [searchBar performSelector:@selector(resignFirstResponder) withObject:nil afterDelay:0];
+        self.searching = NO;
     }
     
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
     [searchBar resignFirstResponder];
+    self.searching = NO;
 }
 
 - (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
@@ -254,7 +263,7 @@
     [self.searchResults removeAllObjects];
     
     // Scan through tableRows for the text in the search bar
-    for (DDBTableRow *item in self.array0000)
+    for (DDBTableRow *item in self.directoryLevel1)
     {
         NSRange titleRange = [item.title rangeOfString:self.searchString options:NSCaseInsensitiveSearch];
         if(titleRange.location != NSNotFound)
@@ -263,6 +272,17 @@
             [self.searchResults addObject:item];
         }
     }
+    
+    // Search elected officials
+    for (DDBTableRow *item in self.electedOfficials)
+    {
+        NSRange titleRange = [item.title rangeOfString:self.searchString options:NSCaseInsensitiveSearch];
+        if(titleRange.location != NSNotFound)
+        {
+            [self.searchResults addObject:item];
+        }
+    }
+    
     self.searching = YES;
     
     [self performSegueWithIdentifier:@"listDepartments" sender:searchBar];
@@ -278,28 +298,38 @@
     return self;
 }
 
+- (void) applicationWillEnterForeground:(NSNotification *) notification {
+    if ([notification isEqual:UIApplicationWillEnterForegroundNotification])
+    {
+        [self updateDirectory];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     // Write the directory to a singleton variable that is accessible from anywhere within the project
-    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"directoryArray.archive"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
     
+    [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+    
+    filePath = [[NSBundle mainBundle] pathForResource:@"favoritesArray" ofType:@".archive"];
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    if([[NSData dataWithContentsOfFile:@"favoritesArray.archive"] length] > 0)
+    if([[NSData dataWithContentsOfFile:filePath] length] > 0)
     {
-        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"favoritesArray.archive"];
+        [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     }
     
     // Hide the navigation bar on startup
     [self.navigationController setNavigationBarHidden:YES];
     
     // Initialize arrays to hold the directory
-    _array0000 = [NSMutableArray new];
-    _array0001 = [NSMutableArray new];
-    _array0002 = [NSMutableArray new];
-    _array0003 = [NSMutableArray new];
+    _directoryLevel1 = [NSMutableArray new];
+    _directoryLevel2 = [NSMutableArray new];
+    _directoryLevel3 = [NSMutableArray new];
+    _directoryLevel4 = [NSMutableArray new];
     _searchResults = [NSMutableArray new];
     _electedOfficials = [NSMutableArray new];
     _houseAndSenate = [NSMutableArray new];
@@ -312,6 +342,13 @@
     // Compare the time stamp item in the locally stored array and the array on DynamoDB.
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
+    
+    
+    
+    // Create a listener so we can refresh the directory when the app is brough up from
+    // the background
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+
     
 }
 
@@ -340,16 +377,16 @@
     
     if (_searching)
     {
-        mainViewController.array0000 = self.searchResults;
+        mainViewController.directoryLevel1 = self.searchResults;
     }
     else
     {
-        mainViewController.array0000 = self.array0000;
+        mainViewController.directoryLevel1 = self.directoryLevel1;
     }
     
-    mainViewController.array0001 = self.array0001;
-    mainViewController.array0002 = self.array0002;
-    mainViewController.array0003 = self.array0003;
+    mainViewController.directoryLevel2 = self.directoryLevel2;
+    mainViewController.directoryLevel3 = self.directoryLevel3;
+    mainViewController.directoryLevel4 = self.directoryLevel4;
     
     switch([sender tag]) {
         case 0:
