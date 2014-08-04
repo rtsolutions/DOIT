@@ -185,6 +185,8 @@
     [self.array0003 removeAllObjects];
     [self.electedOfficials removeAllObjects];
     [self.houseAndSenate removeAllObjects];
+    [self.n11 removeAllObjects];
+    [self.nonEmergencyContacts removeAllObjects];
     
     
     for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
@@ -301,6 +303,8 @@
     _searchResults = [NSMutableArray new];
     _electedOfficials = [NSMutableArray new];
     _houseAndSenate = [NSMutableArray new];
+    _n11 = [NSMutableArray new];
+    _nonEmergencyContacts = [NSMutableArray new];
     
     
     // Create a locks to keep the methods thread safe
