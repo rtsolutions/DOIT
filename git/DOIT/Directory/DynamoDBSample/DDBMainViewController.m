@@ -430,27 +430,11 @@
     // Selection Index for quick scrolling through the table. Lists the alphabet on the right
     // side of the screen
     
-    // if (!(self.showDetails = YES))
-    {
-        NSMutableArray *alphabet = [NSMutableArray new];
-        
-        
-        
-        NSString *letter = nil;
-        for (DDBTableRow *item in self.tableRows)
-        {
-            letter = [item.title substringToIndex:1];
-            if (!([alphabet containsObject:letter]))
-            {
-                [alphabet addObject:letter];
-            }
-        }
-        
-        
-        return alphabet;
-    }
     
-    //  return nil;
+    NSArray *alphabet = [@"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z" componentsSeparatedByString:@" "];
+    
+    return alphabet;
+    
 }
 
 
@@ -460,24 +444,41 @@
         for (int i = 0; i < [self.tableRows count]; i++) {
             DDBTableRow *item = [self.tableRows objectAtIndex:i];
             NSString *letterString = [item.title substringToIndex:1];
-            if ([letterString isEqualToString:title]) {
-                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition: UITableViewScrollPositionTop animated:YES];
-                return i;
+            NSComparisonResult result = [letterString compare:title];
+            if (result == NSOrderedDescending) {
+                if (i > 0)
+                {
+                    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(i-2) inSection:0] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+                    return (i-2);
+                }
+                
             }
         }
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([self.tableRows count]-1) inSection:0] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+        return ([self.tableRows count]-1);
     }
     else
     {
         for (int i = 0; i < [self.sortedSections count]; i++) {
             NSString *item = [self.sortedSections objectAtIndex:i];
-            NSString *letterString = [title substringToIndex:1];
-            if ([letterString isEqualToString:item]) {
-                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i] atScrollPosition: UITableViewScrollPositionTop animated:YES];
-                return i;
+            NSString *letterString = [item substringToIndex:1];
+            NSComparisonResult result = [letterString compare:title];
+            if (result == NSOrderedDescending) {
+                if (i > 0)
+                {
+                    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:(i-1)] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+                    return (i-1);
+                }
+                else
+                {
+                    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:(i)] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+                    return (i);
+                }
             }
         }
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow: 0 inSection:([self.sortedSections count]-1)] atScrollPosition: UITableViewScrollPositionTop animated:YES];
+        return ([self.sortedSections count]-1);
     }
-    return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
