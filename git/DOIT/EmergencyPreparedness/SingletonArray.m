@@ -16,7 +16,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _shared = [[self alloc] init];
-        _shared.alertsArray = [[NSMutableArray alloc] init];
+        _shared.sharedArray = [[NSMutableArray alloc] init];
     });
     return _shared;
 }

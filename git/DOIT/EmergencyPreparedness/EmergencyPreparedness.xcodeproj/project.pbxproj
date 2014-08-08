@@ -7,6 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B4FD7C019927EFC0051A824 /* grayCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B4FD7BE19927EFC0051A824 /* grayCheck.png */; };
+		3B4FD7C119927EFC0051A824 /* greenCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B4FD7BF19927EFC0051A824 /* greenCheck.png */; };
+		3B4FD7C51992913B0051A824 /* ChecklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4FD7C319927F370051A824 /* ChecklistViewController.m */; };
+		3B4FD7C81992937B0051A824 /* checklistItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4FD7C71992937B0051A824 /* checklistItem.m */; };
+		3B4FD7CC19929FB70051A824 /* checkedArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B4FD7CB19929FB70051A824 /* checkedArray.archive */; };
+		3B4FD7CF1992D5A80051A824 /* BeingPreparedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4FD7CE1992D5A80051A824 /* BeingPreparedViewController.m */; };
+		3B8CC61E199026CB0014CEA6 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B8CC61D199026CB0014CEA6 /* PageContentViewController.m */; };
+		3B8CC62219912AC20014CEA6 /* EmergenyPreparednessBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B8CC62019912AC20014CEA6 /* EmergenyPreparednessBackground.png */; };
+		3B8CC62319912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B8CC62119912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png */; };
+		3B8CC6261991540D0014CEA6 /* Hamburger.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B8CC6241991540D0014CEA6 /* Hamburger.png */; };
+		3B8CC6271991540D0014CEA6 /* Hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B8CC6251991540D0014CEA6 /* Hamburger@2x.png */; };
+		3B8CC629199185D80014CEA6 /* alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B8CC628199185D80014CEA6 /* alert.png */; };
+		3B973DCB19940EF400CDC9B6 /* ManualPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B973DCA19940EF400CDC9B6 /* ManualPageViewController.m */; };
+		3B973DED199428A000CDC9B6 /* earthquake.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE2199428A000CDC9B6 /* earthquake.png */; };
+		3B973DEE199428A000CDC9B6 /* extremeheat.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE3199428A000CDC9B6 /* extremeheat.png */; };
+		3B973DEF199428A000CDC9B6 /* fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE4199428A000CDC9B6 /* fire.png */; };
+		3B973DF0199428A000CDC9B6 /* flood.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE5199428A000CDC9B6 /* flood.png */; };
+		3B973DF1199428A000CDC9B6 /* hazardousmaterials.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE6199428A000CDC9B6 /* hazardousmaterials.png */; };
+		3B973DF2199428A000CDC9B6 /* pandemicinfluenza.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE7199428A000CDC9B6 /* pandemicinfluenza.png */; };
+		3B973DF3199428A000CDC9B6 /* terrorism.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE8199428A000CDC9B6 /* terrorism.png */; };
+		3B973DF4199428A000CDC9B6 /* thunderstormsandlightning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DE9199428A000CDC9B6 /* thunderstormsandlightning.png */; };
+		3B973DF5199428A000CDC9B6 /* tornado.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DEA199428A000CDC9B6 /* tornado.png */; };
+		3B973DF6199428A000CDC9B6 /* wildfire.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DEB199428A000CDC9B6 /* wildfire.png */; };
+		3B973DF7199428A000CDC9B6 /* winterstormsandextremecold.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DEC199428A000CDC9B6 /* winterstormsandextremecold.png */; };
+		3B973DFD199521CF00CDC9B6 /* emergencysupplykit.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DF8199521CF00CDC9B6 /* emergencysupplykit.png */; };
+		3B973DFE199521CF00CDC9B6 /* fourstepstodisasterplanning.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DF9199521CF00CDC9B6 /* fourstepstodisasterplanning.png */; };
+		3B973DFF199521CF00CDC9B6 /* householdhazardouswasteemergency.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DFA199521CF00CDC9B6 /* householdhazardouswasteemergency.png */; };
+		3B973E00199521CF00CDC9B6 /* specialadvice.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DFB199521CF00CDC9B6 /* specialadvice.png */; };
+		3B973E01199521CF00CDC9B6 /* tipsforpetowners.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B973DFC199521CF00CDC9B6 /* tipsforpetowners.png */; };
 		3BB1B110198300DD000EE613 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB1B10F198300DD000EE613 /* Foundation.framework */; };
 		3BB1B112198300DD000EE613 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB1B111198300DD000EE613 /* CoreGraphics.framework */; };
 		3BB1B114198300DD000EE613 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB1B113198300DD000EE613 /* UIKit.framework */; };
@@ -22,15 +51,15 @@
 		3BB1B131198300DD000EE613 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB1B115198300DD000EE613 /* CoreData.framework */; };
 		3BB1B139198300DD000EE613 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BB1B137198300DD000EE613 /* InfoPlist.strings */; };
 		3BB1B13B198300DD000EE613 /* EmergencyPreparednessTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB1B13A198300DD000EE613 /* EmergencyPreparednessTests.m */; };
-		3BB1B14F1989ABCD000EE613 /* main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BB1B14E1989ABCD000EE613 /* main.storyboard */; };
+		3BB1B14F1989ABCD000EE613 /* main1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BB1B14E1989ABCD000EE613 /* main1.storyboard */; };
 		3BBCD8C8198AEA7B00330753 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8C7198AEA7B00330753 /* Constants.m */; };
 		3BBCD8CB198AECAB00330753 /* HomepageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8CA198AECAB00330753 /* HomepageViewController.m */; };
 		3BBCD8CE198AED1800330753 /* DDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8CD198AED1800330753 /* DDBManager.m */; };
 		3BBCD8D2198AEEEC00330753 /* SingletonArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8D1198AEEEC00330753 /* SingletonArray.m */; };
 		3BBCD8D4198AF0B400330753 /* timeStamp.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3BBCD8D3198AF0B400330753 /* timeStamp.archive */; };
-		3BBCD8D7198AF42900330753 /* AlertsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8D6198AF42900330753 /* AlertsTable.m */; };
 		3BBCD8D9198AF54600330753 /* alertArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3BBCD8D8198AF54600330753 /* alertArray.archive */; };
 		3BBCD8DC198AF70100330753 /* AlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8DB198AF70100330753 /* AlertViewController.m */; };
+		3BE909F61995476400B5F173 /* downarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE909F51995476400B5F173 /* downarrow.png */; };
 		9F85B48B2796413392A7FD1F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED43EFA31CC04CE2AC880A7C /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +74,40 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B4FD7BE19927EFC0051A824 /* grayCheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayCheck.png; sourceTree = "<group>"; };
+		3B4FD7BF19927EFC0051A824 /* greenCheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenCheck.png; sourceTree = "<group>"; };
+		3B4FD7C219927F370051A824 /* ChecklistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChecklistViewController.h; path = ../Images/ChecklistViewController.h; sourceTree = "<group>"; };
+		3B4FD7C319927F370051A824 /* ChecklistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChecklistViewController.m; path = ../Images/ChecklistViewController.m; sourceTree = "<group>"; };
+		3B4FD7C61992937B0051A824 /* checklistItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = checklistItem.h; path = EmergencyPreparedness/checklistItem.h; sourceTree = "<group>"; };
+		3B4FD7C71992937B0051A824 /* checklistItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = checklistItem.m; path = EmergencyPreparedness/checklistItem.m; sourceTree = "<group>"; };
+		3B4FD7CB19929FB70051A824 /* checkedArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = checkedArray.archive; sourceTree = "<group>"; };
+		3B4FD7CD1992D5A70051A824 /* BeingPreparedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeingPreparedViewController.h; sourceTree = "<group>"; };
+		3B4FD7CE1992D5A80051A824 /* BeingPreparedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeingPreparedViewController.m; sourceTree = "<group>"; };
+		3B8CC61C199026CA0014CEA6 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageContentViewController.h; sourceTree = "<group>"; };
+		3B8CC61D199026CB0014CEA6 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageContentViewController.m; sourceTree = "<group>"; };
+		3B8CC62019912AC20014CEA6 /* EmergenyPreparednessBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmergenyPreparednessBackground.png; sourceTree = "<group>"; };
+		3B8CC62119912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EmergenyPreparednessBackground@2x.png"; sourceTree = "<group>"; };
+		3B8CC6241991540D0014CEA6 /* Hamburger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hamburger.png; sourceTree = "<group>"; };
+		3B8CC6251991540D0014CEA6 /* Hamburger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hamburger@2x.png"; sourceTree = "<group>"; };
+		3B8CC628199185D80014CEA6 /* alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert.png; sourceTree = "<group>"; };
+		3B973DC919940EF400CDC9B6 /* ManualPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManualPageViewController.h; sourceTree = "<group>"; };
+		3B973DCA19940EF400CDC9B6 /* ManualPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManualPageViewController.m; sourceTree = "<group>"; };
+		3B973DE2199428A000CDC9B6 /* earthquake.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earthquake.png; sourceTree = "<group>"; };
+		3B973DE3199428A000CDC9B6 /* extremeheat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = extremeheat.png; sourceTree = "<group>"; };
+		3B973DE4199428A000CDC9B6 /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
+		3B973DE5199428A000CDC9B6 /* flood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flood.png; sourceTree = "<group>"; };
+		3B973DE6199428A000CDC9B6 /* hazardousmaterials.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hazardousmaterials.png; sourceTree = "<group>"; };
+		3B973DE7199428A000CDC9B6 /* pandemicinfluenza.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pandemicinfluenza.png; sourceTree = "<group>"; };
+		3B973DE8199428A000CDC9B6 /* terrorism.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = terrorism.png; sourceTree = "<group>"; };
+		3B973DE9199428A000CDC9B6 /* thunderstormsandlightning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thunderstormsandlightning.png; sourceTree = "<group>"; };
+		3B973DEA199428A000CDC9B6 /* tornado.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tornado.png; sourceTree = "<group>"; };
+		3B973DEB199428A000CDC9B6 /* wildfire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wildfire.png; sourceTree = "<group>"; };
+		3B973DEC199428A000CDC9B6 /* winterstormsandextremecold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = winterstormsandextremecold.png; sourceTree = "<group>"; };
+		3B973DF8199521CF00CDC9B6 /* emergencysupplykit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emergencysupplykit.png; sourceTree = "<group>"; };
+		3B973DF9199521CF00CDC9B6 /* fourstepstodisasterplanning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fourstepstodisasterplanning.png; sourceTree = "<group>"; };
+		3B973DFA199521CF00CDC9B6 /* householdhazardouswasteemergency.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = householdhazardouswasteemergency.png; sourceTree = "<group>"; };
+		3B973DFB199521CF00CDC9B6 /* specialadvice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = specialadvice.png; sourceTree = "<group>"; };
+		3B973DFC199521CF00CDC9B6 /* tipsforpetowners.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tipsforpetowners.png; sourceTree = "<group>"; };
 		3BB1B10C198300DD000EE613 /* EmergencyPreparedness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmergencyPreparedness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BB1B10F198300DD000EE613 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3BB1B111198300DD000EE613 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -57,13 +120,13 @@
 		3BB1B120198300DD000EE613 /* PREPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PREPAppDelegate.h; sourceTree = "<group>"; };
 		3BB1B121198300DD000EE613 /* PREPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PREPAppDelegate.m; sourceTree = "<group>"; };
 		3BB1B124198300DD000EE613 /* EmergencyPreparedness.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EmergencyPreparedness.xcdatamodel; sourceTree = "<group>"; };
-		3BB1B126198300DD000EE613 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		3BB1B126198300DD000EE613 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images.xcassets; sourceTree = "<group>"; };
 		3BB1B12C198300DD000EE613 /* EmergencyPreparednessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmergencyPreparednessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BB1B12D198300DD000EE613 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		3BB1B136198300DD000EE613 /* EmergencyPreparednessTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EmergencyPreparednessTests-Info.plist"; sourceTree = "<group>"; };
 		3BB1B138198300DD000EE613 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3BB1B13A198300DD000EE613 /* EmergencyPreparednessTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmergencyPreparednessTests.m; sourceTree = "<group>"; };
-		3BB1B14E1989ABCD000EE613 /* main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = main.storyboard; sourceTree = "<group>"; };
+		3BB1B14E1989ABCD000EE613 /* main1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = main1.storyboard; sourceTree = "<group>"; };
 		3BBCD8C6198AEA7B00330753 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3BBCD8C7198AEA7B00330753 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		3BBCD8C9198AECAB00330753 /* HomepageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomepageViewController.h; sourceTree = "<group>"; };
@@ -73,11 +136,10 @@
 		3BBCD8D0198AEEEC00330753 /* SingletonArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingletonArray.h; path = ../SingletonArray.h; sourceTree = "<group>"; };
 		3BBCD8D1198AEEEC00330753 /* SingletonArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingletonArray.m; path = ../SingletonArray.m; sourceTree = "<group>"; };
 		3BBCD8D3198AF0B400330753 /* timeStamp.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timeStamp.archive; sourceTree = "<group>"; };
-		3BBCD8D5198AF42900330753 /* AlertsTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertsTable.h; sourceTree = "<group>"; };
-		3BBCD8D6198AF42900330753 /* AlertsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertsTable.m; sourceTree = "<group>"; };
 		3BBCD8D8198AF54600330753 /* alertArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = alertArray.archive; sourceTree = "<group>"; };
 		3BBCD8DA198AF70100330753 /* AlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewController.h; sourceTree = "<group>"; };
 		3BBCD8DB198AF70100330753 /* AlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewController.m; sourceTree = "<group>"; };
+		3BE909F51995476400B5F173 /* downarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downarrow.png; sourceTree = "<group>"; };
 		7E8A15B4FAF746298DD1E0AB /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		ED43EFA31CC04CE2AC880A7C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -109,11 +171,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B8CC61F19912AC20014CEA6 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				3BE909F51995476400B5F173 /* downarrow.png */,
+				3B973DF8199521CF00CDC9B6 /* emergencysupplykit.png */,
+				3B973DF9199521CF00CDC9B6 /* fourstepstodisasterplanning.png */,
+				3B973DFA199521CF00CDC9B6 /* householdhazardouswasteemergency.png */,
+				3B973DFB199521CF00CDC9B6 /* specialadvice.png */,
+				3B973DFC199521CF00CDC9B6 /* tipsforpetowners.png */,
+				3B973DE2199428A000CDC9B6 /* earthquake.png */,
+				3B973DE3199428A000CDC9B6 /* extremeheat.png */,
+				3B973DE4199428A000CDC9B6 /* fire.png */,
+				3B973DE5199428A000CDC9B6 /* flood.png */,
+				3B973DE6199428A000CDC9B6 /* hazardousmaterials.png */,
+				3B973DE7199428A000CDC9B6 /* pandemicinfluenza.png */,
+				3B973DE8199428A000CDC9B6 /* terrorism.png */,
+				3B973DE9199428A000CDC9B6 /* thunderstormsandlightning.png */,
+				3B973DEA199428A000CDC9B6 /* tornado.png */,
+				3B973DEB199428A000CDC9B6 /* wildfire.png */,
+				3B973DEC199428A000CDC9B6 /* winterstormsandextremecold.png */,
+				3B4FD7BE19927EFC0051A824 /* grayCheck.png */,
+				3B4FD7BF19927EFC0051A824 /* greenCheck.png */,
+				3B8CC628199185D80014CEA6 /* alert.png */,
+				3B8CC6241991540D0014CEA6 /* Hamburger.png */,
+				3B8CC6251991540D0014CEA6 /* Hamburger@2x.png */,
+				3B8CC62019912AC20014CEA6 /* EmergenyPreparednessBackground.png */,
+				3B8CC62119912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png */,
+			);
+			path = Images;
+			sourceTree = SOURCE_ROOT;
+		};
 		3BB1B103198300DD000EE613 = {
 			isa = PBXGroup;
 			children = (
 				3BBCD8CC198AED1800330753 /* DDBManager.h */,
 				3BBCD8CD198AED1800330753 /* DDBManager.m */,
+				3B4FD7C61992937B0051A824 /* checklistItem.h */,
+				3B4FD7C71992937B0051A824 /* checklistItem.m */,
 				3BBCD8C6198AEA7B00330753 /* Constants.h */,
 				3BBCD8C7198AEA7B00330753 /* Constants.m */,
 				3BB1B117198300DD000EE613 /* EmergencyPreparedness */,
@@ -149,18 +244,25 @@
 		3BB1B117198300DD000EE613 /* EmergencyPreparedness */ = {
 			isa = PBXGroup;
 			children = (
+				3B8CC61F19912AC20014CEA6 /* Images */,
 				3BB1B120198300DD000EE613 /* PREPAppDelegate.h */,
 				3BB1B121198300DD000EE613 /* PREPAppDelegate.m */,
 				3BBCD8DA198AF70100330753 /* AlertViewController.h */,
 				3BBCD8DB198AF70100330753 /* AlertViewController.m */,
+				3B4FD7CD1992D5A70051A824 /* BeingPreparedViewController.h */,
+				3B4FD7CE1992D5A80051A824 /* BeingPreparedViewController.m */,
+				3B4FD7C219927F370051A824 /* ChecklistViewController.h */,
+				3B4FD7C319927F370051A824 /* ChecklistViewController.m */,
 				3BBCD8C9198AECAB00330753 /* HomepageViewController.h */,
 				3BBCD8CA198AECAB00330753 /* HomepageViewController.m */,
-				3BBCD8D5198AF42900330753 /* AlertsTable.h */,
-				3BBCD8D6198AF42900330753 /* AlertsTable.m */,
+				3B973DC919940EF400CDC9B6 /* ManualPageViewController.h */,
+				3B973DCA19940EF400CDC9B6 /* ManualPageViewController.m */,
+				3B8CC61C199026CA0014CEA6 /* PageContentViewController.h */,
+				3B8CC61D199026CB0014CEA6 /* PageContentViewController.m */,
 				3BB1B126198300DD000EE613 /* Images.xcassets */,
 				3BB1B123198300DD000EE613 /* EmergencyPreparedness.xcdatamodeld */,
 				3BB1B118198300DD000EE613 /* Supporting Files */,
-				3BB1B14E1989ABCD000EE613 /* main.storyboard */,
+				3BB1B14E1989ABCD000EE613 /* main1.storyboard */,
 			);
 			path = EmergencyPreparedness;
 			sourceTree = "<group>";
@@ -176,6 +278,7 @@
 				3BB1B11A198300DD000EE613 /* InfoPlist.strings */,
 				3BB1B11D198300DD000EE613 /* main.m */,
 				3BB1B11F198300DD000EE613 /* EmergencyPreparedness-Prefix.pch */,
+				3B4FD7CB19929FB70051A824 /* checkedArray.archive */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -276,11 +379,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B973DF2199428A000CDC9B6 /* pandemicinfluenza.png in Resources */,
+				3B973DF5199428A000CDC9B6 /* tornado.png in Resources */,
+				3B973DF1199428A000CDC9B6 /* hazardousmaterials.png in Resources */,
+				3B973DF4199428A000CDC9B6 /* thunderstormsandlightning.png in Resources */,
+				3B4FD7C119927EFC0051A824 /* greenCheck.png in Resources */,
+				3B973DFD199521CF00CDC9B6 /* emergencysupplykit.png in Resources */,
+				3B973DEF199428A000CDC9B6 /* fire.png in Resources */,
+				3B8CC629199185D80014CEA6 /* alert.png in Resources */,
+				3B973DED199428A000CDC9B6 /* earthquake.png in Resources */,
+				3B4FD7CC19929FB70051A824 /* checkedArray.archive in Resources */,
 				3BBCD8D9198AF54600330753 /* alertArray.archive in Resources */,
+				3B8CC62319912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png in Resources */,
+				3B8CC6271991540D0014CEA6 /* Hamburger@2x.png in Resources */,
 				3BB1B11C198300DD000EE613 /* InfoPlist.strings in Resources */,
+				3B973DF3199428A000CDC9B6 /* terrorism.png in Resources */,
+				3B973DF0199428A000CDC9B6 /* flood.png in Resources */,
 				3BBCD8D4198AF0B400330753 /* timeStamp.archive in Resources */,
-				3BB1B14F1989ABCD000EE613 /* main.storyboard in Resources */,
+				3BE909F61995476400B5F173 /* downarrow.png in Resources */,
+				3B973E00199521CF00CDC9B6 /* specialadvice.png in Resources */,
+				3B973DEE199428A000CDC9B6 /* extremeheat.png in Resources */,
+				3B973DF7199428A000CDC9B6 /* winterstormsandextremecold.png in Resources */,
+				3B973E01199521CF00CDC9B6 /* tipsforpetowners.png in Resources */,
+				3B8CC62219912AC20014CEA6 /* EmergenyPreparednessBackground.png in Resources */,
+				3B8CC6261991540D0014CEA6 /* Hamburger.png in Resources */,
+				3BB1B14F1989ABCD000EE613 /* main1.storyboard in Resources */,
 				3BB1B127198300DD000EE613 /* Images.xcassets in Resources */,
+				3B973DF6199428A000CDC9B6 /* wildfire.png in Resources */,
+				3B973DFE199521CF00CDC9B6 /* fourstepstodisasterplanning.png in Resources */,
+				3B4FD7C019927EFC0051A824 /* grayCheck.png in Resources */,
+				3B973DFF199521CF00CDC9B6 /* householdhazardouswasteemergency.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,11 +460,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B4FD7C51992913B0051A824 /* ChecklistViewController.m in Sources */,
+				3B4FD7C81992937B0051A824 /* checklistItem.m in Sources */,
+				3B973DCB19940EF400CDC9B6 /* ManualPageViewController.m in Sources */,
 				3BB1B11E198300DD000EE613 /* main.m in Sources */,
+				3B4FD7CF1992D5A80051A824 /* BeingPreparedViewController.m in Sources */,
 				3BB1B122198300DD000EE613 /* PREPAppDelegate.m in Sources */,
+				3B8CC61E199026CB0014CEA6 /* PageContentViewController.m in Sources */,
 				3BBCD8DC198AF70100330753 /* AlertViewController.m in Sources */,
 				3BBCD8CE198AED1800330753 /* DDBManager.m in Sources */,
-				3BBCD8D7198AF42900330753 /* AlertsTable.m in Sources */,
 				3BBCD8CB198AECAB00330753 /* HomepageViewController.m in Sources */,
 				3BBCD8D2198AEEEC00330753 /* SingletonArray.m in Sources */,
 				3BB1B125198300DD000EE613 /* EmergencyPreparedness.xcdatamodeld in Sources */,

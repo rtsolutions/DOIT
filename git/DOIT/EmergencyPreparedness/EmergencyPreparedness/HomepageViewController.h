@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PageContentViewController.h"
 
-@interface HomepageViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
-    IBOutlet UITableView *tableView;
-    
-}
+@interface HomepageViewController : UIViewController <UIPageViewControllerDataSource, UIActionSheetDelegate>
+- (IBAction)showActionSheet:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 
 @property (nonatomic, assign) BOOL needsToRefresh;
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (strong, nonatomic) NSMutableArray *introArray;
 
 
 @end

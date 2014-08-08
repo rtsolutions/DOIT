@@ -31,8 +31,15 @@
 @property (nonatomic, strong) NSString *hashKey;
 @property (nonatomic, strong) NSString *rangeKey;
 @property (nonatomic, strong) NSString *intro;
-@property (nonatomic, strong) NSString *story;
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *timestamp;
+@property (nonatomic, strong) NSString *index;
+@property (nonatomic, strong) NSString *answer1;
+@property (nonatomic, strong) NSString *answer2;
+@property (nonatomic, strong) NSString *answer3;
+@property (nonatomic, strong) NSString *answer4;
+@property (nonatomic, strong) NSString *correctanswer;
 
 
 @end

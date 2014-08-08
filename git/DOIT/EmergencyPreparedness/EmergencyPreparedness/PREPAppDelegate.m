@@ -31,13 +31,14 @@
                                                                           credentialsProvider:credentialsProvider];
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     
-    if ([[UIView appearance] respondsToSelector:@selector(setBarTintColor:)])
-    {
-        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.0 green:158.0/255.0 blue:211.0/255.0 alpha:1.0]];
-    }
-    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, nil]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:39/255 green:44/255 blue:46/255 alpha:1.0]];
+    [[UINavigationBar appearance] setTintColor:[UIColor darkGrayColor]];
+    
+    UIPageControl *pageControl = [UIPageControl appearance];
+    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+    pageControl.backgroundColor = [UIColor grayColor];
     
     return YES;
 }
