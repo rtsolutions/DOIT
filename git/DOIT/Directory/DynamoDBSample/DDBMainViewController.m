@@ -849,7 +849,7 @@
 }
 
 
-// Disable user editing. This keeps users from swiping on table cells to reveal a "delet" button
+// Disable user editing. This keeps users from swiping on table cells to reveal a "delete" button
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
