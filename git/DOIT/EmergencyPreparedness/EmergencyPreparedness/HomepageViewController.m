@@ -379,6 +379,10 @@
     {
         [self performSegueWithIdentifier:@"navigateToBeingPreparedController" sender:self];
     }
+    else if ([buttonTitle isEqual:@"Take the Quiz"])
+    {
+        [self performSegueWithIdentifier:@"navigateToQuiz" sender:self];
+    }
 }
 
 /*
@@ -424,6 +428,13 @@
     [self performSegueWithIdentifier:@"navigateToBeingPreparedController" sender:self];
 }
 
+- (void)popAndPushToQuiz
+{
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    [self performSegueWithIdentifier:@"navigateToQuiz" sender:self];
+}
+
 
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -437,6 +448,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToChecklist) name:@"popAndPushToChecklist" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToBeingPrepared) name:@"popAndPushToBeingPrepared" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToQuiz) name:@"popAndPushToQuiz" object:nil];
     
     [super viewDidLoad];
     self.startSetupView = NO;
@@ -460,6 +472,7 @@
 
     [self checkDatabaseForUpdate:YES];
     
+    [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(checkDatabaseForUpdate:) userInfo:nil repeats:YES];
     
 }
 

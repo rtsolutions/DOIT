@@ -11,6 +11,7 @@
 @interface checklistItem : NSObject
 
 @property (nonatomic, assign) BOOL checked;
-@property (nonatomic, assign) NSString *itemString;
+@property (nonatomic, assign) NSString *text;
+@property (nonatomic, assign) NSString *title;
 
 @end

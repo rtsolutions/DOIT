@@ -1,0 +1,306 @@
+//
+//  QuizQuestionViewController.m
+//  EmergencyPreparedness
+//
+//  Created by rts on 8/8/14.
+//  Copyright (c) 2014 RTS. All rights reserved.
+//
+
+#import "QuizQuestionViewController.h"
+#import "DDBManager.h"
+
+
+@interface QuizQuestionViewController ()
+
+@property (nonatomic, readwrite) NSMutableArray *answers;
+@property (nonatomic, readwrite) NSMutableArray *correctAnswerIndexes;
+@property (nonatomic, readwrite) NSMutableArray *correctAnswers;
+@property (nonatomic, readwrite) NSMutableArray *chosenAnswerIndexes;
+
+@property (nonatomic, readwrite) NSInteger currentQuestionIndex;
+@property (nonatomic, readwrite) DDBTableRow *currentQuestion;
+@property (nonatomic, assign) BOOL showingAnswers;
+
+
+
+@end
+
+@implementation QuizQuestionViewController
+
+- (void)getCurrentQuestion
+{
+    self.currentQuestion = self.questionsArray[self.currentQuestionIndex];
+}
+
+- (void)setupQuestions
+{
+    NSString *answer1 = self.currentQuestion.answer1;
+    NSString *answer2 = self.currentQuestion.answer2;
+    NSString *answer3 = self.currentQuestion.answer3;
+    NSString *answer4 = self.currentQuestion.answer4;
+    NSString *answer5 = self.currentQuestion.answer5;
+    NSString *answer6 = self.currentQuestion.answer6;
+    NSString *answer7 = self.currentQuestion.answer7;
+    NSString *answer8 = self.currentQuestion.answer8;
+    
+    [self.answers addObject:answer1];
+    if (answer2)
+    {
+        [self.answers addObject:answer2];
+    }
+    if(answer3)
+    {
+        [self.answers addObject:answer3];
+    }
+    if (answer4)
+    {
+        [self.answers addObject:answer4];
+    }
+    if (answer5)
+    {
+        [self.answers addObject:answer5];
+    }
+    if (answer6)
+    {
+        [self.answers addObject:answer6];
+    }
+    if (answer7)
+    {
+        [self.answers addObject:answer7];
+    }
+    if (answer8)
+    {
+        [self.answers addObject:answer8];
+    }
+    
+    
+    NSArray *correctAnswersTemp = [self.currentQuestion.correctanswer componentsSeparatedByString:@" "];
+    for (NSString *numberString in correctAnswersTemp)
+    {
+        NSInteger value = [numberString integerValue];
+        value--;
+        NSNumber *number = [NSNumber numberWithInt:value];
+        [self.correctAnswerIndexes addObject:number];
+    }
+    
+    for (NSNumber *index in self.correctAnswerIndexes)
+    {
+        [self.correctAnswers addObject:self.answers[[index integerValue]]];
+    }
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.answers count];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:17.0]};
+    
+    CGRect rect = [self.answers[indexPath.row] boundingRectWithSize:CGSizeMake(250.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
+    CGSize size = rect.size;
+    return size.height + 25;
+                                 
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell2";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    NSString *answer = self.answers[indexPath.row];
+    
+    cell.textLabel.text = answer;
+    [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    cell.textLabel.numberOfLines = 0;
+    cell.indentationLevel = 7;
+    cell.indentationWidth = 10;
+    
+    if (self.showingAnswers == YES)
+    {
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
+        imgView.backgroundColor = [UIColor clearColor];
+        
+        [imgView setTag:99];
+        [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
+        
+        [cell.contentView addSubview:imgView];
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.showingAnswers == NO)
+    {
+        BOOL removedImage = NO;
+        NSNumber *chosenAnswer = [NSNumber numberWithInt:indexPath.row];
+        
+        
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        for (UIImageView *subview in cell.contentView.subviews)
+        {
+            if (subview.tag == 99)
+            {
+                [subview removeFromSuperview];
+                removedImage = YES;
+                
+                [self.chosenAnswerIndexes removeObjectIdenticalTo:chosenAnswer];
+                
+                break;
+                
+            }
+        }
+        
+        if (removedImage == NO)
+        {
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
+            imgView.backgroundColor = [UIColor clearColor];
+            
+            [imgView setTag:99];
+            [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
+            
+            [cell.contentView addSubview:imgView];
+            
+            [self.chosenAnswerIndexes addObject:chosenAnswer];
+        }
+    }
+
+    
+    
+}
+
+
+- (IBAction)answerQuestion:(id)sender
+{
+    if ([self.answerButton.titleLabel.text isEqual:@"FINISH QUIZ"])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToQuiz" object:nil];
+        
+    }
+    else if ([self.answerButton.titleLabel.text isEqual:@"NEXT QUESTION"])
+    {
+        
+        [self performSegueWithIdentifier:@"navigateToSelf" sender:self];
+        
+    }
+    
+    else if ([self.answerButton.titleLabel.text isEqual:@"ANSWER QUESTION"])
+    {
+        self.showingAnswers = YES;
+        [self.answers removeAllObjects];
+        for (NSString *answer in self.correctAnswers)
+        {
+            [self.answers addObject:answer];
+        }
+        [self.tableView reloadData];
+        
+        NSSet *set1 = [NSSet setWithArray:self.correctAnswerIndexes];
+        NSSet *set2 = [NSSet setWithArray:self.chosenAnswerIndexes];
+        
+        if ([set1 isEqualToSet:set2])
+        {
+            self.checkmarkImageView.image = [UIImage imageNamed:@"greenCheck.png"];
+        }
+        else
+        {
+            self.checkmarkImageView.image = [UIImage imageNamed:@"grayCheck.png"];
+        }
+        
+        if ((self.currentQuestionIndex + 1) == [self.questionsArray count])
+        {
+            [self.answerButton setTitle:@"FINISH QUIZ" forState:UIControlStateNormal];
+        }
+        else
+        {
+            [self.answerButton setTitle:@"NEXT QUESTION" forState:UIControlStateNormal];
+        }
+    }
+}
+
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (IBAction)showActionSheet:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Home", @"Being Prepared", @"Checklist", @"Take the Quiz", nil];
+    
+    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
+    [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if ([buttonTitle isEqual: @"Home"])
+    {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    else if ([buttonTitle isEqual:@"Checklist"])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToChecklist" object:nil];
+    }
+    else if ([buttonTitle isEqual:@"Being Prepared"])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToBeingPrepared" object:nil];
+    }
+    else if ([buttonTitle isEqual:@"Take the Quiz"])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToQuiz" object:nil];
+    }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.answers = [NSMutableArray new];
+    self.correctAnswers = [NSMutableArray new];
+    self.correctAnswerIndexes = [NSMutableArray new];
+    self.chosenAnswerIndexes = [NSMutableArray new];
+    [self getCurrentQuestion];
+    [self setupQuestions];
+    self.titleLabel.text = [@"Quiz: " stringByAppendingString:self.titleString];
+    [self.answerButton setTitle:@"ANSWER QUESTION" forState:UIControlStateNormal];
+    [self.answerButton.titleLabel setHidden:NO];
+    self.checkmarkImageView.image = [UIImage imageNamed:@"grayCheck.png"];
+    self.questionTextView.text = self.currentQuestion.title;
+    NSString *questionNumberLabelString = [NSString stringWithFormat:@"%d", self.currentQuestionIndex + 1];
+    questionNumberLabelString = [questionNumberLabelString stringByAppendingString:@" of "];
+    questionNumberLabelString = [questionNumberLabelString stringByAppendingString:[NSString stringWithFormat:@"%d",[self.questionsArray count]]];
+    self.questionNumberLabel.text = questionNumberLabelString;
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    QuizQuestionViewController *quizQuestionViewController = [segue destinationViewController];
+    quizQuestionViewController.currentQuestionIndex = self.currentQuestionIndex + 1;
+    quizQuestionViewController.questionsArray = self.questionsArray;
+    quizQuestionViewController.titleString = self.titleString;
+}
+
+
+@end

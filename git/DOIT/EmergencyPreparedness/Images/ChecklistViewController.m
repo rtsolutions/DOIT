@@ -10,11 +10,14 @@
 #import "checklistItem.h"
 #import "DDBManager.h"
 #import "SingletonArray.h"
+#import "ManualPageViewController.h"
 
 @interface ChecklistViewController ()
 
 @property (nonatomic, readwrite) NSMutableArray* checklistItems;
 @property (nonatomic, readwrite) NSMutableArray* checkedArray;
+@property (nonatomic, readwrite) NSString *checklistText;
+@property (nonatomic, readwrite) NSString *checklistTitle;
 
 
 @end
@@ -28,6 +31,7 @@ int notChecked = 2;
 {
     NSMutableArray *temp = [NSMutableArray new];
     NSMutableArray *checklistTemp = [NSMutableArray new];
+    NSMutableArray *checklistTemp2 = [NSMutableArray new];
     
     for (DDBTableRow *item in [SingletonArray sharedInstance].sharedArray)
     {
@@ -46,9 +50,21 @@ int notChecked = 2;
     
     for (DDBTableRow *item in temp)
     {
-        NSString *checklistString = nil;
-        checklistString = item.text;
-        [checklistTemp addObject:checklistString];
+        NSString *checklistTitle = nil;
+        checklistTitle = item.title;
+        [checklistTemp addObject:checklistTitle];
+        NSString *checklistText = nil;
+        
+        NSString *stringWithoutNewline = item.text;
+        
+        NSString *stringWithNewline = [stringWithoutNewline stringByReplacingOccurrencesOfString:@"  " withString:@"\r"];
+        stringWithNewline = [stringWithNewline stringByReplacingOccurrencesOfString:@"\r" withString:@"\r"];
+        stringWithNewline = [stringWithNewline stringByReplacingOccurrencesOfString:@"\n" withString:@"\r"];
+        
+        
+        item.text = stringWithNewline;
+        checklistText = item.text;
+        [checklistTemp2 addObject:checklistText];
         
     }
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"checkedArray" ofType:@".archive"];
@@ -72,7 +88,7 @@ int notChecked = 2;
     {
         checklistItem *listItem = [checklistItem new];
         
-        listItem.itemString = checklistTemp[i];
+        listItem.title = checklistTemp[i];
         
         if ([self.checkedArray count] == 0)
         {
@@ -105,6 +121,13 @@ int notChecked = 2;
         [self.checklistItems addObject:listItem];
             
     }
+    for (int i = 0; i < [checklistTemp2 count]; i++)
+    {
+        checklistItem *item = self.checklistItems[i];
+        item.text = checklistTemp2[i];
+        [self.checklistItems replaceObjectAtIndex:i withObject:item];
+    }
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -122,6 +145,10 @@ int notChecked = 2;
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    cell.textLabel.numberOfLines = 2;
+    
+    
     checklistItem *item = [self.checklistItems objectAtIndex:indexPath.row];
     if (item.checked == YES)
     {
@@ -132,7 +159,7 @@ int notChecked = 2;
         cell.imageView.image = [UIImage imageNamed:@"grayCheck.png"];
     }
     
-    cell.textLabel.text = item.itemString;
+    cell.textLabel.text = item.title;
     return cell;
 }
 
@@ -141,11 +168,8 @@ int notChecked = 2;
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSNumber *item = self.checkedArray[indexPath.row];
-    if ([item intValue] == checked)
-    {
-        self.checkedArray[indexPath.row] = [NSNumber numberWithInt:notChecked];
-    }
-    else if ([item intValue] == notChecked)
+
+    if ([item intValue] == notChecked)
     {
         self.checkedArray[indexPath.row] = [NSNumber numberWithInt:checked];
     }
@@ -154,7 +178,14 @@ int notChecked = 2;
     [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
 
     [self sortItems];
-    [self.tableView reloadData];
+
+    checklistItem *checklistItem = self.checklistItems[indexPath.row];
+    
+    self.checklistText = checklistItem.text;
+    self.checklistTitle = checklistItem.title;
+    
+    [self performSegueWithIdentifier:@"navigatToChecklistItem" sender:self];
+
 }
 
 - (IBAction)showActionSheet:(id)sender
@@ -181,35 +212,9 @@ int notChecked = 2;
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToBeingPrepared" object:nil];
     }
-}
-
-
-// Change the appearance of the action sheet buttons
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    
-    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    
-    for (UIView *subview in actionSheet.subviews)
+    else if ([buttonTitle isEqual:@"Take the Quiz"])
     {
-        if ([subview isKindOfClass:[UIButton class]])
-        {
-            UIButton *button = (UIButton *)subview;
-            
-            
-            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [button setBackgroundImage: [UIImage imageNamed:@"alert.png"] forState:UIControlStateNormal];
-            
-            [button setBackgroundColor:[UIColor darkGrayColor]];
-            //[button setBackgroundColor:[UIColor colorWithRed:84/255 green:90/255 blue:93/255 alpha:1.0]];
-            //[button setTintColor:[UIColor lightGrayColor]];
-            
-            //[button setTintColor:[UIColor colorWithRed:84/255 green:90/255 blue:93/255 alpha:1.0]];
-            if ([button.currentTitle  isEqual: @"Checklist"])
-            {
-                button.enabled = NO;
-                [button setEnabled:NO];
-            }
-        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToQuiz" object:nil];
     }
 }
 
@@ -225,21 +230,31 @@ int notChecked = 2;
 
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self sortItems];
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqual:@"navigatToChecklistItem"])
+    {
+        ManualPageViewController *manualPageViewController = [segue destinationViewController];
+        manualPageViewController.titleLabelString = self.checklistTitle;
+        manualPageViewController.textViewString = self.checklistText;
+    }
 }
-*/
+
 
 @end

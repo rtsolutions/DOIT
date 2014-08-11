@@ -39,6 +39,10 @@
 @property (nonatomic, strong) NSString *answer2;
 @property (nonatomic, strong) NSString *answer3;
 @property (nonatomic, strong) NSString *answer4;
+@property (nonatomic, strong) NSString *answer5;
+@property (nonatomic, strong) NSString *answer6;
+@property (nonatomic, strong) NSString *answer7;
+@property (nonatomic, strong) NSString *answer8;
 @property (nonatomic, strong) NSString *correctanswer;
 
 
