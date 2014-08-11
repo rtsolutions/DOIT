@@ -136,10 +136,19 @@
 
 - (IBAction)hideTable:(id)sender
 {
+    // Trying to animate the table
+    /*
+    CGFloat moveX = 0;
+    while(self.tableView.frame.origin.y < self.view.frame.size.height)
+    {
+        [self.tableView removeFromSuperview];
+        moveX += .1;
+        self.tableView.frame = CGRectMake(0, 120 + moveX, self.view.frame.size.width, self.view.frame.size.height - 108);
+        [self.view addSubview:self.tableView];
+    }*/
     
-
     [self.tableView setHidden:YES];
-    [self.view addSubview:self.tableView];
+    //[self.view removeSubview:self.tableView];
     [self.tableView reloadData];
     [self.hideContentsButton setHidden:YES];
 }
@@ -287,7 +296,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.tableView setHidden:YES];
+   // [self.tableView setHidden:YES];
 }
 
 - (void)didReceiveMemoryWarning
