@@ -407,23 +407,27 @@
             mainViewController.viewType = DDBMainViewTypeElectedOfficials;
             mainViewController.houseAndSenate = self.houseAndSenate;
             mainViewController.electedOfficials = self.electedOfficials;
+            mainViewController.title = @"Elected Officials";
             break;
         }
         case 5:
         {
             mainViewController.viewType = DDBMainViewTypeFavorites;
+            mainViewController.title=@"Favorites";
             break;
         }
         case 3:
         {
             mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
             mainViewController.nonEmergencyContacts = self.nonEmergencyContacts;
+            mainViewController.title=@"Non Emergency Contacts";
             break;
         }
         case 4:
         {
             mainViewController.viewType = DDBMainViewTypeN11;
             mainViewController.n11 = self.n11;
+            mainViewController.title=@"N11";
         }
     }
 }

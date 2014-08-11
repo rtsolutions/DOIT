@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0204EF2EAC6B490DB5CE2EB8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F9C6AC714DE467BAF3078E5 /* libPods.a */; };
+		0204EF2EAC6B490DB5CE2EB8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F9C6AC714DE467BAF3078E5 /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		3B6DD57919760DD1001C3FB8 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DD57819760DD1001C3FB8 /* MainViewController.m */; };
 		3B9E074819783C2E0082BA8B /* SingletonArrayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */; };
 		3B9E074A197841760082BA8B /* directoryArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E0749197841760082BA8B /* directoryArray.archive */; };
@@ -274,6 +274,11 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Amazon Web Services";
+				TargetAttributes = {
+					CE0DDA7518BD19C900BD8F49 = {
+						DevelopmentTeam = L3W2DZBXH9;
+					};
+				};
 			};
 			buildConfigurationList = CE0DDA7118BD19C900BD8F49 /* Build configuration list for PBXProject "DynamoDBSample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -482,14 +487,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B61A4300E0B445E09692B3C1 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DynamoDBSample/DynamoDBSample-Prefix.pch";
 				INFOPLIST_FILE = "DynamoDBSample/DynamoDBSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = DynamoDBSample;
+				PROVISIONING_PROFILE = "32134346-D6EE-4F63-8E9F-985FA35C41A2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -498,14 +505,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B61A4300E0B445E09692B3C1 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lee Jensen (L3W2DZBXH9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DynamoDBSample/DynamoDBSample-Prefix.pch";
 				INFOPLIST_FILE = "DynamoDBSample/DynamoDBSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = DynamoDBSample;
+				PROVISIONING_PROFILE = "32134346-D6EE-4F63-8E9F-985FA35C41A2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
