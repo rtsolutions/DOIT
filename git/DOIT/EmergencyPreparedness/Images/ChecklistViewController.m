@@ -77,8 +77,8 @@ int notChecked = 2;
         unsigned long long size = [attributes fileSize];
         if (attributes && size > 0)
         {
-            self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-
+            //self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+            self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"checkedArray.archive"];
         }
     }
     
@@ -97,7 +97,7 @@ int notChecked = 2;
                 [self.checkedArray addObject:[NSNumber numberWithInt:notChecked]];
             }
             
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
          }
         
         // 1 means yes and 2 means no. This way, we avoid confusion with 0 and nil
@@ -114,7 +114,7 @@ int notChecked = 2;
         {
             listItem.checked = NO;
             [self.checkedArray insertObject:[NSNumber numberWithInt:notChecked] atIndex:i];
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
         }
         
         
@@ -148,16 +148,34 @@ int notChecked = 2;
     [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
     cell.textLabel.numberOfLines = 2;
     
+    cell.indentationLevel = 7;
+    cell.indentationWidth = 10;
+    
+    for (UIImageView *subview in cell.contentView.subviews)
+    {
+        if (subview.tag == 99)
+        {
+            [subview removeFromSuperview];
+        }
+    }
+    
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 40, 40)];
+    imgView.backgroundColor = [UIColor clearColor];
+    
+    [imgView setTag:99];
     
     checklistItem *item = [self.checklistItems objectAtIndex:indexPath.row];
     if (item.checked == YES)
     {
-        cell.imageView.image = [UIImage imageNamed:@"greenCheck.png"];
+        [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
     }
     else
     {
-        cell.imageView.image = [UIImage imageNamed:@"grayCheck.png"];
+        [imgView setImage:[UIImage imageNamed:@"grayCheck.png"]];
     }
+    
+    [cell.contentView addSubview:imgView];
+
     
     cell.textLabel.text = item.title;
     return cell;
@@ -175,7 +193,7 @@ int notChecked = 2;
     }
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"checkedArray" ofType:@".archive"];
 
-    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
 
     [self sortItems];
 

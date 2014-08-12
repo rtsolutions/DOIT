@@ -28,12 +28,15 @@
 {
     for (DDBTableRow *item in [SingletonArray sharedInstance].sharedArray)
     {
+        // Only look at the quiz questions
         if ([item.hashKey isEqual:@"quiz"])
         {
+            // If the string does not contain "." then it has no parents, meaning it must be a category and not a question
             if ([item.rangeKey rangeOfString:@"."].location == NSNotFound)
             {
                 [self.categoriesArray addObject:item];
             }
+            // Otherwise it's a question
             else
             {
                 [self.allQuestionsArray addObject:item];
@@ -41,13 +44,15 @@
         }
     }
     
+    // Sort the categories in alphabetical order
     NSSortDescriptor *sortingByIndexDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
     NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortingByIndexDescriptor, nil];
     NSMutableArray *temp = self.categoriesArray;
     [temp sortUsingDescriptors:sortingDescriptor];
     self.categoriesArray = temp;
     
-    
+    // Sort questions by "index". Index is an NSInteger, so we don't have to get the int value out of a string.
+    // It's the last digit of the item's path, eg, if the item's path is 7.2.8, the index would be 8.
     sortingByIndexDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
     sortingDescriptor = [NSArray arrayWithObjects:sortingByIndexDescriptor, nil];;
     temp = self.allQuestionsArray;
@@ -76,6 +81,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [self.questionsArray removeAllObjects];
     
     DDBTableRow *selectedItem = self.categoriesArray[indexPath.row];
     
@@ -173,7 +180,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     QuizQuestionViewController *quizQuestionViewController = [segue destinationViewController];
-    quizQuestionViewController.questionsArray = self.questionsArray;
+    quizQuestionViewController.questionsArray = [self.questionsArray copy];
     quizQuestionViewController.titleString = self.titleString;
 }
 
