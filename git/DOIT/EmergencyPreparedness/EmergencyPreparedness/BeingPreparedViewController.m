@@ -148,7 +148,7 @@
     }*/
     
     [self.tableView setHidden:YES];
-    //[self.view removeSubview:self.tableView];
+    [self.tableView removeFromSuperview];
     [self.tableView reloadData];
     [self.hideContentsButton setHidden:YES];
 }
