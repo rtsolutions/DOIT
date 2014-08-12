@@ -364,7 +364,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9QM-wx-LbG">
-                                        <rect key="frame" x="20" y="20" width="191" height="21"/>
+                                        <rect key="frame" x="20" y="8" width="191" height="46"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -403,7 +403,7 @@
                                 </connections>
                             </tableView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" editable="NO" text="text" translatesAutoresizingMaskIntoConstraints="NO" id="8Lt-1T-yNu">
-                                <rect key="frame" x="97" y="126" width="223" height="99"/>
+                                <rect key="frame" x="0.0" y="126" width="320" height="99"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -413,7 +413,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XqZ-MW-3g0">
-                                <rect key="frame" x="28" y="156" width="40" height="40"/>
+                                <rect key="frame" x="135" y="151" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button clearsContextBeforeDrawing="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6T0-8U-VW0">
@@ -496,16 +496,26 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qBg-bn-Od8">
-                                        <rect key="frame" x="20" y="20" width="256" height="21"/>
+                                        <rect key="frame" x="20" y="8" width="256" height="47"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GCS-HP-haw">
-                                        <rect key="frame" x="284" y="22" width="34" height="20"/>
+                                        <rect key="frame" x="284" y="15" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="downarrow.png" backgroundImage="downarrow.png"/>
+                                        <color key="backgroundColor" red="0.35686274509999999" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" image="close.png">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" red="0.094117647060000004" green="0.1058823529" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="hideTable:" destination="dvZ-8M-Qcd" eventType="touchUpInside" id="6u4-J4-9Hf"/>
                                         </connections>
@@ -528,23 +538,29 @@
                                         </constraints>
                                     </imageView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" ambiguous="YES" misplaced="YES" editable="NO" text="text" translatesAutoresizingMaskIntoConstraints="NO" id="VcL-YG-7YX">
-                                        <rect key="frame" x="20" y="112" width="286" height="272"/>
+                                        <rect key="frame" x="20" y="112" width="286" height="269"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QQ7-t6-8DS">
-                                        <rect key="frame" x="87" y="392" width="147" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QQ7-t6-8DS">
+                                        <rect key="frame" x="52" y="389" width="217" height="39"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.35686274509999999" green="0.3921568627" blue="0.42745098040000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="8ea-Ah-RCS"/>
+                                            <constraint firstAttribute="height" constant="39" id="8ea-Ah-RCS"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Show Contents">
-                                            <color key="titleColor" red="0.094117647060000004" green="0.1058823529" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <state key="normal" title="Get Prepared For...">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="showTable:" destination="dvZ-8M-Qcd" eventType="touchUpInside" id="NtC-0q-9KW"/>
                                         </connections>
@@ -557,7 +573,7 @@
                                     <constraint firstAttribute="trailing" secondItem="2cj-BE-T8k" secondAttribute="trailing" constant="121" id="QYx-hN-lA2"/>
                                     <constraint firstItem="VcL-YG-7YX" firstAttribute="top" secondItem="2cj-BE-T8k" secondAttribute="bottom" constant="14" id="aIQ-OC-UeH"/>
                                     <constraint firstItem="2cj-BE-T8k" firstAttribute="top" secondItem="tbY-G4-JK5" secondAttribute="top" constant="20" id="awp-yl-LQe"/>
-                                    <constraint firstAttribute="bottom" secondItem="QQ7-t6-8DS" secondAttribute="bottom" constant="20" id="e1n-sF-Q0s"/>
+                                    <constraint firstAttribute="bottom" secondItem="QQ7-t6-8DS" secondAttribute="bottom" constant="14" id="e1n-sF-Q0s"/>
                                     <constraint firstItem="2cj-BE-T8k" firstAttribute="leading" secondItem="tbY-G4-JK5" secondAttribute="leading" constant="121" id="qEv-7B-JTV"/>
                                     <constraint firstItem="VcL-YG-7YX" firstAttribute="top" secondItem="2cj-BE-T8k" secondAttribute="bottom" constant="14" id="zbC-Aj-p0Y"/>
                                 </constraints>
@@ -743,8 +759,8 @@
     <resources>
         <image name="EmergenyPreparednessBackground.png" width="320" height="568"/>
         <image name="Hamburger.png" width="40" height="40"/>
-        <image name="alert.png" width="94" height="80"/>
-        <image name="downarrow.png" width="512" height="512"/>
+        <image name="alert.png" width="180" height="152"/>
+        <image name="close.png" width="100" height="100"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -752,8 +768,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="JUo-Xp-ez2"/>
         <segue reference="fbJ-Cx-f7e"/>
-        <segue reference="LB7-oW-3wd"/>
+        <segue reference="JUo-Xp-ez2"/>
+        <segue reference="v02-HO-WTP"/>
     </inferredMetricsTieBreakers>
 </document>

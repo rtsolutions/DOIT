@@ -133,13 +133,24 @@
     // Add a green checkmark next to them.
     if (self.showingAnswers == YES)
     {
+        for (UIImageView *subview in cell.contentView.subviews)
+        {
+            if (subview.tag == 99)
+            {
+                [subview removeFromSuperview];
+            }
+        }
+        // Quick little hack to tell if we're displaying a correct answer or an incorrect answer.
+        // When showing answers, self. showing answers has the correct answers as the beginning of the array.
+        // If we display those answers and still haven't reached the end of self.answers, then we must be
+        // displaying the incorrect answers at the end of the array.
         if (indexPath.row >= [self.correctAnswerIndexes count])
         {
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
             imgView.backgroundColor = [UIColor clearColor];
             
             [imgView setTag:99];
-            [imgView setImage:[UIImage imageNamed:@"grayCheck.png"]];
+            [imgView setImage:[UIImage imageNamed:@"wrong.png"]];
             
             [cell.contentView addSubview:imgView];
         }
@@ -194,7 +205,7 @@
             imgView.backgroundColor = [UIColor clearColor];
             
             [imgView setTag:99];
-            [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
+            [imgView setImage:[UIImage imageNamed:@"grayCheck.png"]];
             
             [cell.contentView addSubview:imgView];
             
@@ -230,17 +241,8 @@
             [self.answers addObject:answer];
         }
         
-        NSMutableArray *chosenAnswers = [NSMutableArray new];
-        for (NSNumber *number in self.chosenAnswerIndexes)
-        {
-            if (!([self.correctAnswerIndexes containsObject:number]))
-            {
-                NSInteger index = [number integerValue];
-                [self.answers addObject:answersCopy[index]];
-            }
-        }
-        
-        [self.tableView reloadData];
+        [self.questionTextView setHidden:YES];
+        [self.checkmarkImageView setHidden:NO];
         
         // Make sets with the correct answers and the user's chosen answers
         NSSet *set1 = [NSSet setWithArray:self.correctAnswerIndexes];
@@ -253,8 +255,22 @@
         }
         else
         {
-            self.checkmarkImageView.image = [UIImage imageNamed:@"grayCheck.png"];
+            self.checkmarkImageView.image = [UIImage imageNamed:@"wrong.png"];
+            
+            
+            // Add the incorrect answers at the end of self.answers
+            for (NSNumber *number in self.chosenAnswerIndexes)
+            {
+                if (!([self.correctAnswerIndexes containsObject:number]))
+                {
+                    NSInteger index = [number integerValue];
+                    [self.answers addObject:answersCopy[index]];
+                }
+            }
         }
+        
+        [self.tableView reloadData];
+
         
         // If we're at the end of the array, prepare to finish the quiz. Otherwise, set up for another question
         if ((self.currentQuestionIndex + 1) == [self.questionsArray count])
@@ -286,7 +302,8 @@
     [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
 }
 
-
+// Instead of actually performing a segue, each of these cases sends a notification. The homepageViewController has an
+// observer for each notification, and will call a method to perform the segue when it receives a notification.
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
@@ -316,6 +333,8 @@
     self.correctAnswers = [NSMutableArray new];
     self.correctAnswerIndexes = [NSMutableArray new];
     self.chosenAnswerIndexes = [NSMutableArray new];
+    [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    [self.titleLabel setNumberOfLines:2];
     
     // Get the question at the current index
     [self getCurrentQuestion];
@@ -328,7 +347,7 @@
     self.titleLabel.text = [@"Quiz: " stringByAppendingString:self.titleString];
     [self.answerButton setTitle:@"ANSWER QUESTION" forState:UIControlStateNormal];
     [self.answerButton.titleLabel setHidden:NO];
-    self.checkmarkImageView.image = [UIImage imageNamed:@"grayCheck.png"];
+    [self.checkmarkImageView setHidden:YES];
     self.questionTextView.text = self.currentQuestion.title;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -362,7 +381,7 @@
     // Pass the selected object to the new view controller.
     QuizQuestionViewController *quizQuestionViewController = [segue destinationViewController];
     quizQuestionViewController.currentQuestionIndex = self.currentQuestionIndex + 1;
-    quizQuestionViewController.questionsArray = self.questionsArray;
+    quizQuestionViewController.questionsArray = [self.questionsArray copy];
     quizQuestionViewController.titleString = self.titleString;
 }
 
