@@ -97,7 +97,7 @@ int notChecked = 2;
                 [self.checkedArray addObject:[NSNumber numberWithInt:notChecked]];
             }
             
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
          }
         
         // 1 means yes and 2 means no. This way, we avoid confusion with 0 and nil
@@ -114,7 +114,7 @@ int notChecked = 2;
         {
             listItem.checked = NO;
             [self.checkedArray insertObject:[NSNumber numberWithInt:notChecked] atIndex:i];
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
         }
         
         
@@ -193,7 +193,7 @@ int notChecked = 2;
     }
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"checkedArray" ofType:@".archive"];
 
-    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
+    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
 
     [self sortItems];
 
