@@ -105,7 +105,7 @@
 {
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:17.0]};
     
-    CGRect rect = [self.answers[indexPath.row] boundingRectWithSize:CGSizeMake(250.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
+    CGRect rect = [self.answers[indexPath.row] boundingRectWithSize:CGSizeMake(230.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
     CGSize size = rect.size;
     return size.height + 25;
                                  
@@ -133,13 +133,27 @@
     // Add a green checkmark next to them.
     if (self.showingAnswers == YES)
     {
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
-        imgView.backgroundColor = [UIColor clearColor];
+        if (indexPath.row >= [self.correctAnswerIndexes count])
+        {
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
+            imgView.backgroundColor = [UIColor clearColor];
+            
+            [imgView setTag:99];
+            [imgView setImage:[UIImage imageNamed:@"grayCheck.png"]];
+            
+            [cell.contentView addSubview:imgView];
+        }
         
-        [imgView setTag:99];
-        [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
-        
-        [cell.contentView addSubview:imgView];
+        else
+        {
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
+            imgView.backgroundColor = [UIColor clearColor];
+            
+            [imgView setTag:99];
+            [imgView setImage:[UIImage imageNamed:@"greenCheck.png"]];
+            
+            [cell.contentView addSubview:imgView];
+        }
     }
     
     return cell;
@@ -209,11 +223,23 @@
     {
         // Only show the correct answers
         self.showingAnswers = YES;
+        NSMutableArray *answersCopy = [self.answers copy];
         [self.answers removeAllObjects];
         for (NSString *answer in self.correctAnswers)
         {
             [self.answers addObject:answer];
         }
+        
+        NSMutableArray *chosenAnswers = [NSMutableArray new];
+        for (NSNumber *number in self.chosenAnswerIndexes)
+        {
+            if (!([self.correctAnswerIndexes containsObject:number]))
+            {
+                NSInteger index = [number integerValue];
+                [self.answers addObject:answersCopy[index]];
+            }
+        }
+        
         [self.tableView reloadData];
         
         // Make sets with the correct answers and the user's chosen answers
