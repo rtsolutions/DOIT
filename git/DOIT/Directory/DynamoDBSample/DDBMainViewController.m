@@ -518,7 +518,7 @@
         
         // Create a rectangle that bounds the text. Width is 200, and height is calculated based on
         // how much space the text would need if it wraps.
-        CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(200.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
+        CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(190.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
         
         // Mark that the current table already has an address on it, and we don't need to change the size
         // of any other cells
@@ -611,6 +611,8 @@
     // nasty workarounds like this. If the detail has already been loaded, keep track of its
     // index so we can load it again if we scroll down and up. Otherwise, we get an out of range
     // error.
+    [cell.textLabel setNumberOfLines:2];
+    [cell.detailTextLabel setNumberOfLines:2];
     
     if (indexPath.row == self.addressIndex)
     {
@@ -695,6 +697,33 @@
             }
             
         }
+        
+        // If the tableRow has a phone2 number...
+        if ([_tableRow.phone2 length] > 0)
+        {
+            // If there is not already a cell with phone number
+            if (!(self.phone2Used == YES))
+            {
+                // Don't use the phone number anymore
+                self.phone2Used = YES;
+                self.arrayOffset++;
+                self.phone2Index = indexPath.row;
+                
+            label4:
+                
+                // Add the phone number to a cell
+                cell.textLabel.text = @"Phone 2:";
+                cell.detailTextLabel.text = _tableRow.phone2;
+                
+                // Don't display the arrow on the right side of the cell
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                
+                
+                return cell;
+            }
+            
+        }
+        
         // If the tableRow has a toll free number...
         if ([_tableRow.tollFree length] > 0)
         {
@@ -706,7 +735,7 @@
                 self.arrayOffset++;
                 self.tollFreeIndex = indexPath.row;
                 
-            label4:
+            label5:
                 
                 // Add the phone number to a cell
                 cell.textLabel.text = @"Toll-Free:";
@@ -721,31 +750,7 @@
             
         }
         
-        // If the tableRow has a phone2 number...
-        if ([_tableRow.phone2 length] > 0)
-        {
-            // If there is not already a cell with phone number
-            if (!(self.phone2Used == YES))
-            {
-                // Don't use the phone number anymore
-                self.phone2Used = YES;
-                self.arrayOffset++;
-                self.phone2Index = indexPath.row;
-                
-            label5:
-                
-                // Add the phone number to a cell
-                cell.textLabel.text = @"Phone 2:";
-                cell.detailTextLabel.text = _tableRow.phone2;
-                
-                // Don't display the arrow on the right side of the cell
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                
-                
-                return cell;
-            }
-            
-        }
+        
         
         // If the tableRow has a fax number
         if ([_tableRow.fax length] > 0)
@@ -1183,6 +1188,8 @@
     _addressIndex = -1;
     _phoneIndex = -1;
     _faxIndex = -1;
+    _phone2Index = -1;
+    _tollFreeIndex = -1;
     
     [self setupView];
     [self.tableView reloadData];
