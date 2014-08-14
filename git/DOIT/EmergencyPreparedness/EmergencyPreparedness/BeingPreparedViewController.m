@@ -82,13 +82,13 @@
         self.textView.text = self.firstPage.text;
         self.iconImage.image = [UIImage imageNamed:@"alert.png"];
         self.menuArray = self.topLevel;
-        self.showContentsButton.titleLabel.text = @"Get Prepared For";
+        [self.showContentsButton setTitle:@"Get Prepared For..." forState:UIControlStateNormal];
     }
     else if (self.directoryLevel == 1)
     {
         self.titleLabel.text = self.currentItem.title;
         self.textView.text = self.currentItem.text;
-        self.showContentsButton.titleLabel.text = @"Learn More";
+        [self.showContentsButton setTitle:@"Learn More" forState:UIControlStateNormal];
         [self.showContentsButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
         NSString *imageString = [self.currentItem.title lowercaseString];
         imageString = [imageString stringByAppendingString:@".png"];

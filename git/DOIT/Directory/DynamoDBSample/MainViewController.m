@@ -68,7 +68,9 @@
                      AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                      
                      // Write time stamp back to array from .archive file
-                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                     NSString *documentPath = [paths objectAtIndex:0];
+                     NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
                      
                      self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
                      
@@ -77,8 +79,6 @@
                      if (!self.updateDirectory) {
                          
                          // Write the new time stamp to timeStamp.archive
-                         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
-                         
                          [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                      }
                      
@@ -152,10 +152,12 @@
                      [temp sortUsingDescriptors:sortingDescriptor];
                      [SingletonArrayObject sharedInstance].directoryArray = [temp mutableCopy];
                      
-                     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
+                     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                     NSString *documentPath = [paths objectAtIndex:0];
+                     NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
                      
                      // Write the directory array to an archive file
-                     BOOL success = [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
+                     [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
                      
                      
                      
@@ -311,15 +313,26 @@
     // Do any additional setup after loading the view.
     
     // Write the directory to a singleton variable that is accessible from anywhere within the project
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"directoryArray" ofType:@".archive"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
     
     [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     
-    filePath = [[NSBundle mainBundle] pathForResource:@"favoritesArray" ofType:@".archive"];
+    filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
+    
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    if([[NSData dataWithContentsOfFile:filePath] length] > 0)
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if([manager fileExistsAtPath:filePath])
     {
+        NSDictionary *attributes = [manager attributesOfItemAtPath:filePath error:nil];
+        unsigned long long size = [attributes fileSize];
+        if (attributes && size > 0)
+        {
         [SingletonFavoritesArray sharedInstance].favoritesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+    
+        }
     }
     
     // Hide the navigation bar on startup

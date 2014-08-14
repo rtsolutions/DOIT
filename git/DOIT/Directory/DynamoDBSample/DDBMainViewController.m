@@ -65,6 +65,9 @@
 // PHONE NUMBER MUST BE OF FORM 555-555-5555 -- NO SPACES ALLOWED
 @property (nonatomic, readwrite) NSString *phoneNumber;
 @property (nonatomic, readwrite) NSString *address;
+@property (nonatomic, readwrite) NSString *tollFree;
+@property (nonatomic, readwrite) NSString *phoneNumber2;
+
 
 
 // Items leftover from DynamoDBSample. Not sure if still needed.
@@ -85,6 +88,11 @@
 @property (nonatomic, readwrite) NSInteger faxIndex;
 @property (nonatomic, assign) BOOL addressUsed;
 @property (nonatomic, readwrite) NSInteger addressIndex;
+@property (nonatomic, assign) BOOL tollFreeUsed;
+@property (nonatomic, readwrite) NSInteger tollFreeIndex;
+@property (nonatomic, assign) BOOL phone2Used;
+@property (nonatomic, assign) BOOL phone2Index;
+
 @property (nonatomic, readwrite)  NSInteger arrayOffset;
 
 // BOOL that indicates whether to list items by county
@@ -318,7 +326,9 @@
             BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
             
             // filePath to favoritesArray.archive
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"favoritesArray" ofType:@".archive"];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentPath = [paths objectAtIndex:0];
+            NSString *filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
             
             // If the item is already a favorite
             if (alreadyFavorite)
@@ -508,7 +518,7 @@
         
         // Create a rectangle that bounds the text. Width is 200, and height is calculated based on
         // how much space the text would need if it wraps.
-        CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(200.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
+        CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(190.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
         
         // Mark that the current table already has an address on it, and we don't need to change the size
         // of any other cells
@@ -545,6 +555,14 @@
             rowCount++;
         }
         if ([_tableRow.fax length] > 0)
+        {
+            rowCount++;
+        }
+        if ([_tableRow.phone2 length] > 0)
+        {
+            rowCount++;
+        }
+        if ([_tableRow.tollFree length] > 0)
         {
             rowCount++;
         }
@@ -593,6 +611,8 @@
     // nasty workarounds like this. If the detail has already been loaded, keep track of its
     // index so we can load it again if we scroll down and up. Otherwise, we get an out of range
     // error.
+    [cell.textLabel setNumberOfLines:2];
+    [cell.detailTextLabel setNumberOfLines:2];
     
     if (indexPath.row == self.addressIndex)
     {
@@ -605,6 +625,14 @@
     if (indexPath.row == self.faxIndex)
     {
         goto label3;
+    }
+    if (indexPath.row == self.phone2Index)
+    {
+        goto label4;
+    }
+    if (indexPath.row == self.tollFreeIndex)
+    {
+        goto label5;
     }
 
     
@@ -664,11 +692,65 @@
                 // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 
-
+                
                 return cell;
             }
             
         }
+        
+        // If the tableRow has a phone2 number...
+        if ([_tableRow.phone2 length] > 0)
+        {
+            // If there is not already a cell with phone number
+            if (!(self.phone2Used == YES))
+            {
+                // Don't use the phone number anymore
+                self.phone2Used = YES;
+                self.arrayOffset++;
+                self.phone2Index = indexPath.row;
+                
+            label4:
+                
+                // Add the phone number to a cell
+                cell.textLabel.text = @"Phone 2:";
+                cell.detailTextLabel.text = _tableRow.phone2;
+                
+                // Don't display the arrow on the right side of the cell
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                
+                
+                return cell;
+            }
+            
+        }
+        
+        // If the tableRow has a toll free number...
+        if ([_tableRow.tollFree length] > 0)
+        {
+            // If there is not already a cell with phone number
+            if (!(self.tollFreeUsed == YES))
+            {
+                // Don't use the phone number anymore
+                self.tollFreeUsed = YES;
+                self.arrayOffset++;
+                self.tollFreeIndex = indexPath.row;
+                
+            label5:
+                
+                // Add the phone number to a cell
+                cell.textLabel.text = @"Toll-Free:";
+                cell.detailTextLabel.text = _tableRow.tollFree;
+                
+                // Don't display the arrow on the right side of the cell
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                
+                
+                return cell;
+            }
+            
+        }
+        
+        
         
         // If the tableRow has a fax number
         if ([_tableRow.fax length] > 0)
@@ -907,6 +989,39 @@
             [alert show];
             return;
         }
+    if ([cellText  isEqual: @"Phone 2:"])
+    {
+        // Prepare a string that says "Dial [phone number]?"
+        NSString *messageString = [[@"Dial " stringByAppendingString:self.phoneNumber2] stringByAppendingString:@"?"];
+        self.phoneNumber = self.phoneNumber2;
+        
+        // Prepare a prompt
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:messageString
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Okay", nil];
+        
+        [alert show];
+        return;
+    }
+    if ([cellText  isEqual: @"Toll-Free:"])
+    {
+        // Prepare a string that says "Dial [phone number]?"
+        NSString *messageString = [[@"Dial " stringByAppendingString:self.tollFree] stringByAppendingString:@"?"];
+        
+        self.phoneNumber = self.tollFree;
+        
+        // Prepare a prompt
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:messageString
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Okay", nil];
+        
+        [alert show];
+        return;
+    }
 
         // If we're not on a details screen, the only other option is to open up a new tableview
         // with the children of the selected cell.
@@ -950,6 +1065,8 @@
         mainVewController.showDetails = YES;
         mainVewController.phoneNumber = indexRow.phone;
         mainVewController.address = indexRow.address;
+        mainVewController.phoneNumber2 = indexRow.phone2;
+        mainVewController.tollFree = indexRow.tollFree;
         mainVewController.title = indexRow.title;
         
     }
@@ -1071,6 +1188,8 @@
     _addressIndex = -1;
     _phoneIndex = -1;
     _faxIndex = -1;
+    _phone2Index = -1;
+    _tollFreeIndex = -1;
     
     [self setupView];
     [self.tableView reloadData];
