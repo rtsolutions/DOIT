@@ -32,6 +32,8 @@
     
     for (DDBTableRow *item in [SingletonArray sharedInstance].sharedArray)
     {
+        // Insert newlines into all of the text where there are double spaces.
+        // Four spaces inserts two newlines.
         NSString *stringWithoutNewline = item.text;
         
         NSString *stringWithNewline = [stringWithoutNewline stringByReplacingOccurrencesOfString:@"  " withString:@"\r"];
@@ -41,8 +43,16 @@
         
         item.text = stringWithNewline;
         
+        
         if ([item.hashKey isEqual:@"0001"])
         {
+            // If the item is in the section for the manual, count the number of periods
+            // in its rangeKey. If it has none, it is a top level item. If it has one, it is a
+            // subsection of one of the categories
+            // Commented out because it's easier just to check if the length of the rangeKey is
+            // less than three, but I'm leaving this code here because it would be necessary
+            // for any tree-type filesystem with more than two levels.
+            /*
             NSUInteger count = 0, length = [item.rangeKey length];
             
             for (int i = 0; i < length; i++)
@@ -66,11 +76,25 @@
             else if (count > 0)
             {
                 [self.secondLevel addObject:item];
+            }*/
+            
+            // item with rangeKey == "0" is the first page of the manual
+            if ([item.rangeKey isEqual:@"0"])
+            {
+                self.firstPage = item;
             }
-
+            // Top level items have as many as two characters
+            else if ([item.rangeKey length] < 3)
+            {
+                [self.topLevel addObject:item];
+            }
+            // Subsections have at least three characters
+            else if ([item.rangeKey length] >= 3)
+            {
+                [self.secondLevel addObject:item];
+            }
         }
     }
-    
 }
 
 - (void)setupView
@@ -78,6 +102,7 @@
     // Setup first page of manual
     if (self.directoryLevel == 0)
     {
+        // Add text and images to all of the appropriate fields
         self.titleLabel.text = self.firstPage.title;
         self.textView.text = self.firstPage.text;
         self.iconImage.image = [UIImage imageNamed:@"alert.png"];
@@ -86,10 +111,14 @@
     }
     else if (self.directoryLevel == 1)
     {
+        // Add text and images to the appropriate fields
         self.titleLabel.text = self.currentItem.title;
         self.textView.text = self.currentItem.text;
         [self.showContentsButton setTitle:@"Learn More" forState:UIControlStateNormal];
         [self.showContentsButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
+        
+        // To get the name of the image for the current page, take the title of the page,
+        // change it all to lowercase, remove the spaces, and append ".png"
         NSString *imageString = [self.currentItem.title lowercaseString];
         imageString = [imageString stringByAppendingString:@".png"];
         imageString = [imageString stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -97,6 +126,7 @@
         
         for (DDBTableRow *item in self.secondLevel)
         {
+            // Extract the parentID from the current item's rangeKey
             NSString *parentID = item.rangeKey;
             NSUInteger length = [item.rangeKey length];
             
@@ -119,6 +149,8 @@
             }
         }
     }
+    // Sort the items by index--an integer that's equivalent to the last element of the rangeKey
+    // eg if rangeKey == "3.10.7" then index == 7.
     NSSortDescriptor *sortingByIndexDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
     NSArray *sortingDescriptor = [NSArray arrayWithObjects:sortingByIndexDescriptor, nil];
     NSMutableArray *temp = self.menuArray;
@@ -126,6 +158,7 @@
     self.menuArray = temp;
 }
 
+/// On button press, add the table to the current view.
 - (IBAction)showTable:(id)sender
 {
     
@@ -137,6 +170,7 @@
     [self.hideContentsButton setEnabled:YES];
 }
 
+/// On button press, remove the table from the current view
 - (IBAction)hideTable:(id)sender
 {
     // Trying to animate the table
@@ -156,6 +190,7 @@
     [self.hideContentsButton setHidden:YES];
 }
 
+/// Trying to use swipes to show the table of contents. Couldn't get it to work.
 - (void)handleSwipeUpFrom:(UISwipeGestureRecognizer *)recognizer
 {
     if (recognizer == self.swipeDown)
@@ -184,11 +219,14 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     DDBTableRow *item = self.menuArray[indexPath.row];
+    
+    // Let each cell use two lines
     [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
     [cell.textLabel setNumberOfLines:2];
     
     cell.textLabel.text = item.title;
 
+    // Check to see if the cell already has an image in it. If it does, remove it
     if (self.directoryLevel == 0)
     {
         for (UIImageView *subview in cell.contentView.subviews)
@@ -199,14 +237,19 @@
             }
         }
         
-        
+        // Move the cell text over to make room for the image.
         cell.indentationLevel = 7;
         cell.indentationWidth = 10;
+        
+        // Set up an image view...
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 40, 40)];
         imgView.backgroundColor = [UIColor clearColor];
         
+        // Give the image view a tag so we can find it later
         [imgView setTag:99];
         
+        // Take the title, change it to all lowercase, remove spaces, and append ".png" to get
+        // the image name.
         NSString *imageString = [item.title lowercaseString];
         imageString = [imageString stringByAppendingString:@".png"];
         imageString = [imageString stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -224,6 +267,9 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     DDBTableRow *item = self.menuArray[indexPath.row];
     self.currentItem = item;
+    
+    // If the next page doesn't have any subsections, navigateToManualPage.
+    // If the next page does have subsections, navigate back to the same page with new data.
     if (self.directoryLevel == 1 || [self.currentItem.rangeKey isEqual:@"1"] || [self.currentItem.rangeKey isEqual:@"3"])
     {
         [self performSegueWithIdentifier:@"navigateToManualPage" sender:self];

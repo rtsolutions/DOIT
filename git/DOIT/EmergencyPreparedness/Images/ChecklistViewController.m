@@ -24,6 +24,7 @@
 
 @implementation ChecklistViewController
 
+// Variables
 int checked = 1;
 int notChecked = 2;
 
