@@ -37,6 +37,8 @@
 
 - (BFTask *)checkDatabaseForUpdate:(BOOL)check {
     
+    // In case we're downloading more than AWS's limit for one download, keep track of the
+    // last item downloaded, and start there. This will probably never be used by this app.
     if (check) {
         self.lastEvaluatedKey = nil;
         self.doneLoading = NO;
@@ -61,12 +63,13 @@
                  AWSDynamoDBPaginatedOutput *paginatedOutput = task.result;
                  
                  // Write time stamp back to array from .archive file
-                 
                  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                  NSString *documentPath = [paths objectAtIndex:0];
                  NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
                  
                  
+                 // Unarchiving an empty file and using a nil array has crashed the app in the past,
+                 // so check to make sure the archive file has something in it before using it.
                  NSFileManager *manager = [NSFileManager defaultManager];
                  
                  if([manager fileExistsAtPath:filePath])
@@ -80,11 +83,12 @@
                      }
                  }
                  
+                 // Check if the timestamp has changed. Notice that we don't check for a more recent
+                 // time stamp. We only check for a different timestamp.
                  self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                  
                  if (!self.updateDirectory) {
                      // Write the new time stamp to timeStamp.archive
-                     
                      [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                  }
                  
@@ -93,6 +97,10 @@
              }] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id(BFTask *task) {
                  if (task.error) {
                      NSLog(@"Error: [%@]", task.error);
+                 }
+                 if (self.updateDirectory)
+                 {
+                     [self sortItems];
                  }
                  if (!(self.updateDirectory))
                  {
@@ -228,6 +236,9 @@
     NSString *hour = nil;
     NSString *min = nil;
     NSString *ampm = nil;
+    
+    // Hard-coded date ranges. This means it's important to get the format
+    // exactly correct on Dynamo DB.
     NSRange monthRange = NSMakeRange(4, 2);
     NSRange dayRange = NSMakeRange(6, 2);
     NSRange hourRange = NSMakeRange(8, 2);
@@ -238,16 +249,20 @@
     for (DDBTableRow *item in self.stories)
     {
         date = item.timestamp;
+        
+        // Split the timestamp into elements
         year = [date substringToIndex:4];
         month = [date substringWithRange:monthRange];
         day = [date substringWithRange:dayRange];
         hour = [date substringWithRange:hourRange];
         min = [date substringFromIndex:10];
         
+        // Remove leading zeros from hour, day, and month.
         month = [month stringByReplacingOccurrencesOfString:@"0" withString:@"" options:0 range:firstChar];
         day = [day stringByReplacingOccurrencesOfString:@"0" withString:@"" options:0 range:firstChar];
         hour = [hour stringByReplacingOccurrencesOfString:@"0" withString:@"" options:0 range:firstChar];
         
+        // Convert from military time to AM/PM
         if ([hour integerValue] > 12)
         {
             NSInteger hourInt = [hour integerValue];
@@ -260,12 +275,14 @@
             ampm = @" AM";
         }
         
+        // Format the date with slashes and colons and spaces
         month = [month stringByAppendingString:@"/"];
         day = [day stringByAppendingString:@"/"];
         year = [year stringByAppendingString:@"  "];
         hour = [hour stringByAppendingString:@":"];
         min = [min stringByAppendingString:ampm];
         
+        // Append all the string together.
         parsedDate = [month stringByAppendingString:day];
         year = [year stringByAppendingString:hour];
         year = [year stringByAppendingString:min];
@@ -274,12 +291,16 @@
     }
 
     
-    
+    // Setup view is called here so that it doesn't run before sortItems finishes, which
+    // could happen if the two methods were called one after the other in viewDidLoad
     [self setupView];
 }
 
+
+/// Setup the pageView (the subview that holds the introductions for the alerts)
 - (void)setupView
 {
+    // Add the page view controllers to an array, so we can cycle through them.
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
     
@@ -287,6 +308,7 @@
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
     
+    // Set up the dimensions for the subview, and add it to the current view controller.
     self.pageViewController.view.frame = CGRectMake(14, 248, 292, 200);
     
     [self addChildViewController:_pageViewController];
@@ -294,6 +316,8 @@
     [self.pageViewController didMoveToParentViewController:self];
 }
 
+
+/// Scroll to the left
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
     NSUInteger index = ((PageContentViewController*) viewController).pageIndex;
@@ -307,6 +331,8 @@
     return [self viewControllerAtIndex:index];
 }
 
+
+/// Scroll to the right
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
     NSUInteger index = ((PageContentViewController*) viewController).pageIndex;
@@ -326,8 +352,10 @@
 }
 
 
+/// Return the pageContentViewController at a given index.
 - (PageContentViewController *)viewControllerAtIndex:(NSUInteger)index
 {
+    // Check bounds
     if (([self.introArray count] == 0) || (index >= [self.introArray count]))
     {
         return nil;
@@ -335,6 +363,7 @@
     
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentController"];
     
+    // Give the pageContentViewController data from our arrays of intros and dates
     pageContentViewController.introString = self.introArray[index];
     pageContentViewController.dateString = self.dates[index];
     
@@ -347,18 +376,20 @@
     return pageContentViewController;
 }
 
+/// Number of dots to display at the bottom of the subview
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController
 {
     return [self.introArray count];
 }
 
+/// Starting index for subview
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
     return 0;
 }
 
 
-
+/// Show an actionSheet with buttons to jump to the four features of the app.
 - (IBAction)showActionSheet:(id)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Home", @"Being Prepared", @"Checklist", @"Take the Quiz", nil];
@@ -367,7 +398,7 @@
     [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
 }
 
-
+/// Based onthe text of the button title, perform a segue to the appropriate viewController
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
@@ -389,35 +420,7 @@
     }
 }
 
-/*
-// Change the appearance of the action sheet buttons
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    
-    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-
-    for (UIView *subview in actionSheet.subviews)
-    {
-        if ([subview isKindOfClass:[UIButton class]])
-        {
-            UIButton *button = (UIButton *)subview;
-            
-
-            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            
-            [button setBackgroundColor:[UIColor darkGrayColor]];
-            //[button setBackgroundColor:[UIColor colorWithRed:84/255 green:90/255 blue:93/255 alpha:1.0]];
-            //[button setTintColor:[UIColor lightGrayColor]];
-            
-            //[button setTintColor:[UIColor colorWithRed:84/255 green:90/255 blue:93/255 alpha:1.0]];
-            if ([button.currentTitle  isEqual: @"Add to Favorites"])
-            {
-                
-               
-            }
-        }
-    }
-}*/
-
+/// Pop all of the viewControllers off of the stack, then navigate to the checklist
 - (void)popAndPushToChecklist
 {
     [self.navigationController popToRootViewControllerAnimated:NO];
@@ -425,6 +428,8 @@
     [self performSegueWithIdentifier:@"navigateToChecklist" sender:self];
 }
 
+/// Pop all of the viewControllers off of the stack, then navigate to the emergency preparedness
+/// manual
 - (void)popAndPushToBeingPrepared
 {
     [self.navigationController popToRootViewControllerAnimated:NO];
@@ -432,6 +437,7 @@
     [self performSegueWithIdentifier:@"navigateToBeingPreparedController" sender:self];
 }
 
+/// Pop all of the viewControllers off of the stack, then navigate to the quiz
 - (void)popAndPushToQuiz
 {
     [self.navigationController popToRootViewControllerAnimated:NO];
@@ -440,25 +446,24 @@
 }
 
 
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    
-}
-
-
 - (void)viewDidLoad
 {
+    // Listeners for navigation. If a menu button is pressed on another view controller, this
+    // view controller receives a notification that tells it to call the appropriate method.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToChecklist) name:@"popAndPushToChecklist" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToBeingPrepared) name:@"popAndPushToBeingPrepared" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popAndPushToQuiz) name:@"popAndPushToQuiz" object:nil];
     
     [super viewDidLoad];
+    
+    // Thread stuff.
     self.startSetupView = NO;
     self.startSetupStories = NO;
     _lock = [NSCondition new];
     
+    // Write the poorly-named alertArray.archive to the global sharedArray. Really, this
+    // array holds all of the data. Most view controllers start with a call to a sortItems
+    // method that will extract the data that it needs.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
     NSString *filePath = [documentPath stringByAppendingString:@"alertArray.archive"];
@@ -478,8 +483,8 @@
 
     [self checkDatabaseForUpdate:YES];
     
+    // Check if there are any updates every 30 seconds.
     [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(checkDatabaseForUpdate:) userInfo:nil repeats:YES];
-    
 }
 
 - (void)didReceiveMemoryWarning
