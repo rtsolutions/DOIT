@@ -33,6 +33,8 @@
 @property (nonatomic, strong) NSString *phone;
 @property (nonatomic, strong) NSString *fax;
 @property (nonatomic, strong) NSString *address;
+@property (nonatomic, strong) NSString *phone2;
+@property (nonatomic, strong) NSString *tollFree;
 @property (nonatomic, strong) NSString *parentID;
 @property (nonatomic, strong) NSString *timestamp;
 @property (nonatomic, strong) NSString *title;
