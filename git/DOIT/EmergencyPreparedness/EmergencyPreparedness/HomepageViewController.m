@@ -62,7 +62,9 @@
                  
                  // Write time stamp back to array from .archive file
                  
-                 NSString *filePath = [[NSBundle mainBundle] pathForResource:@"timeStamp" ofType:@".archive"];
+                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                 NSString *documentPath = [paths objectAtIndex:0];
+                 NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
                  
                  
                  NSFileManager *manager = [NSFileManager defaultManager];
@@ -150,7 +152,9 @@
                  
                  
                  // Write the directory array to an archive file
-                 NSString *filePath = [[NSBundle mainBundle] pathForResource:@"alertArray" ofType:@".archive"];
+                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                 NSString *documentPath = [paths objectAtIndex:0];
+                 NSString *filePath = [documentPath stringByAppendingString:@"alertArray.archive"];
                  
                  BOOL success = [NSKeyedArchiver archiveRootObject: [SingletonArray sharedInstance].sharedArray toFile:filePath];
                  
@@ -455,7 +459,9 @@
     self.startSetupStories = NO;
     _lock = [NSCondition new];
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"alertArray" ofType:@".archive"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    NSString *filePath = [documentPath stringByAppendingString:@"alertArray.archive"];
     
     NSFileManager *manager = [NSFileManager defaultManager];
     

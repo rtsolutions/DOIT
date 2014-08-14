@@ -67,7 +67,9 @@ int notChecked = 2;
         [checklistTemp2 addObject:checklistText];
         
     }
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"checkedArray" ofType:@".archive"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    NSString *filePath = [documentPath stringByAppendingString:@"checkedArray.archive"];
 
     NSFileManager *manager = [NSFileManager defaultManager];
     
@@ -77,8 +79,8 @@ int notChecked = 2;
         unsigned long long size = [attributes fileSize];
         if (attributes && size > 0)
         {
-            //self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-            self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"checkedArray.archive"];
+            self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+            //self.checkedArray = [NSKeyedUnarchiver unarchiveObjectWithFile:@"checkedArray.archive"];
         }
     }
     
@@ -97,7 +99,7 @@ int notChecked = 2;
                 [self.checkedArray addObject:[NSNumber numberWithInt:notChecked]];
             }
             
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
          }
         
         // 1 means yes and 2 means no. This way, we avoid confusion with 0 and nil
@@ -114,7 +116,7 @@ int notChecked = 2;
         {
             listItem.checked = NO;
             [self.checkedArray insertObject:[NSNumber numberWithInt:notChecked] atIndex:i];
-            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
+            [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
         }
         
         
@@ -191,9 +193,11 @@ int notChecked = 2;
     {
         self.checkedArray[indexPath.row] = [NSNumber numberWithInt:checked];
     }
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"checkedArray" ofType:@".archive"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = [paths objectAtIndex:0];
+    NSString *filePath = [documentPath stringByAppendingString:@"checkedArray.archive"];
 
-    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:@"checkedArray.archive"];
+    [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
 
     [self sortItems];
 
