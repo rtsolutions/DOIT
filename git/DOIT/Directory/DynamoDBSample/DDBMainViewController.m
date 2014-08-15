@@ -1185,10 +1185,7 @@
     _faxUsed = NO;
     _addressUsed = NO;
     _arrayOffset = 0;
-    if (self.showDetails == YES)
-    {
-       // _arrayOffset = 1;
-    }
+    _addressFlag = NO;
     _addressIndex = -1;
     _phoneIndex = -1;
     _faxIndex = -1;
