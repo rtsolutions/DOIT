@@ -32,7 +32,7 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
-    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (%@)", [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleShortVersionString"]];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version: %@", [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleShortVersionString"]];
     
     self.directoryLabel.text = [@"Database: " stringByAppendingString: AWSSampleDynamoDBTableName];
     
