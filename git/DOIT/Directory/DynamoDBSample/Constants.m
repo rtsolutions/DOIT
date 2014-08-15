@@ -22,4 +22,4 @@ NSString *const CognitoRoleAuth = nil;
 NSString *const CognitoRoleUnauth = @"arn:aws:iam::796658757335:role/directoryRole";
 
 
-NSString *const AWSSampleDynamoDBTableName = @"Directory1";
+NSString *const AWSSampleDynamoDBTableName = @"Directory2";

@@ -569,7 +569,7 @@
         if ([_tableRow.address length] > 0)
         {
             rowCount++;
-            rowCount++;
+            //rowCount++;
         }
     }
     // If we're viewing search results, return the number of items in the filteredTableRows array
@@ -1185,6 +1185,10 @@
     _faxUsed = NO;
     _addressUsed = NO;
     _arrayOffset = 0;
+    if (self.showDetails == YES)
+    {
+       // _arrayOffset = 1;
+    }
     _addressIndex = -1;
     _phoneIndex = -1;
     _faxIndex = -1;
