@@ -569,7 +569,9 @@
         if ([_tableRow.address length] > 0)
         {
             rowCount++;
-            //rowCount++;
+            rowCount++;
+            DDBTableRow *item = nil;
+            item.title = @"placeholder";
         }
     }
     // If we're viewing search results, return the number of items in the filteredTableRows array
@@ -918,12 +920,14 @@
     // Add rows that don't contain details
     if (_tableRows.count)
     {
-        DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
-        cell.textLabel.text = item.title;
-        cell.detailTextLabel.text = nil;
-        cell.userInteractionEnabled = YES;
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+       
+                DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
+                cell.textLabel.text = item.title;
+                cell.detailTextLabel.text = nil;
+                cell.userInteractionEnabled = YES;
+                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         
     }
     
