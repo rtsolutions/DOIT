@@ -384,64 +384,70 @@
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    DDBMainViewController *mainViewController = [segue destinationViewController];
     
-    [self sortItems];
-    
-    if (_searching)
+    if ([sender tag] != 6)
     {
-        mainViewController.directoryLevel1 = self.searchResults;
+        DDBMainViewController *mainViewController = [segue destinationViewController];
+        
+        [self sortItems];
+        
+        if (_searching)
+        {
+            mainViewController.directoryLevel1 = self.searchResults;
+        }
+        else
+        {
+            mainViewController.directoryLevel1 = self.directoryLevel1;
+        }
+        
+        mainViewController.directoryLevel2 = self.directoryLevel2;
+        mainViewController.directoryLevel3 = self.directoryLevel3;
+        mainViewController.directoryLevel4 = self.directoryLevel4;
+        
+        switch([sender tag]) {
+            case 0:
+            {
+                mainViewController.viewType = DDBMainViewTypeAtoZ;
+                mainViewController.electedOfficials = self.electedOfficials;
+                mainViewController.title = @"Directory";
+                break;
+            }
+            case 1:
+            {
+                mainViewController.viewType = DDBMainViewTypeByCounty;
+                mainViewController.title = @"County List";
+                break;
+            }
+            case 2:
+            {
+                mainViewController.viewType = DDBMainViewTypeElectedOfficials;
+                mainViewController.houseAndSenate = self.houseAndSenate;
+                mainViewController.electedOfficials = self.electedOfficials;
+                mainViewController.title = @"Elected Officials";
+                break;
+            }
+            case 5:
+            {
+                mainViewController.viewType = DDBMainViewTypeFavorites;
+                mainViewController.title=@"Favorites";
+                break;
+            }
+            case 3:
+            {
+                mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
+                mainViewController.nonEmergencyContacts = self.nonEmergencyContacts;
+                mainViewController.title=@"Non Emergency Contacts";
+                break;
+            }
+            case 4:
+            {
+                mainViewController.viewType = DDBMainViewTypeN11;
+                mainViewController.n11 = self.n11;
+                mainViewController.title=@"N11";
+            }
+        }
+
     }
-    else
-    {
-        mainViewController.directoryLevel1 = self.directoryLevel1;
+        
     }
-    
-    mainViewController.directoryLevel2 = self.directoryLevel2;
-    mainViewController.directoryLevel3 = self.directoryLevel3;
-    mainViewController.directoryLevel4 = self.directoryLevel4;
-    
-    switch([sender tag]) {
-        case 0:
-        {
-            mainViewController.viewType = DDBMainViewTypeAtoZ;
-            mainViewController.electedOfficials = self.electedOfficials;
-            mainViewController.title = @"Directory";
-            break;
-        }
-        case 1:
-        {
-            mainViewController.viewType = DDBMainViewTypeByCounty;
-            mainViewController.title = @"County List";
-            break;
-        }
-        case 2:
-        {
-            mainViewController.viewType = DDBMainViewTypeElectedOfficials;
-            mainViewController.houseAndSenate = self.houseAndSenate;
-            mainViewController.electedOfficials = self.electedOfficials;
-            mainViewController.title = @"Elected Officials";
-            break;
-        }
-        case 5:
-        {
-            mainViewController.viewType = DDBMainViewTypeFavorites;
-            mainViewController.title=@"Favorites";
-            break;
-        }
-        case 3:
-        {
-            mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
-            mainViewController.nonEmergencyContacts = self.nonEmergencyContacts;
-            mainViewController.title=@"Non Emergency Contacts";
-            break;
-        }
-        case 4:
-        {
-            mainViewController.viewType = DDBMainViewTypeN11;
-            mainViewController.n11 = self.n11;
-            mainViewController.title=@"N11";
-        }
-    }
-}
 @end
