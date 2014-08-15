@@ -530,7 +530,12 @@
         return size.height + 10;
     }
     
-    // If we're not displaying an address, just use 40 as the size of each cell
+    if (self.listingByCounty == YES)
+    {
+        return 66.0;
+    }
+    
+    // If we're not displaying an address, just use 44 as the size of each cell
     return 44.0;
     
     
@@ -569,9 +574,10 @@
         if ([_tableRow.address length] > 0)
         {
             rowCount++;
-            rowCount++;
-            DDBTableRow *item = nil;
-            item.title = @"placeholder";
+            //rowCount++;
+            
+            NSString *item = @"placeholder";
+            [self.tableRows addObject:item];
         }
     }
     // If we're viewing search results, return the number of items in the filteredTableRows array
@@ -636,7 +642,7 @@
     {
         goto label5;
     }
-
+    
     
     if (self.showDetails == YES) {
         
@@ -664,8 +670,17 @@
                 [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
                 cell.detailTextLabel.numberOfLines = 0;
                 
-                // Let users click on the cell, which brings up the maps app with the address string
-                cell.userInteractionEnabled = YES;
+                NSString *addressString = _tableRow.address;
+                NSRange wordrange = NSMakeRange(0, 3);
+                if ([[addressString substringWithRange:wordrange] isEqual:@"see"])
+                {
+                    cell.userInteractionEnabled = NO;
+                }
+                else
+                {
+                    // Let users click on the cell, which brings up the maps app with the address string
+                    cell.userInteractionEnabled = YES;
+                }
                 
                 // Don't display the arrow on the right side of the cell
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -848,19 +863,19 @@
             }
             
         }
-
-     
-     
-     cell.detailTextLabel.text = item.title;
+        
+        
+        
+        cell.detailTextLabel.text = item.title;
         
         return cell;
-     }
+    }
     
     if (self.listingByCounty == YES)
     {
         // Use a different style of cell so we have more room for parent title
         [cell initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
-
+        
         NSString *county = [self.sortedSections objectAtIndex:indexPath.section];
         NSArray *listingsInCountyArray = [self.sections objectForKey:county];
         
@@ -868,7 +883,7 @@
         
         [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
         
-        cell.textLabel.numberOfLines = 2;
+        cell.textLabel.numberOfLines = 3;
         cell.textLabel.textColor = [UIColor lightGrayColor];
         cell.textLabel.textAlignment = NSTextAlignmentLeft;
         
@@ -920,15 +935,22 @@
     // Add rows that don't contain details
     if (_tableRows.count)
     {
-       
-                DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
-                cell.textLabel.text = item.title;
-                cell.detailTextLabel.text = nil;
-                cell.userInteractionEnabled = YES;
-                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
-        
+        if ((self.showDetails == YES) && (indexPath.row - self.arrayOffset == [self.tableRows count] - 1))
+        {
+            cell.textLabel.text = nil;
+            cell.detailTextLabel.text = nil;
+            cell.userInteractionEnabled = NO;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        else
+        {
+            DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
+            cell.textLabel.text = item.title;
+            cell.detailTextLabel.text = nil;
+            cell.userInteractionEnabled = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
     }
     
     return cell;
@@ -967,32 +989,32 @@
     NSString *cellText = cell.textLabel.text;
     
     // On a details screen....
-
-        if ([cellText  isEqual: @"Address:"])
-        {
-            // Create a string that's compatible with the maps app ("Albuquerque, New Mexico" becomes
-            // "Albuquerque,+New+Mexico") and append it to the Apple maps URL. Open the maps app
-            // with this string.
-            NSString *addressNoSpaces = [self.address stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-            NSString *addressURL = [@"http://maps.apple.com?q=" stringByAppendingString:addressNoSpaces];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:addressURL]];
-            return;
-        }
-        if ([cellText  isEqual: @"Phone:"])
-        {
-            // Prepare a string that says "Dial [phone number]?"
-            NSString *messageString = [[@"Dial " stringByAppendingString:self.phoneNumber] stringByAppendingString:@"?"];
-            
-            // Prepare a prompt
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                            message:messageString
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Cancel"
-                                                  otherButtonTitles:@"Okay", nil];
-            
-            [alert show];
-            return;
-        }
+    
+    if ([cellText  isEqual: @"Address:"])
+    {
+        // Create a string that's compatible with the maps app ("Albuquerque, New Mexico" becomes
+        // "Albuquerque,+New+Mexico") and append it to the Apple maps URL. Open the maps app
+        // with this string.
+        NSString *addressNoSpaces = [self.address stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+        NSString *addressURL = [@"http://maps.apple.com?q=" stringByAppendingString:addressNoSpaces];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:addressURL]];
+        return;
+    }
+    if ([cellText  isEqual: @"Phone:"])
+    {
+        // Prepare a string that says "Dial [phone number]?"
+        NSString *messageString = [[@"Dial " stringByAppendingString:self.phoneNumber] stringByAppendingString:@"?"];
+        
+        // Prepare a prompt
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:messageString
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Okay", nil];
+        
+        [alert show];
+        return;
+    }
     if ([cellText  isEqual: @"Phone 2:"])
     {
         // Prepare a string that says "Dial [phone number]?"
@@ -1026,15 +1048,15 @@
         [alert show];
         return;
     }
-
-        // If we're not on a details screen, the only other option is to open up a new tableview
-        // with the children of the selected cell.
-        if (self.listingByCounty == YES)
-        {
-            self.currentCounty = [self tableView:tableView titleForHeaderInSection:indexPath.section];
-        }
-        [self performSegueWithIdentifier:@"navigateToMainView" sender:[tableView cellForRowAtIndexPath:indexPath]];
-  
+    
+    // If we're not on a details screen, the only other option is to open up a new tableview
+    // with the children of the selected cell.
+    if (self.listingByCounty == YES)
+    {
+        self.currentCounty = [self tableView:tableView titleForHeaderInSection:indexPath.section];
+    }
+    [self performSegueWithIdentifier:@"navigateToMainView" sender:[tableView cellForRowAtIndexPath:indexPath]];
+    
 }
 
 #pragma mark - Navigation
@@ -1125,7 +1147,7 @@
             //[self showFavorites];
             break;
         }
-        
+            
         case DDBMainViewTypeFavorites:
         {
             [self showFavorites];
