@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0204EF2EAC6B490DB5CE2EB8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F9C6AC714DE467BAF3078E5 /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		3B6DD57919760DD1001C3FB8 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6DD57819760DD1001C3FB8 /* MainViewController.m */; };
+		3B7B9224199EBEE700440FC9 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B9223199EBEE700440FC9 /* AboutViewController.m */; };
 		3B9E074819783C2E0082BA8B /* SingletonArrayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */; };
 		3B9E074A197841760082BA8B /* directoryArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E0749197841760082BA8B /* directoryArray.archive */; };
 		3B9E074C19788C6B0082BA8B /* timeStamp.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3B9E074B19788C6B0082BA8B /* timeStamp.archive */; };
@@ -58,6 +59,8 @@
 /* Begin PBXFileReference section */
 		3B6DD57719760DD1001C3FB8 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		3B6DD57819760DD1001C3FB8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = DynamoDBSample/MainViewController.m; sourceTree = SOURCE_ROOT; };
+		3B7B9222199EBEE700440FC9 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = ../AboutViewController.h; sourceTree = "<group>"; };
+		3B7B9223199EBEE700440FC9 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = ../AboutViewController.m; sourceTree = "<group>"; };
 		3B9E074619783C2E0082BA8B /* SingletonArrayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingletonArrayObject.h; path = ../SingletonArrayObject.h; sourceTree = "<group>"; };
 		3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingletonArrayObject.m; path = ../SingletonArrayObject.m; sourceTree = "<group>"; };
 		3B9E0749197841760082BA8B /* directoryArray.archive */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.bplist; name = directoryArray.archive; path = DynamoDBSample/directoryArray.archive; sourceTree = SOURCE_ROOT; };
@@ -205,6 +208,8 @@
 				3B9E075A197DAB350082BA8B /* Images */,
 				CE7BD55018C168B20044F866 /* DynamoDB */,
 				CE0DDA8B18BD19C900BD8F49 /* Main.storyboard */,
+				3B7B9222199EBEE700440FC9 /* AboutViewController.h */,
+				3B7B9223199EBEE700440FC9 /* AboutViewController.m */,
 				3B9E074619783C2E0082BA8B /* SingletonArrayObject.h */,
 				3B9E074719783C2E0082BA8B /* SingletonArrayObject.m */,
 				3B9E0757197D7E450082BA8B /* SingletonFavoritesArray.h */,
@@ -380,6 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B7B9224199EBEE700440FC9 /* AboutViewController.m in Sources */,
 				CE0DDA8A18BD19C900BD8F49 /* AppDelegate.m in Sources */,
 				CEA9F50218C5270400B6AE51 /* DDBDynamoDBManager.m in Sources */,
 				3B9E074819783C2E0082BA8B /* SingletonArrayObject.m in Sources */,

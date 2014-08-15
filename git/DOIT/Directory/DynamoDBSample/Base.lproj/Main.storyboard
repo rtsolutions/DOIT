@@ -29,7 +29,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AI1-Ui-eiw">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="360"/>
+                                        <rect key="frame" x="-8" y="-55" width="320" height="387"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="AtoZ" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mcl-W2-QbF">
@@ -92,6 +92,18 @@
                                                     <segue destination="nQs-i6-JM7" kind="push" id="lu0-fu-BOV"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ER0-Pa-7hA">
+                                                <rect key="frame" x="110" y="357" width="100" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
+                                                <state key="normal" title="About This App">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="eOS-mX-Mdc" kind="push" id="sfq-cZ-Kde"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.61960784310000006" blue="0.82745098039999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -148,6 +160,44 @@
                 </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="823" y="-3"/>
+        </scene>
+        <!--About View Controller-->
+        <scene sceneID="ll6-7Y-JYj">
+            <objects>
+                <viewController id="eOS-mX-Mdc" customClass="AboutViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oQ9-Hy-E1a"/>
+                        <viewControllerLayoutGuide type="bottom" id="Iea-tI-pYY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ASf-a9-FEo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nL9-FW-LDS">
+                                <rect key="frame" x="20" y="58" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LeS-oT-nvf">
+                                <rect key="frame" x="20" y="100" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="IEl-pm-zGc"/>
+                    <connections>
+                        <outlet property="directoryLabel" destination="LeS-oT-nvf" id="4os-Zj-lhc"/>
+                        <outlet property="versionLabel" destination="nL9-FW-LDS" id="f4V-IZ-4fx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zG4-B2-Jc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="823" y="686"/>
         </scene>
         <!--Main View Controller - A to Z Directory-->
         <scene sceneID="wIH-O5-aex">
@@ -286,6 +336,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="HJo-Qe-Kys"/>
-        <segue reference="lu0-fu-BOV"/>
+        <segue reference="tyd-S9-hXv"/>
     </inferredMetricsTieBreakers>
 </document>
