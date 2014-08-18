@@ -39,7 +39,7 @@
     [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
 }
 
-
+/// If the user selects a button from the actionSheet menu, send a notification to the homepageViewController to pop and push to the chosen viewController
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
@@ -54,6 +54,10 @@
     else if ([buttonTitle isEqual:@"Being Prepared"])
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToBeingPrepared" object:nil];
+    }
+    else if ([buttonTitle isEqual:@"Take the Quiz"])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"popAndPushToQuiz" object:nil];
     }
 }
 

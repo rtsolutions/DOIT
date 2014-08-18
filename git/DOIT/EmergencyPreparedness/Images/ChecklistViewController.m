@@ -70,7 +70,7 @@ int notChecked = 2;
     }
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"checkedArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingString:@"/checkedArray.archive"];
 
     NSFileManager *manager = [NSFileManager defaultManager];
     
@@ -196,7 +196,7 @@ int notChecked = 2;
     }
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"checkedArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingString:@"/checkedArray.archive"];
 
     [NSKeyedArchiver archiveRootObject:self.checkedArray toFile:filePath];
 
@@ -250,6 +250,9 @@ int notChecked = 2;
     self.checklistItems = [NSMutableArray new];
     self.checkedArray = [NSMutableArray new];
     [self sortItems];
+    
+    
+    self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 
 }
 

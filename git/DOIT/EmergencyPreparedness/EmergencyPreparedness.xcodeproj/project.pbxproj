@@ -63,6 +63,10 @@
 		3BBCD8DC198AF70100330753 /* AlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8DB198AF70100330753 /* AlertViewController.m */; };
 		3BBF6F2B199AD363009F9516 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BBF6F2A199AD363009F9516 /* Default-568h@2x.png */; };
 		3BDA290519A26A9800DE8C32 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDA290419A26A9800DE8C32 /* AboutViewController.m */; };
+		3BDA290A19A2C40D00DE8C32 /* ep29.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDA290619A2C40D00DE8C32 /* ep29.png */; };
+		3BDA290B19A2C40D00DE8C32 /* ep58.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDA290719A2C40D00DE8C32 /* ep58.png */; };
+		3BDA290C19A2C40D00DE8C32 /* ep80.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDA290819A2C40D00DE8C32 /* ep80.png */; };
+		3BDA290D19A2C40D00DE8C32 /* ep120.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDA290919A2C40D00DE8C32 /* ep120.png */; };
 		3BDD9E5E199ABA4A00C43009 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDD9E5C199ABA4A00C43009 /* close.png */; };
 		3BDD9E5F199ABA4A00C43009 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDD9E5D199ABA4A00C43009 /* wrong.png */; };
 		3BE909F61995476400B5F173 /* downarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE909F51995476400B5F173 /* downarrow.png */; };
@@ -152,6 +156,10 @@
 		3BBF6F2A199AD363009F9516 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		3BDA290319A26A9800DE8C32 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		3BDA290419A26A9800DE8C32 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		3BDA290619A2C40D00DE8C32 /* ep29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ep29.png; sourceTree = "<group>"; };
+		3BDA290719A2C40D00DE8C32 /* ep58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ep58.png; sourceTree = "<group>"; };
+		3BDA290819A2C40D00DE8C32 /* ep80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ep80.png; sourceTree = "<group>"; };
+		3BDA290919A2C40D00DE8C32 /* ep120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ep120.png; sourceTree = "<group>"; };
 		3BDD9E5C199ABA4A00C43009 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		3BDD9E5D199ABA4A00C43009 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wrong.png; sourceTree = "<group>"; };
 		3BE909F51995476400B5F173 /* downarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downarrow.png; sourceTree = "<group>"; };
@@ -189,6 +197,10 @@
 		3B8CC61F19912AC20014CEA6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3BDA290619A2C40D00DE8C32 /* ep29.png */,
+				3BDA290719A2C40D00DE8C32 /* ep58.png */,
+				3BDA290819A2C40D00DE8C32 /* ep80.png */,
+				3BDA290919A2C40D00DE8C32 /* ep120.png */,
 				3BBF6F2A199AD363009F9516 /* Default-568h@2x.png */,
 				3BDD9E5C199ABA4A00C43009 /* close.png */,
 				3BDD9E5D199ABA4A00C43009 /* wrong.png */,
@@ -409,6 +421,7 @@
 				3B973DF2199428A000CDC9B6 /* pandemicinfluenza.png in Resources */,
 				3B973DF5199428A000CDC9B6 /* tornado.png in Resources */,
 				3B973DF1199428A000CDC9B6 /* hazardousmaterials.png in Resources */,
+				3BDA290A19A2C40D00DE8C32 /* ep29.png in Resources */,
 				3B973DF4199428A000CDC9B6 /* thunderstormsandlightning.png in Resources */,
 				3B4FD7C119927EFC0051A824 /* greenCheck.png in Resources */,
 				3B973DFD199521CF00CDC9B6 /* emergencysupplykit.png in Resources */,
@@ -416,6 +429,7 @@
 				3B8CC629199185D80014CEA6 /* alert.png in Resources */,
 				3B973DED199428A000CDC9B6 /* earthquake.png in Resources */,
 				3BDD9E5F199ABA4A00C43009 /* wrong.png in Resources */,
+				3BDA290B19A2C40D00DE8C32 /* ep58.png in Resources */,
 				3B4FD7CC19929FB70051A824 /* checkedArray.archive in Resources */,
 				3BBCD8D9198AF54600330753 /* alertArray.archive in Resources */,
 				3B8CC62319912AC20014CEA6 /* EmergenyPreparednessBackground@2x.png in Resources */,
@@ -424,7 +438,9 @@
 				3B973DF3199428A000CDC9B6 /* terrorism.png in Resources */,
 				3BDD9E5E199ABA4A00C43009 /* close.png in Resources */,
 				3B973DF0199428A000CDC9B6 /* flood.png in Resources */,
+				3BDA290C19A2C40D00DE8C32 /* ep80.png in Resources */,
 				3BBCD8D4198AF0B400330753 /* timeStamp.archive in Resources */,
+				3BDA290D19A2C40D00DE8C32 /* ep120.png in Resources */,
 				3BE909F61995476400B5F173 /* downarrow.png in Resources */,
 				3B973E00199521CF00CDC9B6 /* specialadvice.png in Resources */,
 				3B973DEE199428A000CDC9B6 /* extremeheat.png in Resources */,

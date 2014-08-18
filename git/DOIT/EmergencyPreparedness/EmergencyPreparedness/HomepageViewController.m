@@ -65,7 +65,7 @@
                  // Write time stamp back to array from .archive file
                  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                  NSString *documentPath = [paths objectAtIndex:0];
-                 NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
+                 NSString *filePath = [documentPath stringByAppendingString:@"/timeStamp.archive"];
                  
                  
                  // Unarchiving an empty file and using a nil array has crashed the app in the past,
@@ -162,7 +162,7 @@
                  // Write the directory array to an archive file
                  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                  NSString *documentPath = [paths objectAtIndex:0];
-                 NSString *filePath = [documentPath stringByAppendingString:@"alertArray.archive"];
+                 NSString *filePath = [documentPath stringByAppendingString:@"/alertArray.archive"];
                  
                  BOOL success = [NSKeyedArchiver archiveRootObject: [SingletonArray sharedInstance].sharedArray toFile:filePath];
                  
@@ -466,7 +466,7 @@
     // method that will extract the data that it needs.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"alertArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingString:@"/alertArray.archive"];
     
     NSFileManager *manager = [NSFileManager defaultManager];
     
