@@ -317,7 +317,7 @@
             // filePath to favoritesArray.archive
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentPath = [paths objectAtIndex:0];
-            NSString *filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
+            NSString *filePath = [documentPath stringByAppendingString:@"/favoritesArray.archive"];
             
             // If the item is already a favorite
             if (alreadyFavorite)

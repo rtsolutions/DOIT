@@ -72,16 +72,18 @@
                      // Write time stamp back to array from .archive file
                      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                      NSString *documentPath = [paths objectAtIndex:0];
-                     NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
+                     NSString *filePath = [documentPath stringByAppendingString:@"/timeStamp.archive"];
                      
                      self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
                      
                      self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
+                     BOOL success;
+                     
                      if (!self.updateDirectory) {
                          
                          // Write the new time stamp to timeStamp.archive
-                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
+                         success = [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                      }
                      
                      
@@ -156,7 +158,7 @@
                      
                      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                      NSString *documentPath = [paths objectAtIndex:0];
-                     NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
+                     NSString *filePath = [documentPath stringByAppendingString:@"/directoryArray.archive"];
                      
                      // Write the directory array to an archive file
                      [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
@@ -326,12 +328,12 @@
     // Write the directory to a singleton variable that is accessible from anywhere within the project
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingString:@"/directoryArray.archive"];
     
     [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
+    filePath = [documentPath stringByAppendingString:@"/favoritesArray.archive"];
     NSFileManager *manager = [NSFileManager defaultManager];
     if([manager fileExistsAtPath:filePath])
     {
