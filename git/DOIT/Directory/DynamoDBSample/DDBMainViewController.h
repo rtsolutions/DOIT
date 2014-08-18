@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, DDBMainViewType) {
 @property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel2;
 @property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel3;
 @property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel4;
+@property (nonatomic, readwrite, strong) NSMutableArray *directoryLevel5;
 @property (nonatomic, readwrite, strong) NSMutableArray *electedOfficials;
 @property (nonatomic, readwrite, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readwrite, strong) NSMutableArray *n11;
