@@ -248,22 +248,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DynamoDBSample/MainViewController.m"
-            timestampString = "430069870.47487"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "-checkDatabaseForUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DynamoDBSample/MainViewController.m"
             timestampString = "430069897.666402"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
