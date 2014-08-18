@@ -360,7 +360,7 @@
     
     // Create a listener so we can refresh the directory when the app is brough up from
     // the background
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkDatabaseForUpdate:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
     
 }
