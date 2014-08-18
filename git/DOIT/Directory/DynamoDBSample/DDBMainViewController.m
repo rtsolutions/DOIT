@@ -83,13 +83,13 @@
 // BOOLs to keep track of which items are already on the detail view
 @property (nonatomic, assign) BOOL addressFlag;
 @property (nonatomic, assign) BOOL phoneUsed;
-@property (nonatomic, readwrite) NSInteger phoneIndex;
+@property (nonatomic, assign) NSInteger phoneIndex;
 @property (nonatomic, assign) BOOL faxUsed;
-@property (nonatomic, readwrite) NSInteger faxIndex;
+@property (nonatomic, assign) NSInteger faxIndex;
 @property (nonatomic, assign) BOOL addressUsed;
-@property (nonatomic, readwrite) NSInteger addressIndex;
+@property (nonatomic, assign) NSInteger addressIndex;
 @property (nonatomic, assign) BOOL tollFreeUsed;
-@property (nonatomic, readwrite) NSInteger tollFreeIndex;
+@property (nonatomic, assign) NSInteger tollFreeIndex;
 @property (nonatomic, assign) BOOL phone2Used;
 @property (nonatomic, assign) BOOL phone2Index;
 
@@ -166,6 +166,11 @@
         
         if ([item.parentID isEqual:self.parentID])
             [self.tableRows addObject:item];
+    }
+    
+    if (self.showDetails == YES)
+    {
+        [self addDetails];
     }
 }
 
@@ -550,9 +555,9 @@
     // Add one to rowCount for phone number and fax. For address, add two, so we can display a dummy
     // cell at the end. If we don't do this, the size of every cell will be the size of the address
     // cell (big) and that looks messy.
-    
+  
     NSInteger rowCount = 0;
-    
+    /*
     if (self.showDetails == YES) {
         
         if ([_tableRow.phone length] > 0)
@@ -579,7 +584,7 @@
             NSString *item = @"placeholder";
             [self.tableRows addObject:item];
         }
-    }
+    }*/
     // If we're viewing search results, return the number of items in the filteredTableRows array
     if (self.isFiltered == YES)
     {
@@ -619,9 +624,66 @@
     // nasty workarounds like this. If the detail has already been loaded, keep track of its
     // index so we can load it again if we scroll down and up. Otherwise, we get an out of range
     // error.
+    
     [cell.textLabel setNumberOfLines:2];
     [cell.detailTextLabel setNumberOfLines:2];
     
+    
+    if (self.showDetails == YES)
+    {
+        DDBTableRow *item = self.tableRows[indexPath.row];
+        NSString *detailString = item.title;
+        NSString *detailSubstring = [detailString substringToIndex:4];
+        if ([detailSubstring isEqual:@"tol:"])
+        {
+            cell.textLabel.text = @"Toll Free:";
+            cell.detailTextLabel.text = [detailString substringFromIndex:4];
+            self.tollFree = [detailString substringFromIndex:4];
+            return cell;
+        }
+        else if ([detailSubstring isEqual:@"phn:"])
+        {
+            cell.textLabel.text = @"Phone:";
+            self.phoneNumber2 = [detailString substringFromIndex:4];
+            cell.detailTextLabel.text = [detailString substringFromIndex:4];
+            return cell;
+        }
+        else if ([detailSubstring isEqual:@"ph2:"])
+        {
+            cell.textLabel.text = @"Phone2:";
+            self.phoneNumber2 = [detailString substringFromIndex:4];
+            cell.detailTextLabel.text = [detailString substringFromIndex:4];
+            return cell;
+        }
+        else if ([detailSubstring isEqual:@"adr:"])
+        {
+            cell.textLabel.text = @"Address:";
+            self.address = [detailString substringFromIndex:4];
+            NSString *detailsWithoutPrefix = [detailString substringFromIndex:4];
+            cell.detailTextLabel.text = detailsWithoutPrefix;
+            cell.detailTextLabel.numberOfLines = 0;
+            
+            if ([[detailsWithoutPrefix substringToIndex:3].lowercaseString isEqual:@"see"])
+            {
+                cell.userInteractionEnabled = NO;
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            
+            return cell;
+        }
+        else if ([detailSubstring isEqual:@"fax:"])
+        {
+            cell.textLabel.text = @"Fax:";
+            cell.detailTextLabel.text = [detailString substringFromIndex:4];
+            cell.userInteractionEnabled = NO;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            return cell;
+        }
+        
+        
+    }
+    
+    /*
     if (indexPath.row == self.addressIndex)
     {
         goto label1;
@@ -653,9 +715,8 @@
             if (!(self.addressUsed == YES))
             {
                 // Don't try to make another address cell
-                self.addressUsed = YES;
                 
-                self.arrayOffset++;
+                
                 
                 self.addressIndex = indexPath.row;
                 
@@ -664,6 +725,9 @@
                 // Create a cell with the string in _tableRow.address
                 cell.textLabel.text = @"Address:";
                 cell.detailTextLabel.text = _tableRow.address;
+                self.addressUsed = YES;
+                self.arrayOffset++;
+
                 
                 // Word wrap so we can see the whole address. Setting the numberOfLines to 0 allows
                 // the string to use as many lines as it needs.
@@ -803,7 +867,7 @@
         cell.userInteractionEnabled = NO;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
-    }
+    }*/
     
     if (self.isFiltered == YES)
     {
@@ -935,14 +999,15 @@
     // Add rows that don't contain details
     if (_tableRows.count)
     {
-        if ((self.showDetails == YES) && (indexPath.row - self.arrayOffset == [self.tableRows count] - 1))
+        /*
+        if ((self.showDetails == YES) && (indexPath.row - self.arrayOffset == [self.tableRows count]))
         {
             cell.textLabel.text = nil;
             cell.detailTextLabel.text = nil;
             cell.userInteractionEnabled = NO;
             cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else
+        }*/
+        
         {
             DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
             cell.textLabel.text = item.title;
@@ -1108,14 +1173,14 @@
     temp++;
     mainVewController.numParents = temp;
     
-    if (temp <= 4)
+    if (temp <= 5)
     {
         mainVewController.directoryLevel1 = self.directoryLevel1;
         mainVewController.directoryLevel2 = self.directoryLevel2;
         mainVewController.directoryLevel3 = self.directoryLevel3;
         mainVewController.directoryLevel4 = self.directoryLevel4;
     }
-    else if (temp >= 5 && temp <=7)
+    else if (temp > 5 && temp <=7)
     {
         mainVewController.electedOfficials = self.electedOfficials;
         mainVewController.houseAndSenate = self.houseAndSenate;
@@ -1176,6 +1241,47 @@
         }
             
     }
+    
+
+}
+
+- (void) addDetails
+{
+    if (_tableRow.fax)
+    {
+        DDBTableRow *item = [DDBTableRow new];
+        NSString *string = _tableRow.fax;
+        item.title = [@"fax:" stringByAppendingString:string];
+        [self.tableRows insertObject:item atIndex:0];
+    }
+    if (_tableRow.tollFree)
+    {
+        DDBTableRow *item = [DDBTableRow new];
+        NSString *string = _tableRow.tollFree;
+        item.title = [@"tol:" stringByAppendingString:string];
+        [self.tableRows insertObject:item atIndex:0];
+    }
+    if (_tableRow.phone2)
+    {
+        DDBTableRow *item = [DDBTableRow new];
+        NSString *string = _tableRow.phone2;
+        item.title = [@"ph2:" stringByAppendingString:string];
+        [self.tableRows insertObject:item atIndex:0];
+    }
+    if (_tableRow.phone)
+    {
+        DDBTableRow *item = [DDBTableRow new];
+        NSString *string = _tableRow.phone;
+        item.title = [@"phn:" stringByAppendingString:string];
+        [self.tableRows insertObject:item atIndex:0];
+    }
+    if (_tableRow.address)
+    {
+        DDBTableRow *item = [DDBTableRow new];
+        NSString *string = _tableRow.address;
+        item.title = [@"adr:" stringByAppendingString:string];
+        [self.tableRows insertObject:item atIndex:0];
+    }
 }
 
 - (void)viewDidLoad {
@@ -1185,6 +1291,11 @@
     _favoritesArray = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
     
+    _addressIndex = -1;
+    _phoneIndex = -1;
+    _faxIndex = -1;
+    _phone2Index = -1;
+    _tollFreeIndex = -1;
     _lock = [NSLock new];
     
     [self.navigationController.navigationBar setTranslucent:NO];
@@ -1212,11 +1323,7 @@
     _addressUsed = NO;
     _arrayOffset = 0;
     _addressFlag = NO;
-    _addressIndex = -1;
-    _phoneIndex = -1;
-    _faxIndex = -1;
-    _phone2Index = -1;
-    _tollFreeIndex = -1;
+    
     
     [self setupView];
     [self.tableView reloadData];
