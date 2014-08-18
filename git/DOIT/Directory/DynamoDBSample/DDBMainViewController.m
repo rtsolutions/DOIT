@@ -164,14 +164,15 @@
     [self.tableRows removeAllObjects];
     self.showingFavorites = YES;
     
-    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
-    {
-        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
-        {
-            [self.favoritesArray addObject:item];
-        }
-    }
-    for (DDBTableRow *item in self.favoritesArray)
+//    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
+//    {
+//        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
+//        {
+//            [self.favoritesArray addObject:item];
+//        }
+//    }
+    //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];
+    for (DDBTableRow *item in [SingletonFavoritesArray sharedInstance].favoritesArray)
     {
         [self.tableRows addObject:item];
     }
@@ -289,7 +290,7 @@
                 }
                 
                 // If the current item is a favorite...
-                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
+                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem];
                 
                 if (alreadyFavorite)
                 {
@@ -312,7 +313,7 @@
             
         case 1:
         {
-            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
+            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem];
             
             // filePath to favoritesArray.archive
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -323,7 +324,7 @@
             if (alreadyFavorite)
             {
                 // Remove from favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObjectIdenticalTo:_parentItem];
                 
                 // Write the global favoritesArray to the .archive file so it persists
                 
@@ -342,7 +343,7 @@
             else
             {
                 // Add to favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem.rangeKey];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem];
                 
                 // Sort the favoritesArray by title
                 NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
@@ -352,6 +353,7 @@
                 [temp sortUsingDescriptors:sortingDescriptor];
                 self.favoritesArray = [temp mutableCopy];
                 
+                //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
                 
