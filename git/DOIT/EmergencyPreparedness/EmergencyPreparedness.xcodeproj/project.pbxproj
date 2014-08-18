@@ -62,6 +62,7 @@
 		3BBCD8D9198AF54600330753 /* alertArray.archive in Resources */ = {isa = PBXBuildFile; fileRef = 3BBCD8D8198AF54600330753 /* alertArray.archive */; };
 		3BBCD8DC198AF70100330753 /* AlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BBCD8DB198AF70100330753 /* AlertViewController.m */; };
 		3BBF6F2B199AD363009F9516 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BBF6F2A199AD363009F9516 /* Default-568h@2x.png */; };
+		3BDA290519A26A9800DE8C32 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDA290419A26A9800DE8C32 /* AboutViewController.m */; };
 		3BDD9E5E199ABA4A00C43009 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDD9E5C199ABA4A00C43009 /* close.png */; };
 		3BDD9E5F199ABA4A00C43009 /* wrong.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BDD9E5D199ABA4A00C43009 /* wrong.png */; };
 		3BE909F61995476400B5F173 /* downarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE909F51995476400B5F173 /* downarrow.png */; };
@@ -149,6 +150,8 @@
 		3BBCD8DA198AF70100330753 /* AlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewController.h; sourceTree = "<group>"; };
 		3BBCD8DB198AF70100330753 /* AlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewController.m; sourceTree = "<group>"; };
 		3BBF6F2A199AD363009F9516 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		3BDA290319A26A9800DE8C32 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		3BDA290419A26A9800DE8C32 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		3BDD9E5C199ABA4A00C43009 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		3BDD9E5D199ABA4A00C43009 /* wrong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wrong.png; sourceTree = "<group>"; };
 		3BE909F51995476400B5F173 /* downarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downarrow.png; sourceTree = "<group>"; };
@@ -278,6 +281,8 @@
 				3B1B3D5519957A560017F178 /* QuizQuestionViewController.m */,
 				3B1B3D5119957A2F0017F178 /* QuizTableViewController.h */,
 				3B1B3D5219957A2F0017F178 /* QuizTableViewController.m */,
+				3BDA290319A26A9800DE8C32 /* AboutViewController.h */,
+				3BDA290419A26A9800DE8C32 /* AboutViewController.m */,
 				3BB1B126198300DD000EE613 /* Images.xcassets */,
 				3BB1B123198300DD000EE613 /* EmergencyPreparedness.xcdatamodeld */,
 				3BB1B118198300DD000EE613 /* Supporting Files */,
@@ -495,6 +500,7 @@
 				3B1B3D5319957A2F0017F178 /* QuizTableViewController.m in Sources */,
 				3B8CC61E199026CB0014CEA6 /* PageContentViewController.m in Sources */,
 				3BBCD8DC198AF70100330753 /* AlertViewController.m in Sources */,
+				3BDA290519A26A9800DE8C32 /* AboutViewController.m in Sources */,
 				3BBCD8CE198AED1800330753 /* DDBManager.m in Sources */,
 				3BBCD8CB198AECAB00330753 /* HomepageViewController.m in Sources */,
 				3BBCD8D2198AEEEC00330753 /* SingletonArray.m in Sources */,
