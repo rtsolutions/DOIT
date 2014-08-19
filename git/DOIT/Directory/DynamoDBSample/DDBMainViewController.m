@@ -353,7 +353,7 @@
                 [temp sortUsingDescriptors:sortingDescriptor];
                 self.favoritesArray = [temp mutableCopy];
                 
-                //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];
+                //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];  //Use this line to empty the favorites array
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
                 
