@@ -62,18 +62,11 @@
 
 // The dialable phone number and address on the current table for creating URLs.
 // The URLs are used to open the dialer app or the maps app
-// PHONE NUMBER MUST BE OF FORM 555-555-5555 -- NO SPACES ALLOWED
+// PHONE NUMBER MUST BE OF FORM 555-555-5555 -- NO SPACES ALLOWED (1-800 numbers are fine)
 @property (nonatomic, readwrite) NSString *phoneNumber;
 @property (nonatomic, readwrite) NSString *address;
 @property (nonatomic, readwrite) NSString *tollFree;
 @property (nonatomic, readwrite) NSString *phoneNumber2;
-
-
-
-// Items leftover from DynamoDBSample. Not sure if still needed.
-@property (nonatomic, readonly) NSLock *lock;
-@property (nonatomic, strong) NSDictionary *lastEvaluatedKey;
-@property (nonatomic, assign) BOOL doneLoading;
 
 
 // Activate detail mode
@@ -82,18 +75,6 @@
 
 // BOOLs to keep track of which items are already on the detail view
 @property (nonatomic, assign) BOOL addressFlag;
-@property (nonatomic, assign) BOOL phoneUsed;
-@property (nonatomic, assign) NSInteger phoneIndex;
-@property (nonatomic, assign) BOOL faxUsed;
-@property (nonatomic, assign) NSInteger faxIndex;
-@property (nonatomic, assign) BOOL addressUsed;
-@property (nonatomic, assign) NSInteger addressIndex;
-@property (nonatomic, assign) BOOL tollFreeUsed;
-@property (nonatomic, assign) NSInteger tollFreeIndex;
-@property (nonatomic, assign) BOOL phone2Used;
-@property (nonatomic, assign) BOOL phone2Index;
-
-@property (nonatomic, readwrite)  NSInteger arrayOffset;
 
 // BOOL that indicates whether to list items by county
 @property (nonatomic, assign) BOOL listingByCounty;
@@ -121,12 +102,6 @@
     for (DDBTableRow *item in self.directoryLevel1) {
         [self.tableRows addObject:item];
     }
-    
-    // Include elected officials in A to Z directory?
-    /*
-     for (DDBTableRow *item in self.electedOfficials) {
-     [self.tableRows addObject:item];
-     }*/
 }
 
 
@@ -155,6 +130,11 @@
             currentArray = self.directoryLevel4;
             break;
         }
+        case (4):
+        {
+            currentArray = self.directoryLevel5;
+            break;
+        }
         case (6):
         {
             currentArray = self.electedOfficials;
@@ -162,6 +142,7 @@
         }
     }
     
+    // Add the children of the selected item to _tableRows
     for (DDBTableRow *item in currentArray) {
         
         if ([item.parentID isEqual:self.parentID])
@@ -175,26 +156,29 @@
 }
 
 
-// Adds all items in the global favoritesArray to tableRows
+// Adds all items in the global favoritesArray to tableRows. Instead of storing the items themselves in the favorites
+// array, we essentially store a reference to it, in the form of the rangeKey. We then search through the directory
+// array for the items that match the rangeKey, so the favorites will update with the rest of the app.
 - (void)showFavorites {
     [self.favoritesArray removeAllObjects];
     [self.tableRows removeAllObjects];
     self.showingFavorites = YES;
     
-    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
-    {
-        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
-        {
-            [self.favoritesArray addObject:item];
-        }
-    }
-    for (DDBTableRow *item in self.favoritesArray)
+//    for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray)
+//    {
+//        if ([[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:item.rangeKey])
+//        {
+//            [self.favoritesArray addObject:item];
+//        }
+//    }
+    //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];
+    for (DDBTableRow *item in [SingletonFavoritesArray sharedInstance].favoritesArray)
     {
         [self.tableRows addObject:item];
     }
 }
 
-// Shows just two menu options: Senate and House of Representatives
+// Shows the different branches of elected officials
 - (void)showElectedOfficials {
     [self.tableRows removeAllObjects];
     for (DDBTableRow *item in self.houseAndSenate)
@@ -202,6 +186,7 @@
         [self.tableRows addObject:item];
     }
 }
+
 
 - (void) showN11 {
     [self.tableRows removeAllObjects];
@@ -305,7 +290,7 @@
                 }
                 
                 // If the current item is a favorite...
-                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
+                BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem];
                 
                 if (alreadyFavorite)
                 {
@@ -328,18 +313,18 @@
             
         case 1:
         {
-            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem.rangeKey];
+            BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem];
             
             // filePath to favoritesArray.archive
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentPath = [paths objectAtIndex:0];
-            NSString *filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
+            NSString *filePath = [documentPath stringByAppendingString:@"/favoritesArray.archive"];
             
             // If the item is already a favorite
             if (alreadyFavorite)
             {
                 // Remove from favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:_parentItem.rangeKey];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObjectIdenticalTo:_parentItem];
                 
                 // Write the global favoritesArray to the .archive file so it persists
                 
@@ -358,7 +343,7 @@
             else
             {
                 // Add to favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem.rangeKey];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray addObject:_parentItem];
                 
                 // Sort the favoritesArray by title
                 NSSortDescriptor *sortByTitleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
@@ -368,6 +353,7 @@
                 [temp sortUsingDescriptors:sortingDescriptor];
                 self.favoritesArray = [temp mutableCopy];
                 
+                //[[SingletonFavoritesArray sharedInstance].favoritesArray removeAllObjects];
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
                 
@@ -453,13 +439,17 @@
 }
 
 
+// Implementation of quick scroll. Gives us the title and index of the selected section--in this case, a single letter
+// from A to Z
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
     if (!(self.listingByCounty))
     {
+        // Extract the first character of each cell's title.
         for (int i = 0; i < [self.tableRows count]; i++) {
             DDBTableRow *item = [self.tableRows objectAtIndex:i];
             NSString *letterString = [item.title substringToIndex:1];
             NSComparisonResult result = [letterString compare:title];
+            // If we pass the selected letter, scroll to the last character we checked
             if (result == NSOrderedDescending) {
                 if (i > 0)
                 {
@@ -469,10 +459,12 @@
                 
             }
         }
+        // If we never get a NSOrderedDescending result, scroll all the way to the end.
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([self.tableRows count]-1) inSection:0] atScrollPosition: UITableViewScrollPositionTop animated:YES];
         return ([self.tableRows count]-1);
     }
-    else
+    else // if we're listing by county, do the same thing but use the first letter of the counties instead of the
+         // first letter of the cell
     {
         for (int i = 0; i < [self.sortedSections count]; i++) {
             NSString *item = [self.sortedSections objectAtIndex:i];
@@ -521,7 +513,7 @@
     {
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:17.0]};
         
-        // Create a rectangle that bounds the text. Width is 200, and height is calculated based on
+        // Create a rectangle that bounds the text. Width is 185, and height is calculated based on
         // how much space the text would need if it wraps.
         CGRect rect = [_tableRow.address boundingRectWithSize:CGSizeMake(185.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attributes context:nil];
         
@@ -535,12 +527,13 @@
         return size.height + 10;
     }
     
+    // lisingByCounty needs a little bit of extra space
     if (self.listingByCounty == YES)
     {
         return 66.0;
     }
     
-    // If we're not displaying an address, just use 44 as the size of each cell
+    // If we're not displaying an address or a county listing, just use 44 as the size of each cell
     return 44.0;
     
     
@@ -555,40 +548,11 @@
     // Add one to rowCount for phone number and fax. For address, add two, so we can display a dummy
     // cell at the end. If we don't do this, the size of every cell will be the size of the address
     // cell (big) and that looks messy.
-  
-    NSInteger rowCount = 0;
-    /*
-    if (self.showDetails == YES) {
-        
-        if ([_tableRow.phone length] > 0)
-        {
-            rowCount++;
-        }
-        if ([_tableRow.fax length] > 0)
-        {
-            rowCount++;
-        }
-        if ([_tableRow.phone2 length] > 0)
-        {
-            rowCount++;
-        }
-        if ([_tableRow.tollFree length] > 0)
-        {
-            rowCount++;
-        }
-        if ([_tableRow.address length] > 0)
-        {
-            rowCount++;
-            //rowCount++;
-            
-            NSString *item = @"placeholder";
-            [self.tableRows addObject:item];
-        }
-    }*/
+    
     // If we're viewing search results, return the number of items in the filteredTableRows array
     if (self.isFiltered == YES)
     {
-        return (rowCount + [self.filteredTableRows count]);
+        return [self.filteredTableRows count];
     }
     if (self.listingByCounty == YES)
     {
@@ -597,9 +561,7 @@
         return [listingsInCountyArray count];
     }
     // Otherwise just return the number of items in tableRows
-    rowCount += [self.tableRows count];
-    
-    return rowCount;
+    return [self.tableRows count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -679,15 +641,13 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             return cell;
         }
-        
-        
     }
-
+    
     
     if (self.isFiltered == YES)
     {
         // Add rows that don't contain details
-        DDBTableRow *item = self.filteredTableRows[indexPath.row-self.arrayOffset];
+        DDBTableRow *item = self.filteredTableRows[indexPath.row];
         cell.textLabel.text = item.title;
         cell.detailTextLabel.text = nil;
         return cell;
@@ -740,10 +700,7 @@
                     }
                 }
             }
-            
         }
-        
-        
         
         cell.detailTextLabel.text = item.title;
         
@@ -814,17 +771,9 @@
     // Add rows that don't contain details
     if (_tableRows.count)
     {
-        /*
-        if ((self.showDetails == YES) && (indexPath.row - self.arrayOffset == [self.tableRows count]))
-        {
-            cell.textLabel.text = nil;
-            cell.detailTextLabel.text = nil;
-            cell.userInteractionEnabled = NO;
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }*/
         
         {
-            DDBTableRow *item = self.tableRows[indexPath.row-self.arrayOffset];
+            DDBTableRow *item = self.tableRows[indexPath.row];
             cell.textLabel.text = item.title;
             cell.detailTextLabel.text = nil;
             cell.userInteractionEnabled = YES;
@@ -958,7 +907,7 @@
     }
     else
     {
-        indexRow = [self.tableRows objectAtIndex:(indexPath.row-self.arrayOffset)];
+        indexRow = [self.tableRows objectAtIndex:(indexPath.row)];
     }
     
     
@@ -984,18 +933,21 @@
     
     
     mainVewController.parentItem = indexRow;
+    
+    // Increment the directory level to drill down the directory
     NSInteger temp = [indexRow.hashKey integerValue];
     temp++;
     mainVewController.numParents = temp;
     
-    if (temp <= 5)
+    if (temp < 5)
     {
         mainVewController.directoryLevel1 = self.directoryLevel1;
         mainVewController.directoryLevel2 = self.directoryLevel2;
         mainVewController.directoryLevel3 = self.directoryLevel3;
         mainVewController.directoryLevel4 = self.directoryLevel4;
+        mainVewController.directoryLevel5 = self.directoryLevel5;
     }
-    else if (temp > 5 && temp <=7)
+    else if (temp >= 5 && temp <=7)
     {
         mainVewController.electedOfficials = self.electedOfficials;
         mainVewController.houseAndSenate = self.houseAndSenate;
@@ -1006,6 +958,7 @@
 
 - (void)setupView{
     
+    // Call the correct method to sort the directory items
     switch (self.viewType) {
             
         case DDBMainViewTypeAtoZ:
@@ -1023,8 +976,6 @@
         case DDBMainViewTypeByCounty:
         {
             [self showCounties];
-            //Need to create a new case for favorites
-            //[self showFavorites];
             break;
         }
             
@@ -1057,9 +1008,13 @@
             
     }
     
-
+    
 }
 
+
+/// Add details to _tableRows as DDBTableRow items so tableView population goes smoothly. If the current tableRow
+/// has a detail, append a prefix to the detail and add it to _tableRows. cellForRowAtIndexPath will recognize the
+/// prefix and create the cell appropriately.
 - (void) addDetails
 {
     if (_tableRow.fax)
@@ -1106,13 +1061,6 @@
     _favoritesArray = [NSMutableArray new];
     _filteredTableRows = [NSMutableArray new];
     
-    _addressIndex = -1;
-    _phoneIndex = -1;
-    _faxIndex = -1;
-    _phone2Index = -1;
-    _tollFreeIndex = -1;
-    _lock = [NSLock new];
-    
     [self.navigationController.navigationBar setTranslucent:NO];
     
     [self.navigationController setNavigationBarHidden:NO];
@@ -1133,10 +1081,6 @@
     [super viewWillAppear:animated];
     
     // Reset all of the detail flags
-    _phoneUsed = NO;
-    _faxUsed = NO;
-    _addressUsed = NO;
-    _arrayOffset = 0;
     _addressFlag = NO;
     
     

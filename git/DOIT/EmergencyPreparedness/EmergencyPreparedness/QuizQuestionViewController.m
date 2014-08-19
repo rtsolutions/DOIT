@@ -349,7 +349,14 @@
     [self.answerButton.titleLabel setHidden:NO];
     [self.checkmarkImageView setHidden:YES];
     self.questionTextView.text = self.currentQuestion.title;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    // Remove the separator lines after the last answer
+    self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+    
+    // Add a line between the tableView and the textView
+//    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 225, self.view.bounds.size.width, 1)];
+//    lineView.backgroundColor = [UIColor blackColor];
+//    [self.view addSubview:lineView];
     
     // Show the question number, eg "5 of 11"
     NSString *questionNumberLabelString = [NSString stringWithFormat:@"%d", self.currentQuestionIndex + 1];

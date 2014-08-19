@@ -23,10 +23,12 @@
 @property (nonatomic, assign) BOOL doneLoading;
 @property (nonatomic, retain) NSMutableArray *timeStamp;
 
+// Arrays that hold items from the directory, sorted by hashKey
 @property (nonatomic, readonly, strong) NSMutableArray *directoryLevel1;
 @property (nonatomic, readonly, strong) NSMutableArray *directoryLevel2;
 @property (nonatomic, readonly, strong) NSMutableArray *directoryLevel3;
 @property (nonatomic, readonly, strong) NSMutableArray *directoryLevel4;
+@property (nonatomic, readonly, strong) NSMutableArray *directoryLevel5;
 @property (nonatomic, readonly, strong) NSMutableArray *searchResults;
 @property (nonatomic, readonly, strong) NSMutableArray *houseAndSenate;
 @property (nonatomic, readonly, strong) NSMutableArray *electedOfficials;
@@ -70,16 +72,18 @@
                      // Write time stamp back to array from .archive file
                      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                      NSString *documentPath = [paths objectAtIndex:0];
-                     NSString *filePath = [documentPath stringByAppendingString:@"timeStamp.archive"];
+                     NSString *filePath = [documentPath stringByAppendingString:@"/timeStamp.archive"];
                      
                      self.timeStamp = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
                      
                      self.updateDirectory = [self.timeStamp isEqualToArray:paginatedOutput.items];
                      
+                     BOOL success;
+                     
                      if (!self.updateDirectory) {
                          
                          // Write the new time stamp to timeStamp.archive
-                         [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
+                         success = [NSKeyedArchiver archiveRootObject: paginatedOutput.items toFile:filePath];
                      }
                      
                      
@@ -154,7 +158,7 @@
                      
                      NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                      NSString *documentPath = [paths objectAtIndex:0];
-                     NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
+                     NSString *filePath = [documentPath stringByAppendingString:@"/directoryArray.archive"];
                      
                      // Write the directory array to an archive file
                      [NSKeyedArchiver archiveRootObject: [SingletonArrayObject sharedInstance].directoryArray toFile:filePath];
@@ -188,6 +192,9 @@
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
 - (void)sortItems {
+    
+    // Clear the arrays because the data remains in them even when we navigate away from this
+    // view controller
     [self.directoryLevel1 removeAllObjects];
     [self.directoryLevel2 removeAllObjects];
     [self.directoryLevel3 removeAllObjects];
@@ -198,6 +205,7 @@
     [self.nonEmergencyContacts removeAllObjects];
     
     
+    // Add items to different arrays based on hashKey
     for (DDBTableRow *item in [SingletonArrayObject sharedInstance].directoryArray) {
         
         
@@ -219,6 +227,10 @@
         else if ([item.hashKey  isEqual: @"0003"])
         {
             [self.directoryLevel4 addObject:item];
+        }
+        else if ([item.hashKey isEqual:@"0004"])
+        {
+            [self.directoryLevel5 addObject:item];
         }
         else if ([item.hashKey  isEqual: @"0005"])
         {
@@ -255,6 +267,7 @@
     
 }
 
+// Hide keyboard when "x" button is clicked.
 - (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
     [searchBar resignFirstResponder];
     self.searching = NO;
@@ -315,14 +328,12 @@
     // Write the directory to a singleton variable that is accessible from anywhere within the project
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"directoryArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingString:@"/directoryArray.archive"];
     
     [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     
-    filePath = [documentPath stringByAppendingString:@"favoritesArray.archive"];
-    
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    
+    filePath = [documentPath stringByAppendingString:@"/favoritesArray.archive"];
     NSFileManager *manager = [NSFileManager defaultManager];
     if([manager fileExistsAtPath:filePath])
     {
@@ -343,15 +354,14 @@
     _directoryLevel2 = [NSMutableArray new];
     _directoryLevel3 = [NSMutableArray new];
     _directoryLevel4 = [NSMutableArray new];
+    _directoryLevel5 = [NSMutableArray new];
     _searchResults = [NSMutableArray new];
     _electedOfficials = [NSMutableArray new];
     _houseAndSenate = [NSMutableArray new];
     _n11 = [NSMutableArray new];
     _nonEmergencyContacts = [NSMutableArray new];
     
-    
-    // Create a locks to keep the methods thread safe
-    
+        
     // Compare the time stamp item in the locally stored array and the array on DynamoDB.
     // If not equal, checkDatabaseForUpdate calls refreshList to update the array.
     [self checkDatabaseForUpdate:YES];
@@ -380,17 +390,21 @@
 
 #pragma mark - Navigation
 
-// Each button has a tag from 0-4. Depending on which button is pressed, a different case
+// Each button has a tag from 0-6. Depending on which button is pressed, a different case
 // is satisfied. The cases each set a property of the list screen, which indicates which filter
 // to apply to the array before displaying the list.
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
+    // tag = 6 is the "About This App" page. Since it doesn't have all of the properties of
+    // the mainViewController, the app will crash when it tries to set those properties. So
+    // we only set the properties when a different button is selected.
     if ([sender tag] != 6)
     {
         DDBMainViewController *mainViewController = [segue destinationViewController];
         
         [self sortItems];
         
+        // Pass the appropriate data to the mainViewController
         if (_searching)
         {
             mainViewController.directoryLevel1 = self.searchResults;
@@ -403,6 +417,7 @@
         mainViewController.directoryLevel2 = self.directoryLevel2;
         mainViewController.directoryLevel3 = self.directoryLevel3;
         mainViewController.directoryLevel4 = self.directoryLevel4;
+        mainViewController.directoryLevel5 = self.directoryLevel5;
         
         switch([sender tag]) {
             case 0:

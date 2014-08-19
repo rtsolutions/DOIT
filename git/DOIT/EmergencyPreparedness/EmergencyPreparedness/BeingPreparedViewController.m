@@ -46,38 +46,6 @@
         
         if ([item.hashKey isEqual:@"0001"])
         {
-            // If the item is in the section for the manual, count the number of periods
-            // in its rangeKey. If it has none, it is a top level item. If it has one, it is a
-            // subsection of one of the categories
-            // Commented out because it's easier just to check if the length of the rangeKey is
-            // less than three, but I'm leaving this code here because it would be necessary
-            // for any tree-type filesystem with more than two levels.
-            /*
-            NSUInteger count = 0, length = [item.rangeKey length];
-            
-            for (int i = 0; i < length; i++)
-            {
-                char singleChar = [item.rangeKey characterAtIndex:i];
-                NSString *character = [NSString stringWithFormat:@"%c",singleChar];
-                if ([character isEqual:@"."])
-                {
-                    count++;
-                }
-            }
-            
-            if ([item.rangeKey isEqual:@"0"])
-            {
-                self.firstPage = item;
-            }
-            else if (count == 0)
-            {
-                [self.topLevel addObject:item];
-            }
-            else if (count > 0)
-            {
-                [self.secondLevel addObject:item];
-            }*/
-            
             // item with rangeKey == "0" is the first page of the manual
             if ([item.rangeKey isEqual:@"0"])
             {
@@ -173,17 +141,6 @@
 /// On button press, remove the table from the current view
 - (IBAction)hideTable:(id)sender
 {
-    // Trying to animate the table
-    /*
-    CGFloat moveX = 0;
-    while(self.tableView.frame.origin.y < self.view.frame.size.height)
-    {
-        [self.tableView removeFromSuperview];
-        moveX += .1;
-        self.tableView.frame = CGRectMake(0, 120 + moveX, self.view.frame.size.width, self.view.frame.size.height - 108);
-        [self.view addSubview:self.tableView];
-    }*/
-    
     [self.tableView setHidden:YES];
     [self.tableView removeFromSuperview];
     [self.tableView reloadData];
