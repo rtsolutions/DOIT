@@ -184,8 +184,11 @@
         
         
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        // Remove the checkmark image if it's already been added
         for (UIImageView *subview in cell.contentView.subviews)
         {
+            // Check the tag, because there are multiple imageViews in the cell.
             if (subview.tag == 99)
             {
                 [subview removeFromSuperview];
@@ -204,6 +207,7 @@
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 30, 30)];
             imgView.backgroundColor = [UIColor clearColor];
             
+            // Set a tag so we can identify our imageView later
             [imgView setTag:99];
             [imgView setImage:[UIImage imageNamed:@"grayCheck.png"]];
             
@@ -301,6 +305,7 @@
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
 }
+
 
 // Instead of actually performing a segue, each of these cases sends a notification. The homepageViewController has an
 // observer for each notification, and will call a method to perform the segue when it receives a notification.

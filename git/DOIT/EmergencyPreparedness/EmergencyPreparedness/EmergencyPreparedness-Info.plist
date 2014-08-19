@@ -26,6 +26,11 @@
 	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>main1</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>ep120.png</string>
+		<string></string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

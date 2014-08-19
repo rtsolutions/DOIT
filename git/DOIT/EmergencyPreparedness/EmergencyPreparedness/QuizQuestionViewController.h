@@ -13,7 +13,7 @@
     
 }
 
-@property (weak, nonatomic) IBOutlet UINavigationItem *menuButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 
 @property (nonatomic, readwrite) NSMutableArray *questionsArray;
 @property (nonatomic, readwrite) NSString *titleString;

@@ -29,9 +29,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    
+    // Retrieve the release version and display it in a label
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@", [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleShortVersionString"]];
     
+    // Display the name of the database we retrieved the data from
     self.databaseLabel.text = [@"Database: " stringByAppendingString: AWSSampleDynamoDBTableName];
     
     
