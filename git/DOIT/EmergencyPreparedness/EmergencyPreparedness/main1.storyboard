@@ -522,7 +522,7 @@
                     <navigationItem key="navigationItem" id="6gX-4S-kDX">
                         <barButtonItem key="rightBarButtonItem" image="Hamburger.png" id="tOj-Dz-2Ai">
                             <connections>
-                                <action selector="showActionSheet:" destination="swe-VW-l1X" id="YdD-5d-YWO"/>
+                                <action selector="showActionSheet:" destination="swe-VW-l1X" id="v1M-8X-2qG"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -530,7 +530,7 @@
                     <connections>
                         <outlet property="answerButton" destination="6T0-8U-VW0" id="ZM2-kx-Mnh"/>
                         <outlet property="checkmarkImageView" destination="XqZ-MW-3g0" id="pH7-bf-55b"/>
-                        <outlet property="menuButton" destination="6gX-4S-kDX" id="0YB-Zv-nSE"/>
+                        <outlet property="menuButton" destination="tOj-Dz-2Ai" id="zHu-I9-8M6"/>
                         <outlet property="questionNumberLabel" destination="dve-Vm-Myn" id="wXB-97-LIj"/>
                         <outlet property="questionTextView" destination="8Lt-1T-yNu" id="H6b-He-RyM"/>
                         <outlet property="tableView" destination="rab-VZ-99X" id="eR6-0C-bE0"/>
