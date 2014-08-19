@@ -24,6 +24,9 @@
 
 @implementation QuizTableViewController
 
+// sortItems loops through the global shared array and places items pertaining to the quiz
+// in arrays. Quiz question categories go in self.categoriesArray, and quiz questions go in
+// self.allQuestionsArray. Items are then sorted by index.
 - (void)sortItems
 {
     for (DDBTableRow *item in [SingletonArray sharedInstance].sharedArray)
@@ -80,12 +83,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // deselect the cell and show the deselect animation
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     [self.questionsArray removeAllObjects];
     
     DDBTableRow *selectedItem = self.categoriesArray[indexPath.row];
     
+    
+    // Loop through self.allQuestionsArray. For each item, take the rangeKey and remove characters
+    // from the end until we hit a period. What's left after that is the question's parent's rangeKey,
+    // which is the category to which the question belongs. If it matches the selected category's
+    // rangeKey, add the question to self.questionsArray
     for (DDBTableRow *item in self.allQuestionsArray)
     {
         NSString *parentID = item.rangeKey;
@@ -109,7 +118,7 @@
             [self.questionsArray addObject:item];
         }
     }
-    
+    // Set self.titleString to pass it to QuizQuestionViewController
     self.titleString = selectedItem.title;
     [self performSegueWithIdentifier:@"navigateToQuizQuestion" sender:self];
 }
@@ -133,7 +142,8 @@
     [actionSheet showFromBarButtonItem:self.menuButton animated:YES];
 }
 
-
+// Set up the actionsheet from the hamburger icon. When a button is selected, send a notification
+// to the HomepageViewController to pop the view stack and push to the appropriate view controller
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
