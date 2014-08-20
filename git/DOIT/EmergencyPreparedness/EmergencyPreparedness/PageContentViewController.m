@@ -7,7 +7,8 @@
 
 
 /*
- * View controller that will be added as a subview of HomepageViewController.
+ * View controller that will be added as a subview of HomepageViewController. Displays the date 
+ * of the alert and the introduction to the alert.
  */
 
 #import "PageContentViewController.h"
