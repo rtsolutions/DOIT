@@ -332,9 +332,7 @@
             NSString *favoriteString = [hashKeyString stringByAppendingString:rangeKeyString];
             
             BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:favoriteString];
-            
-            //BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:_parentItem];
-            
+                        
             // filePath to favoritesArray.archive
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentPath = [paths objectAtIndex:0];
@@ -344,7 +342,7 @@
             if (alreadyFavorite)
             {
                 // Remove from favorites
-                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObjectIdenticalTo:favoriteString];
+                [[SingletonFavoritesArray sharedInstance].favoritesArray removeObject:favoriteString];
                 
                 // Write the global favoritesArray to the .archive file so it persists
                 [NSKeyedArchiver archiveRootObject: [SingletonFavoritesArray sharedInstance].favoritesArray toFile:filePath];
@@ -597,7 +595,9 @@
     [cell.textLabel setNumberOfLines:2];
     [cell.detailTextLabel setNumberOfLines:2];
     
-    
+    // Check at the beginning of the title of each item to see if it is a detail.
+    // If the method finds one of the detail prefixes, it will remove the prefix and
+    // prepare a cell with the detail.
     if (self.showDetails == YES)
     {
         DDBTableRow *item = self.tableRows[indexPath.row];
@@ -631,6 +631,11 @@
             NSString *detailsWithoutPrefix = [detailString substringFromIndex:4];
             cell.detailTextLabel.text = detailsWithoutPrefix;
             cell.detailTextLabel.numberOfLines = 0;
+            
+            if ([self.tableRows count] == 1)
+            {
+                self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+            }
             
             if ([[detailsWithoutPrefix substringToIndex:3].lowercaseString isEqual:@"see"])
             {
