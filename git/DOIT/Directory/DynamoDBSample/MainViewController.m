@@ -43,7 +43,8 @@
 
 @implementation MainViewController
 
-- (BFTask *)checkDatabaseForUpdate:(BOOL)check {
+- (BFTask *)checkDatabaseForUpdate:(BOOL)check
+{
     _lock = [NSLock new];
     if ([self.lock tryLock]){
         if (check) {
@@ -111,7 +112,8 @@
 }
 
 
-- (BFTask *)refreshList:(BOOL)startFromBeginning {
+- (BFTask *)refreshList:(BOOL)startFromBeginning
+{
     if ([self.lock tryLock]){
         if (startFromBeginning) {
             self.lastEvaluatedKey = nil;
@@ -191,8 +193,8 @@
 // every item whenever it loads a tableView
 // Since the directory is sorted in refresh list, everything is in alphabetical order within the
 // hashKey arrays.
-- (void)sortItems {
-    
+- (void)sortItems
+{
     // Clear the arrays because the data remains in them even when we navigate away from this
     // view controller
     [self.directoryLevel1 removeAllObjects];
@@ -267,14 +269,17 @@
     
 }
 
+
 // Hide keyboard when "x" button is clicked.
-- (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar {
+- (void)searchBarTextDidEndEditing:(UISearchBar *) searchBar
+{
     [searchBar resignFirstResponder];
     self.searching = NO;
 }
 
-- (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar {
-    
+
+- (void)searchBarSearchButtonClicked: (UISearchBar *) searchBar
+{
     [self.searchResults removeAllObjects];
     
     // Scan through tableRows for the text in the search bar
@@ -313,12 +318,15 @@
     return self;
 }
 
-- (void) applicationWillEnterForeground:(NSNotification *) notification {
+
+- (void) applicationWillEnterForeground:(NSNotification *) notification
+{
     if ([notification isEqual:UIApplicationWillEnterForegroundNotification])
     {
         [self updateDirectory];
     }
 }
+
 
 - (void)viewDidLoad
 {
@@ -375,12 +383,15 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
     // Hide the navigation controller each time the view draws on the screen
     [self.navigationController setNavigationBarHidden:YES];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -441,12 +452,6 @@
                 mainViewController.title = @"Elected Officials";
                 break;
             }
-            case 5:
-            {
-                mainViewController.viewType = DDBMainViewTypeFavorites;
-                mainViewController.title=@"Favorites";
-                break;
-            }
             case 3:
             {
                 mainViewController.viewType = DDBMainViewTypeNonEmergencyContacts;
@@ -460,9 +465,13 @@
                 mainViewController.n11 = self.n11;
                 mainViewController.title=@"N11";
             }
+            case 5:
+            {
+                mainViewController.viewType = DDBMainViewTypeFavorites;
+                mainViewController.title=@"Favorites";
+                break;
+            }
         }
-
     }
-        
-    }
+}
 @end
