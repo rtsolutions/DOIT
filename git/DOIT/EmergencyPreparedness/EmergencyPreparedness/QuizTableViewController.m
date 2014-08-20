@@ -175,6 +175,7 @@
     self.questionsArray = [NSMutableArray new];
     [self sortItems];
     [self.tableView reloadData];
+    self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 }
 
 - (void)didReceiveMemoryWarning
