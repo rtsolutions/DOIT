@@ -332,7 +332,7 @@
             NSString *favoriteString = [hashKeyString stringByAppendingString:rangeKeyString];
             
             BOOL alreadyFavorite = [[SingletonFavoritesArray sharedInstance].favoritesArray containsObject:favoriteString];
-                        
+            
             // filePath to favoritesArray.archive
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentPath = [paths objectAtIndex:0];
@@ -457,6 +457,7 @@
             DDBTableRow *item = [self.tableRows objectAtIndex:i];
             NSString *letterString = [item.title substringToIndex:1];
             NSComparisonResult result = [letterString compare:title];
+            
             // If we pass the selected letter, scroll to the last character we checked
             if (result == NSOrderedDescending) {
                 if (i > 0)
@@ -632,6 +633,8 @@
             cell.detailTextLabel.text = detailsWithoutPrefix;
             cell.detailTextLabel.numberOfLines = 0;
             
+            // If the address is the only item we're adding to the list, remove all of the cell
+            // divider lines below it because they're ugly.
             if ([self.tableRows count] == 1)
             {
                 self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -737,34 +740,19 @@
         {
             cell.textLabel.text = nil;
         }
-        
-        if ([listing.hashKey integerValue] <= 4)
+        else
         {
             for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
             {
-                if ([possibleParent.hashKey integerValue] <= 4)
+                
+                // If the possibleParent has the correct rangeKey and is one level higher in the directory...
+                if ([listing.parentID isEqual: possibleParent.rangeKey] &&
+                    [listing.hashKey integerValue] - 1 == [possibleParent.hashKey integerValue])
                 {
-                    if ([listing.parentID isEqual: possibleParent.rangeKey])
-                    {
-                        cell.textLabel.text = possibleParent.title;
-                    }
+                    cell.textLabel.text = possibleParent.title;
+                    break;
                 }
             }
-        }
-        
-        else if ([listing.hashKey integerValue] > 4)
-        {
-            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-            {
-                if ([possibleParent.hashKey integerValue] > 4)
-                {
-                    if ([listing.parentID isEqual: possibleParent.rangeKey])
-                    {
-                        cell.textLabel.text = possibleParent.title;
-                    }
-                }
-            }
-            
         }
         
         return cell;
