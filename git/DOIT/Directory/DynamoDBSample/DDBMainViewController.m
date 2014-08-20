@@ -50,7 +50,7 @@
 
 // The number of parents of the current items, which is the hashKey. Use this string to specify
 // which array to search in
-@property (nonatomic, readwrite) NSInteger numParents;
+@property (nonatomic, readwrite) NSInteger directoryLevel;
 
 // The item that was selected in the last table
 @property (nonatomic, strong) DDBTableRow *parentItem;
@@ -114,7 +114,7 @@
     
     // Switch between arrays of items sorted by hashkey. This cuts down the time it takes to
     // scan through arrays.
-    switch (self.numParents) {
+    switch (self.directoryLevel) {
         case (1):
         {
             currentArray = self.directoryLevel2;
@@ -947,7 +947,7 @@
     // Increment the directory level to drill down the directory
     NSInteger temp = [indexRow.hashKey integerValue];
     temp++;
-    mainVewController.numParents = temp;
+    mainVewController.directoryLevel = temp;
     
     if (temp < 5)
     {
