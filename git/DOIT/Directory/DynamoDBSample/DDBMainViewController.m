@@ -591,11 +591,8 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // I am so sorry for this.
-    // In future directory apps, each detail should get its own entry in the database to avoid
-    // nasty workarounds like this. If the detail has already been loaded, keep track of its
-    // index so we can load it again if we scroll down and up. Otherwise, we get an out of range
-    // error.
+    // First checks to see if the item being added is a detail based on the prefix in the
+    // item's title.
     
     [cell.textLabel setNumberOfLines:2];
     [cell.detailTextLabel setNumberOfLines:2];
@@ -679,42 +676,32 @@
         [cell.detailTextLabel setLineBreakMode:NSLineBreakByWordWrapping];
         cell.detailTextLabel.numberOfLines = 2;
         
+        // Search the directory to find a match for the hashKey and rangeKey of the item's parent.
+        // Then add the parent's title as the text on the left of the cell.
         DDBTableRow *item = self.tableRows[indexPath.row];
         if (item.parentID == nil)
         {
             cell.textLabel.text = nil;
         }
-        if ([item.hashKey integerValue] <= 4)
+        else
         {
             for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
             {
-                if ([possibleParent.hashKey integerValue] <= 4)
+                
+                // If the possibleParent has the correct rangeKey and is one level higher in the directory...
+                if ([item.parentID isEqual: possibleParent.rangeKey] &&
+                    [item.hashKey integerValue] - 1 == [possibleParent.hashKey integerValue])
                 {
-                    if ([item.parentID isEqual: possibleParent.rangeKey])
-                    {
-                        cell.textLabel.text = possibleParent.title;
-                    }
+                    cell.textLabel.text = possibleParent.title;
+                    break;
                 }
+                
             }
         }
         
-        else if ([item.hashKey integerValue] > 4)
-        {
-            for (DDBTableRow *possibleParent in [SingletonArrayObject sharedInstance].directoryArray)
-            {
-                if ([possibleParent.hashKey integerValue] > 4)
-                {
-                    if ([item.parentID isEqual: possibleParent.rangeKey])
-                    {
-                        cell.textLabel.text = possibleParent.title;
-                    }
-                }
-            }
-        }
+    cell.detailTextLabel.text = item.title;
         
-        cell.detailTextLabel.text = item.title;
-        
-        return cell;
+    return cell;
     }
     
     if (self.listingByCounty == YES)

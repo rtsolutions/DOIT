@@ -328,12 +328,12 @@
     // Write the directory to a singleton variable that is accessible from anywhere within the project
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [paths objectAtIndex:0];
-    NSString *filePath = [documentPath stringByAppendingString:@"/directoryArray.archive"];
+    NSString *filePath = [documentPath stringByAppendingPathComponent:@"directoryArray.archive"];
     
     [SingletonArrayObject sharedInstance].directoryArray = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     
     // Write the favorites to a singleton variable that is accessible from anywhere within the project
-    filePath = [documentPath stringByAppendingString:@"/favoritesArray.archive"];
+    filePath = [documentPath stringByAppendingPathComponent:@"favoritesArray.archive"];
     NSFileManager *manager = [NSFileManager defaultManager];
     if([manager fileExistsAtPath:filePath])
     {
