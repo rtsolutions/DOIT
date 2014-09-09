@@ -834,7 +834,7 @@
         [alert show];
         return;
     }
-    if ([cellText  isEqual: @"Phone 2:"])
+    if ([cellText  isEqual: @"Phone2:"])
     {
         // Prepare a string that says "Dial [phone number]?"
         NSString *messageString = [[@"Dial " stringByAppendingString:self.phoneNumber2] stringByAppendingString:@"?"];
