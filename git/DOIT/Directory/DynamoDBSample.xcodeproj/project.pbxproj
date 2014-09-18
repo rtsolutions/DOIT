@@ -502,7 +502,7 @@
 				INFOPLIST_FILE = "DynamoDBSample/DynamoDBSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DynamoDBSample;
-				PROVISIONING_PROFILE = "2ca19a25-abff-45ec-920b-a3624eefba3e";
+				PROVISIONING_PROFILE = "3057cf5b-26b1-4ee7-84f3-20ddcad1d74c";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -520,7 +520,7 @@
 				INFOPLIST_FILE = "DynamoDBSample/DynamoDBSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DynamoDBSample;
-				PROVISIONING_PROFILE = "2ca19a25-abff-45ec-920b-a3624eefba3e";
+				PROVISIONING_PROFILE = "3057cf5b-26b1-4ee7-84f3-20ddcad1d74c";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
